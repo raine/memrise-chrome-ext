@@ -1,0 +1,30 @@
+{
+	"name": "Memrise Button",
+	"version": "0.1",
+	"manifest_version": 2,
+	"description": "Helps you keep your plants healthy",
+	"icons": {
+		"16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
+	},
+	"background": {
+		"page": "background.html"
+	},
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"permissions": [
+		"http://www.memrise.com/",
+		"background",
+		"tabs"
+	],
+	"content_scripts": [ {
+		"js": [ "jquery-1.7.2.min.js" ],
+		"matches": [ "file:///*/*" ],
+		"run_at" : "document_end"
+	}, {
+		"matches": [ "http://www.memrise.com/*" ],
+		"js": [ "page.js" ]
+	} ]
+}
