@@ -20,7 +20,7 @@
 		"tabs"
 	],
 	"content_scripts": [ {
-		"js": [ "jquery-1.7.2.min.js" ],
+		"js": [ "lib/jquery-1.7.2.min.js" ],
 		"matches": [ "file:///*/*" ],
 		"run_at" : "document_end"
 	}, {
