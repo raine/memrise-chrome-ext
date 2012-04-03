@@ -1,0 +1,99 @@
+/* Copyright (c) 2012 The Chromium Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+body {
+  cursor: default;
+  font-size: 13px;
+  margin: 0;
+  padding: 0 24px;
+  font-family: Helvetica, sans-serif;
+}
+
+a:link {
+  color: rgb(63, 110, 194);
+}
+
+a:active {
+  color: rgb(37, 64, 113);
+}
+
+input[type='password'],
+input[type='text'],
+input[type='url'],
+input:not([type]) {
+  -webkit-border-radius: 2px;
+  border: 1px solid #aaa;
+  font-size: inherit;
+  padding: 3px;
+}
+
+input[type='text']:disabled {
+  color: #888;
+}
+
+h1 {
+  background-image:url("/icon.png");
+  background-repeat: no-repeat;
+  background-position: 5px 60%;
+  text-indent: 36px;
+  font-family: Helvetica, sans-serif;
+  -webkit-padding-end: 24px;
+  -webkit-user-select: none;
+  border-bottom: 1px solid #eeeeee;
+  color: #333;
+  font-size: 200%;
+  font-weight: normal;
+  margin: 0;
+  padding-bottom: 4px;
+  padding-top: 13px;
+  text-shadow: white 0 1px 2px;
+}
+
+.displaytable {
+  display: table;
+  width: 100%;
+}
+
+section {
+  -webkit-box-orient: horizontal;
+  border-bottom: 1px solid #eeeeee;
+  display: -webkit-box;
+  margin-top: 17px;
+  padding-bottom: 20px;
+}
+
+section:last-child {
+  border-bottom: none;
+}
+
+h3 {
+  font-size: 105%;
+  font-weight: bold;
+  margin: 20px 0 10px 0;
+}
+
+section > h3 {
+  margin: 0;
+  vertical-align: middle;
+  width: 130px;
+  -webkit-padding-end: 10px;
+}
+
+.displaytable > section > * {
+  display: table-cell;
+  vertical-align: baseline;
+}
+
+.version {
+  margin-left: 10px;
+  font-size: 10pt;
+  color: #aaa;
+}
+
+input[pref="wilting-threshold"] {
+  width: 2em;
+  margin-right: 5px;
+}
+

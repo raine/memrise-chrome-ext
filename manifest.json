@@ -3,6 +3,7 @@
 	"version": "0.1",
 	"manifest_version": 2,
 	"description": "Helps you take care of your plants",
+	"options_page": "options.html",
 	"icons": {
 		"16": "icon16.png",
 		"48": "icon48.png",
@@ -16,8 +17,7 @@
 	},
 	"permissions": [
 		"http://www.memrise.com/",
-		"background",
-		"tabs"
+		"background"
 	],
 	"content_scripts": [ {
 		"js": [ "lib/jquery-1.7.2.min.js" ],

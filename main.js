@@ -14,6 +14,8 @@ var STRINGS = {
 var UPDATE_INTERVAL = 5 * 60 * 1000;
 var action;
 
+var settings = new Store("settings", DEFAULTS);
+
 chrome.browserAction.onClicked.addListener(function() {
 	if (action) {
 		action();
@@ -27,6 +29,11 @@ var setBadge = function(topic) {
 	} else if (topic.wilting > 0) {
 		var type   = 'wilting';
 		var number = topic.wilting;
+
+		// Check against wilting-threshold setting
+		if (number < settings.get('wilting-threshold')) {
+			return;
+		}
 	} else {
 		action = function() {
 			chrome.tabs.create({ 'url': DASHBOARD_URL });
