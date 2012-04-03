@@ -54,6 +54,11 @@ var setBadge = function(topic) {
 
 var fetchGardens = function(cb) {
 	$.get('http://www.memrise.com/home/gardens', function(html) {
+		// jQuery uses browser DOM for parsing the HTML, so here's a dirty
+		// way for preventing that process from loading external resources
+		// like images
+		html = html.replace(/<img([^>]*)\ssrc=/gi,'<img$1 data-src=');
+
 		var $html   = $(html);
 		var $topics = $html.find('div:has(> .rows.my-wordlists)');
 		var topics  = [];
