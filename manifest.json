@@ -2,7 +2,7 @@
 	"name": "Memrise Button",
 	"version": "0.1",
 	"manifest_version": 2,
-	"description": "Helps you keep your plants healthy",
+	"description": "Helps you take care of your plants",
 	"icons": {
 		"16": "icon16.png",
 		"48": "icon48.png",
