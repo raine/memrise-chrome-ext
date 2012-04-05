@@ -26,14 +26,9 @@ var setBadge = function(topic) {
 	if (topic.harvestable > 0) {
 		var type   = 'harvest';
 		var number = topic.harvestable;
-	} else if (topic.wilting > 0) {
+	} else if (topic.wilting > 0 && number >= settings.get('wilting-threshold')) {
 		var type   = 'wilting';
 		var number = topic.wilting;
-
-		// Check against wilting-threshold setting
-		if (number < settings.get('wilting-threshold')) {
-			return;
-		}
 	} else {
 		action = function() {
 			chrome.tabs.create({ 'url': DASHBOARD_URL });
