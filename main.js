@@ -1,5 +1,7 @@
 var CAVE_URL      = 'http://www.memrise.com/cave/?';
 var DASHBOARD_URL = 'http://www.memrise.com/home/';
+var GARDEN_URL    = 'http://www.memrise.com/home/gardens';
+var LOGIN_URL     = 'http://www.memrise.com/accounts/login/';
 
 var COLORS = {
 	harvest: [ 250, 177, 31, 255 ],
@@ -23,14 +25,18 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 var setBadge = function(topic) {
-	var fallback = function() {
+	var noBadge = function(url, title) {
 		action = function() {
-			chrome.tabs.create({ 'url': DASHBOARD_URL });
+			chrome.tabs.create({ 'url': url });
 		};
 
 		chrome.browserAction.setBadgeText({ text: '' });
-		chrome.browserAction.setTitle({ title: 'Go to Memrise dashboard' });
-	};
+		chrome.browserAction.setTitle({ title: title });
+	}
+
+	if (topic === 'not-logged') {
+		return noBadge(LOGIN_URL, 'Log in to Memrise');
+	}
 
 	if (topic.harvestable > 0) {
 		var type   = 'harvest';
@@ -40,10 +46,10 @@ var setBadge = function(topic) {
 		var number = topic.wilting;
 
 	    if (number < settings.get('wilting-threshold')) {
-			return fallback();
+			return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
 		}
 	} else {
-		return fallback();
+		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
 	}
 
 	action = function() {
@@ -61,13 +67,17 @@ var setBadge = function(topic) {
 };
 
 var fetchGardens = function(cb) {
-	$.get('http://www.memrise.com/home/gardens', function(html) {
+	$.get(GARDEN_URL, function(html, foo) {
 		// jQuery uses browser DOM for parsing the HTML, so here's a dirty
 		// way for preventing that process from loading external resources
 		// like images
 		html = html.replace(/<img([^>]*)\ssrc=/gi,'<img$1 data-src=');
 
-		var $html   = $(html);
+		if (html.match(/<title>.*Login/)) {
+			return cb('not-logged');
+		}
+
+		var $html = $(html);
 		var $topics = $html.find('div:has(> .rows.my-wordlists)');
 		var topics  = [];
 
@@ -109,7 +119,7 @@ var fetchGardens = function(cb) {
 			topics.push(topic);
 		});
 
-		cb(topics);
+		cb(null, topics);
 	})
 };
 
@@ -146,7 +156,11 @@ var sortTopics = function(topics) {
 };
 
 var refreshButton = function() {
-	fetchGardens(function(topics) {
+	fetchGardens(function(err, topics) {
+		if (err) {
+			return setBadge(err);
+		}
+
 		var topics = sortTopics(topics).reverse();
 		var topic  = topics[0];
 
