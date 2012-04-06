@@ -162,4 +162,4 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-setTimeout(refreshButton, UPDATE_INTERVAL);
+setInterval(refreshButton, UPDATE_INTERVAL);
