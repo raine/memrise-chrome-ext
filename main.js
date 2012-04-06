@@ -23,21 +23,27 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 var setBadge = function(topic) {
-	if (topic.harvestable > 0) {
-		var type   = 'harvest';
-		var number = topic.harvestable;
-	} else if (topic.wilting > 0 && number >= settings.get('wilting-threshold')) {
-		var type   = 'wilting';
-		var number = topic.wilting;
-	} else {
+	var fallback = function() {
 		action = function() {
 			chrome.tabs.create({ 'url': DASHBOARD_URL });
 		};
 
 		chrome.browserAction.setBadgeText({ text: '' });
 		chrome.browserAction.setTitle({ title: 'Go to Memrise dashboard' });
+	};
 
-		return;
+	if (topic.harvestable > 0) {
+		var type   = 'harvest';
+		var number = topic.harvestable;
+	} else if (topic.wilting > 0) {
+		var type   = 'wilting';
+		var number = topic.wilting;
+
+	    if (number < settings.get('wilting-threshold')) {
+			return fallback();
+		}
+	} else {
+		return fallback();
 	}
 
 	action = function() {
