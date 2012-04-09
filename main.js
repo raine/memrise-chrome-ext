@@ -38,10 +38,10 @@ var setBadge = function(topic) {
 		return noBadge(LOGIN_URL, 'Log in to Memrise');
 	}
 
-	if (topic.harvestable > 0) {
+	if (topic && topic.harvestable > 0) {
 		var type   = 'harvest';
 		var number = topic.harvestable;
-	} else if (topic.wilting > 0) {
+	} else if (topic && topic.wilting > 0) {
 		var type   = 'wilting';
 		var number = topic.wilting;
 
@@ -155,10 +155,22 @@ var sortTopics = function(topics) {
 	});
 };
 
-var refreshButton = function() {
+var refreshButton = function(fromOpts) {
+	// Clear badge text if refreshing from options
+	if (fromOpts) {
+		setBadge();
+	}
+
 	fetchGardens(function(err, topics) {
 		if (err) {
 			return setBadge(err);
+		}
+
+		var topicsSetting = settings.get('topics');
+		if (topicsSetting) {
+			topics = _.filter(topics, function(topic) {
+				return topicsSetting[topic.id] === true;
+			});
 		}
 
 		var topics = sortTopics(topics).reverse();
@@ -172,7 +184,8 @@ refreshButton();
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	if (request === 'refresh') {
-		refreshButton();
+		var fromOpts = sender.tab.url.indexOf('options.html') > -1;
+		refreshButton(fromOpts);
 	}
 });
 

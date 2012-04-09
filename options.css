@@ -97,3 +97,23 @@ input[pref="wilting-threshold"] {
   margin-right: 5px;
 }
 
+.checkboxes {
+  margin-top: 10px;
+}
+
+.checkboxes label {
+  display: block;
+}
+
+input[type="checkbox"] {
+  margin-right: 0.5em;
+}
+
+.loading {
+  background-image:url("/loading.gif");
+  background-repeat: no-repeat;
+  padding-left: 24px;
+  margin-top: 10px;
+  line-height: 18px;
+  color: #666;
+}
