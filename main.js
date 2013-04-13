@@ -45,7 +45,7 @@ var setBadge = function(topic) {
 		var type   = 'wilting';
 		var number = topic.wilting;
 
-	    if (number < settings.get('wilting-threshold')) {
+		if (number < settings.get('wilting-threshold')) {
 			return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
 		}
 	} else {
