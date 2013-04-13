@@ -52,7 +52,7 @@ var setBadge = function(group) {
 
 			var type = 'harvest',
 				text = 'H';
-		} else if (group.wilting) {
+		} else if (group.wilting && group.wilting > settings.get('wilting-threshold')) {
 			var path  = group.waterPath,
 				type  = 'wilting',
 				count = group.wilting,
