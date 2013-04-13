@@ -29,17 +29,19 @@ var createTab = function(url) {
 	};
 };
 
+var noBadge = function(url, title) {
+	action = createTab(url);
+	chrome.browserAction.setBadgeText({ text: '' });
+	chrome.browserAction.setTitle({ title: title });
+}
+
+var setErrorBadge = function(err) {
+	if (err === 'not-logged-in') {
+		noBadge(LOGIN_URL, 'Log in to Memrise');
+	}
+}
+
 var setBadge = function(group) {
-	var noBadge = function(url, title) {
-		action = createTab(url);
-		chrome.browserAction.setBadgeText({ text: '' });
-		chrome.browserAction.setTitle({ title: title });
-	}
-
-	if (group === 'not-logged') {
-		return noBadge(LOGIN_URL, 'Log in to Memrise');
-	}
-
 	if (group) {
 		var count;
 
@@ -73,7 +75,11 @@ var setBadge = function(group) {
 };
 
 var fetchGroups = function(cb) {
-	$.get(DASHBOARD_URL, function(html, foo) {
+	$.get(DASHBOARD_URL, function(html) {
+		if (html.search(/'is_authenticated': false/) >= 0) {
+			return cb('not-logged-in');
+		}
+
 		var $html  = $($.parseHTML(html));
 		var groups = [];
 
@@ -144,7 +150,7 @@ var refreshButton = function(fromOpts) {
 
 	fetchGroups(function(err, groups) {
 		if (err) {
-			return setBadge(err);
+			return setErrorBadge(err);
 		}
 
 		// var topicsSetting = settings.get('topics');
