@@ -90,6 +90,11 @@ var fetchGroups = function(cb) {
 				wilting: 0,
 				courses: []
 			};
+			
+			group.id = group.name // Used in options.js but I'm lazy
+				.toLowerCase()
+				.replace(/[^a-z\s]*/g, '')
+				.replace(/\s+/, '-')
 
 			var m, href, btn = $('.group-header .btn', this);
 			if (href = btn.attr('href')) {
@@ -158,16 +163,15 @@ var refreshButton = function(fromOpts) {
 				noLogin = true;
 			}
 		} else {
+			var groupsSetting = settings.get('topics');
+			if (groupsSetting) {
+				groups = _.filter(groups, function(group) {
+					return groupsSetting[group.id] === true;
+				});
+			}
+
 			setBadge(_.last(groups.sort(sortGroups)));
 		}
-
-		// var topicsSetting = settings.get('topics');
-		// if (topicsSetting) {
-		// 	topics = _.filter(topics, function(topic) {
-		// 		return topicsSetting[topic.id] === true;
-		// 	});
-		// }
-
 	});
 };
 

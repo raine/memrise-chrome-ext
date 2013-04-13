@@ -1,4 +1,4 @@
-var JSON_URL = 'http://www.memrise.com/api/1.0/home/?format=json';
+var HOME_URL = 'http://www.memrise.com/home/';
 var settings = new Store("settings", DEFAULTS);
 
 $(document).ready(function() {
@@ -22,18 +22,30 @@ $(document).ready(function() {
 		});
 
 	// Topics
-	$.get(JSON_URL, function(data) {
+	$.get(HOME_URL, function(html) {
+		var $html = $($.parseHTML(html));
+
+		var topics = $.makeArray($('.whitebox .groupname', $html)).map(function(e) {
+			return {
+				name: e.innerText,
+				slug: e.innerText
+						.toLowerCase()
+						.replace(/[^a-z\s]*/g, '')
+						.replace(/\s+/, '-')
+			}
+		});
+
 		$('#topics .loading').hide();
 
-		if (data.topics && data.topics.length > 0) {
+		if (topics && topics.length > 0) {
 			if (settings.get('topics') == undefined) {
 				console.log('topics was empty');
 				settings.set('topics', {});
 			}
 
-			var topics = settings.get('topics');
+			var store = settings.get('topics');
 
-			data.topics.forEach(function(topic) {
+			topics.forEach(function(topic) {
 				var label = $('<label>', {
 					text: topic.name
 				});
@@ -47,20 +59,20 @@ $(document).ready(function() {
 					var $box = $(this);
 					var slug = $box.attr('name');
 
-					topics[slug] = $box.prop('checked');
-					settings.set('topics', topics);
+					store[slug] = $box.prop('checked');
+					settings.set('topics', store);
 				});
 
 				checkBox.prependTo(label);
 				$('#topics .checkboxes').append(label);
 
-				if (!topics.hasOwnProperty(topic.slug) || topics[topic.slug] === true) {
-					topics[topic.slug] = true; // Enable by default
+				if (!store.hasOwnProperty(topic.slug) || store[topic.slug] === true) {
+					store[topic.slug] = true; // Enable by default
 					checkBox.prop('checked', true);
 				}
 			});
 
-			settings.set('topics', topics);
+			settings.set('topics', store);
 		}
 	});
 
@@ -70,6 +82,6 @@ $(document).ready(function() {
 	});
 
 	$('#refresh').click(function() {
-		chrome.extension.sendRequest('refresh');
+		chrome.extension.sendMessage('refresh');
 	});
 });
