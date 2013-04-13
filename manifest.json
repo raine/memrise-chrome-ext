@@ -1,6 +1,6 @@
 {
 	"name": "Memrise Button",
-	"version": "1.1",
+	"version": "1.11",
 	"manifest_version": 2,
 	"description": "An unofficial Memrise extension to help you take care of your plants",
 	"options_page": "options.html",
