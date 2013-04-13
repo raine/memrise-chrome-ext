@@ -12,9 +12,10 @@ var observer = new window.WebKitMutationObserver(function(mutations, observer) {
 });
 
 var gardeningArea = document.getElementById('gardening-area');
-
-observer.observe(gardeningArea, {
-  subtree: true,
-  attributes: true,
-  childList: true
-});
+if (gardeningArea) {
+	observer.observe(gardeningArea, {
+		subtree: true,
+		attributes: true,
+		childList: true
+	});
+}
