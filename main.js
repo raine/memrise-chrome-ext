@@ -1,7 +1,6 @@
-var CAVE_URL      = 'http://www.memrise.com/cave/?';
-var DASHBOARD_URL = 'http://www.memrise.com/home/';
-var GARDEN_URL    = 'http://www.memrise.com/home/gardens';
-var LOGIN_URL     = 'http://www.memrise.com/accounts/login/';
+var BASE_URL      = 'http://www.memrise.com';
+var DASHBOARD_URL = BASE_URL + '/home/';
+var LOGIN_URL     = BASE_URL + '/login/';
 
 var COLORS = {
 	harvest: [ 250, 177, 31, 255 ],
@@ -9,7 +8,7 @@ var COLORS = {
 };
 
 var STRINGS = {
-	harvest: "%s: Harvest %d plant",
+	harvest: "%s: Harvest plants",
 	wilting: "%s: Water %d wilting plant"
 };
 
@@ -24,135 +23,117 @@ chrome.browserAction.onClicked.addListener(function() {
 	}
 });
 
-var setBadge = function(topic) {
-	var noBadge = function(url, title) {
-		action = function() {
-			chrome.tabs.create({ 'url': url });
-		};
+var createTab = function(url) {
+	return function() {
+		chrome.tabs.create({ 'url': url });
+	};
+};
 
+var setBadge = function(group) {
+	var noBadge = function(url, title) {
+		action = createTab(url);
 		chrome.browserAction.setBadgeText({ text: '' });
 		chrome.browserAction.setTitle({ title: title });
 	}
 
-	if (topic === 'not-logged') {
+	if (group === 'not-logged') {
 		return noBadge(LOGIN_URL, 'Log in to Memrise');
 	}
 
-	if (topic && topic.harvestable > 0) {
-		var type   = 'harvest';
-		var number = topic.harvestable;
-	} else if (topic && topic.wilting > 0) {
-		var type   = 'wilting';
-		var number = topic.wilting;
+	if (group) {
+		var count;
 
-		if (number < settings.get('wilting-threshold')) {
-			return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
+		if (group.harvestable) {
+			var path = _.find(group.courses, function(c) {
+				return c.harvestPath;
+			}).harvestPath;
+
+			var type = 'harvest',
+				text = 'H';
+		} else if (group.wilting) {
+			var path  = group.waterPath,
+				type  = 'wilting',
+				count = group.wilting,
+				text  = group.wilting.toString();
+		} else {
+			return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard');
 		}
-	} else {
-		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
+
+		var title = STRINGS[type].replace('%d', count).replace('%s', group.name);
+		if (type === 'wilting' && count !== 1) {
+			title += 's'
+		}
+
+		action = createTab(BASE_URL + path);
+
+		chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
+		chrome.browserAction.setBadgeText({ text: text });
+		chrome.browserAction.setTitle({ title: title });
 	}
-
-	action = function() {
-		chrome.tabs.create({ 'url': topic[type + 'URL'] });
-	};
-
-	var title = STRINGS[type].replace('%d', number).replace('%s', topic.name);
-	if (number !== 1) {
-		title += 's'
-	}
-
-	chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
-	chrome.browserAction.setBadgeText({ text: number.toString() });
-	chrome.browserAction.setTitle({ title: title });
 };
 
-var fetchGardens = function(cb) {
-	$.get(GARDEN_URL, function(html, foo) {
-		// jQuery uses browser DOM for parsing the HTML, so here's a dirty
-		// way for preventing that process from loading external resources
-		// like images
-		html = html.replace(/<img([^>]*)\ssrc=/gi,'<img$1 data-src=');
+var fetchGroups = function(cb) {
+	$.get(DASHBOARD_URL, function(html, foo) {
+		var $html  = $($.parseHTML(html));
+		var groups = [];
 
-		if (html.match(/<title>.*Login/)) {
-			return cb('not-logged');
-		}
+		// .whitebox is a single group of courses, like "Animals"
+		$('.whitebox', $html).each(function() {
+			var group = {
+				name: $('.groupname', this).text(),
+				wilting: 0,
+				courses: []
+			};
 
-		var $html = $(html);
-		var $topics = $html.find('div:has(> .rows.my-wordlists)');
-		var topics  = [];
+			var m, href, btn = $('.group-header .btn', this);
+			if (href = btn.attr('href')) {
+				group.waterPath = href;
 
-		$topics.each(function() {
-			var topic     = {};
-			var topicName = $('h3', this).text();
-			var topicId   = $(this).attr('id');
+				if (m = btn.text().match(/Water (\d+)/)) {
+					group.wilting = parseInt(m[1]);
+				}
+			}
 
-			topic.name      = topicName;
-			topic.id        = topicId;
-			topic.wordlists = [];
+			$('.course-box-wrapper', this).each(function() {
+				var course = {
+					title: $('a.inner-wrap', this).attr('title'),
+					id: parseInt($('.course-progress-box', this).attr('data-course-id'))
+				};
 
-			var wordlists = [];
+				var $harvest = $('.btn[href*="harvest"]', this);
+				if ($harvest.length > 0) {
+					course.harvestPath = $harvest.attr('href');
 
-			$('.row', this).each(function() {
-				var wordlist = {};
-				var wordlistName = $('.details > .name', this).text();
-
-				wordlist.name = wordlistName;
-				wordlist.id   = $(this).attr('id');
-
-				var $harvestable = $('.needs_harvest', this);
-				if ($harvestable.length) {
-					var $a = $harvestable.children('a');
-					wordlist.harvestURL   = $a.attr('href');
-					wordlist.harvestCount = parseInt($a.text().match(/\((\d+)\)/)[1]);
+					// Make it easier to check which groups have harvestable
+					group.harvestable = true;
 				}
 
-				var $wilting = $('.wilting', this);
-				if ($wilting.length) {
-					var $a = $wilting.children('a');
-					wordlist.wiltingURL   = $a.attr('href');
-					wordlist.wiltingCount = parseInt($a.text().match(/\((\d+)\)/)[1]);
-				}
-
-				topic.wordlists.push(wordlist);
+				group.courses.push(course);
 			});
 
-			topics.push(topic);
+			groups.push(group);
 		});
+
+		return cb(null, groups);
 
 		cb(null, topics);
 	})
 };
 
-var sortTopics = function(topics) {
-	topics.forEach(function(topic) {
-		topic.wilting = topic.wordlists.reduce(function(a, wl) {
-			return a + (wl.wiltingCount || 0);
-		}, 0);
+var sortGroups = function(a, b) {
+	if (a.harvestable) {
+		return 1;
+	} else if (b.harvestable) {
+		return -1;
+	}
 
-		topic.harvestable = topic.wordlists.reduce(function(a, wl) {
-			return a + (wl.harvestCount || 0);
-		}, 0);
+	if (a.wilting > b.wilting) {
+		return 1;
+	} else if (b.wilting > a.wilting) {
+		return -1;
+	}
 
-		// Construct URLs for harvesting or watering all plants under a topic
-		topic.harvestURL = CAVE_URL + jQuery.param({ topic: topic.id, 'plant_filter': 'harvest', ltemplatename: 'all_old_typing' });
-		topic.wiltingURL = CAVE_URL + jQuery.param({ topic: topic.id, 'plant_filter': 'wilting', ltemplatename: 'random_old' });
-	});
-
-	return topics.sort(function(a, b) {
-		if (a.harvestable > b.harvestable) {
-			return 1;
-		} else if (b.harvestable > a.harvestable) {
-			return -1;
-		}
-
-		if (a.wilting > b.wilting) {
-			return 1;
-		} else if (b.wilting > a.wilting) {
-			return -1;
-		}
-
-		return 0;
-	});
+	return 0;
 };
 
 var refreshButton = function(fromOpts) {
@@ -161,29 +142,27 @@ var refreshButton = function(fromOpts) {
 		setBadge();
 	}
 
-	fetchGardens(function(err, topics) {
+	fetchGroups(function(err, groups) {
 		if (err) {
 			return setBadge(err);
 		}
 
-		var topicsSetting = settings.get('topics');
-		if (topicsSetting) {
-			topics = _.filter(topics, function(topic) {
-				return topicsSetting[topic.id] === true;
-			});
-		}
+		// var topicsSetting = settings.get('topics');
+		// if (topicsSetting) {
+		// 	topics = _.filter(topics, function(topic) {
+		// 		return topicsSetting[topic.id] === true;
+		// 	});
+		// }
 
-		var topics = sortTopics(topics).reverse();
-		var topic  = topics[0];
-
-		setBadge(topic);
+		setBadge(_.last(groups.sort(sortGroups)));
 	});
 };
 
 refreshButton();
 
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request === 'refresh') {
+		console.log('refreshing');
 		var fromOpts = sender.tab.url.indexOf('options.html') > -1;
 		refreshButton(fromOpts);
 	}
