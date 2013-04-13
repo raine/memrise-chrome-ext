@@ -13,7 +13,7 @@ var STRINGS = {
 };
 
 var UPDATE_INTERVAL = 5 * 60 * 1000;
-var action;
+var action, noLogin;
 
 var settings = new Store("settings", DEFAULTS);
 
@@ -150,7 +150,15 @@ var refreshButton = function(fromOpts) {
 
 	fetchGroups(function(err, groups) {
 		if (err) {
-			return setErrorBadge(err);
+			console.log('err:', err);
+			setErrorBadge(err);
+
+			// So that it knows to refresh next time user is at /home/
+			if (err === 'not-logged-in') {
+				noLogin = true;
+			}
+		} else {
+			setBadge(_.last(groups.sort(sortGroups)));
 		}
 
 		// var topicsSetting = settings.get('topics');
@@ -160,17 +168,24 @@ var refreshButton = function(fromOpts) {
 		// 	});
 		// }
 
-		setBadge(_.last(groups.sort(sortGroups)));
 	});
 };
 
 refreshButton();
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request === 'refresh') {
-		console.log('refreshing');
-		var fromOpts = sender.tab.url.indexOf('options.html') > -1;
-		refreshButton(fromOpts);
+	switch (request) {
+		case 'refresh':
+			console.log('refreshing');
+			var fromOpts = sender.tab.url.indexOf('options.html') > -1;
+			refreshButton(fromOpts);
+			break;
+
+		case 'home':
+			if (noLogin) {
+				refreshButton(fromOpts);
+			}
+			break;
 	}
 });
 
