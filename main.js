@@ -17,6 +17,15 @@ var action, noLogin;
 
 var settings = new Store("settings", DEFAULTS);
 
+var consoleHolder = console,
+	console = {
+	log: function() {
+		var args = Array.prototype.slice.call(arguments);
+		args.unshift('[' + (new Date()).toISOString() + ']');
+		consoleHolder.log.apply(consoleHolder, args);
+	}
+};
+
 chrome.browserAction.onClicked.addListener(function() {
 	if (action) {
 		action();
