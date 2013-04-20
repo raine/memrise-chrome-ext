@@ -137,7 +137,7 @@ var fetchGroups = function(cb) {
 		return cb(null, groups);
 
 		cb(null, topics);
-	})
+	});
 };
 
 var sortGroups = function(a, b) {
