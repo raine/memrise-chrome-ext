@@ -157,6 +157,8 @@ var sortGroups = function(a, b) {
 };
 
 var refreshButton = function(fromOpts) {
+	console.log('refreshing button');
+
 	// Clear badge text if refreshing from options
 	if (fromOpts) {
 		setBadge();
@@ -187,9 +189,10 @@ var refreshButton = function(fromOpts) {
 refreshButton();
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	console.log('request "' + request + '"', sender);
+
 	switch (request) {
 		case 'refresh':
-			console.log('refreshing');
 			var fromOpts = sender.tab.url.indexOf('options.html') > -1;
 			refreshButton(fromOpts);
 			break;
