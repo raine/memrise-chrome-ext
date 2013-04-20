@@ -166,7 +166,7 @@ var refreshButton = function(fromOpts) {
 
 	fetchGroups(function(err, groups) {
 		if (err) {
-			console.log('err:', err);
+			console.log('error fetching data:', err);
 			setErrorBadge(err);
 
 			// So that it knows to refresh next time user is at /home/
