@@ -17,8 +17,8 @@ var action, noLogin;
 
 var settings = new Store("settings", DEFAULTS);
 
-var consoleHolder = console,
-	console = {
+var consoleHolder = console;
+var console = {
 	log: function() {
 		var args = Array.prototype.slice.call(arguments);
 		args.unshift('[' + (new Date()).toISOString() + ']');
