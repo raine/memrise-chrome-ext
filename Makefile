@@ -12,3 +12,6 @@ all: clean
 clean:
 	rm -rf memrise-button*
 	rm -rf dist/
+
+publish:
+	open https://chrome.google.com/webstore/developer/edit/mahhgdkliaknjffpmocpaglcoljnhodn
