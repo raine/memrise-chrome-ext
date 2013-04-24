@@ -117,3 +117,8 @@ input[type="checkbox"] {
   line-height: 18px;
   color: #666;
 }
+
+#unlogged {
+  margin-top: 10px;
+  display: none;
+}

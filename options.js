@@ -25,6 +25,13 @@ $(document).ready(function() {
 	// Topics
 	$.get(HOME_URL, function(html) {
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
+		$('#topics .loading').hide();
+
+		if (html.search(/'is_authenticated': false/) >= 0) {
+			$('#unlogged').show();
+			return;
+		}
+
 		var $html = $($.parseHTML(html));
 
 		var topics = $.makeArray($('.whitebox .groupname', $html)).map(function(e) {
@@ -36,8 +43,6 @@ $(document).ready(function() {
 						.replace(/\s+/, '-')
 			}
 		});
-
-		$('#topics .loading').hide();
 
 		if (topics && topics.length > 0) {
 			if (settings.get('topics') == undefined) {
