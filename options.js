@@ -1,5 +1,6 @@
 var HOME_URL = 'http://www.memrise.com/home/';
 var settings = new Store("settings", DEFAULTS);
+var resetTopics;
 
 $(document).ready(function() {
 	// Text input logic
@@ -46,6 +47,15 @@ $(document).ready(function() {
 
 			var store = settings.get('topics');
 
+			resetTopics = function() {
+				$('#topics .checkboxes input').prop('checked', true);
+				for (slug in store) {
+					store[slug] = true;
+				}
+
+				settings.set('topics', store);
+			}
+
 			topics.forEach(function(topic) {
 				var label = $('<label>', {
 					text: topic.name
@@ -78,8 +88,13 @@ $(document).ready(function() {
 	});
 
 	$('#reset').click(function() {
-		Store.clear();
-		console.log('localStorage cleared');
+		settings.reset();
+		$('input[type=text]').each(function(i, el) {
+			var pref = $(this).attr('pref');
+			$(this).val(settings.get(pref));
+		});
+
+		resetTopics();
 	});
 
 	$('#refresh').click(function() {
