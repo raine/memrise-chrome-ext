@@ -11,12 +11,15 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
-a:link {
-  color: rgb(63, 110, 194);
-}
 
-a:active {
-  color: rgb(37, 64, 113);
+a {
+  color: #0088cc;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  color: #005580;
+  text-decoration: underline;
 }
 
 input[type='password'],
