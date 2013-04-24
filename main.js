@@ -89,6 +89,7 @@ var fetchGroups = function(cb) {
 			return cb('not-logged-in');
 		}
 
+		html = html.replace(/<img\b[^>]*\/>/ig,'');
 		var $html  = $($.parseHTML(html));
 		var groups = [];
 

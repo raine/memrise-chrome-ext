@@ -23,6 +23,7 @@ $(document).ready(function() {
 
 	// Topics
 	$.get(HOME_URL, function(html) {
+		html = html.replace(/<img\b[^>]*\/>/ig,'');
 		var $html = $($.parseHTML(html));
 
 		var topics = $.makeArray($('.whitebox .groupname', $html)).map(function(e) {
