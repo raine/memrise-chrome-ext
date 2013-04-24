@@ -80,6 +80,8 @@ var setBadge = function(group) {
 		chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
 		chrome.browserAction.setBadgeText({ text: text });
 		chrome.browserAction.setTitle({ title: title });
+	} else {
+		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
 	}
 };
 
