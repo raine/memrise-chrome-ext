@@ -10,5 +10,5 @@ all: clean
 	open .
 
 clean:
-	rm -f memrise-button.zip
+	rm -rf memrise-button*
 	rm -rf dist/
