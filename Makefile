@@ -4,7 +4,7 @@ all: clean
 		-name '*' ! -name '.*' ! -name 'README.md' ! -name 'Makefile' -print | \
 		xargs -I % sh -c '{ echo %; cp -R % dist/; }'
 	cd dist && find . -name 'manifest.json' -o -name 'options.html' | \
-		xargs sed -i. "s/%VERSION%/$$VERSION/g"
+		xargs sed -i '' -e "s/%VERSION%/$$VERSION/g"
 	find dist -type f -name ".*" | xargs rm
 	cd dist && zip -r ../memrise-button .
 	open .
