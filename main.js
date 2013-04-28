@@ -214,3 +214,5 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 		refreshButton();
 	});
 }
+
+chrome.runtime.onInstalled.addListener(refreshButton);
