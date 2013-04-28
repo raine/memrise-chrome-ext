@@ -26,12 +26,6 @@ var console = {
 	}
 };
 
-chrome.browserAction.onClicked.addListener(function() {
-	if (action) {
-		action();
-	}
-});
-
 var createTab = function(url) {
 	return function() {
 		chrome.tabs.create({ 'url': url });
@@ -205,6 +199,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 				refreshButton(fromOpts);
 			}
 			break;
+	}
+});
+
+chrome.browserAction.onClicked.addListener(function() {
+	if (action) {
+		action();
 	}
 });
 
