@@ -21,7 +21,7 @@
 	},
 	"permissions": [
 		"http://www.memrise.com/",
-		"background"
+		"alarms"
 	],
 	"content_scripts": [ {
 		"matches": [ "http://www.memrise.com/*" ],

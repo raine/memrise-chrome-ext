@@ -12,7 +12,7 @@ var STRINGS = {
 	wilting: "%s: Water %d wilting plant"
 };
 
-var UPDATE_INTERVAL = 5 * 60 * 1000;
+var UPDATE_INTERVAL = 5; // Minutes
 var action, noLogin;
 
 var settings = new Store("settings", DEFAULTS);
@@ -206,7 +206,13 @@ chrome.browserAction.onClicked.addListener(function() {
 	}
 });
 
-setInterval(refreshButton, UPDATE_INTERVAL);
+chrome.runtime.onInstalled.addListener(refreshButton);
+chrome.alarms.onAlarm.addListener(function(alarm) {
+	console.log('got alarm', alarm);
+	refreshButton();
+});
+
+chrome.alarms.create('refresh', { periodInMinutes: 5 });
 
 if (chrome.runtime && chrome.runtime.onStartup) {
 	chrome.runtime.onStartup.addListener(function() {
@@ -214,5 +220,3 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 		refreshButton();
 	});
 }
-
-chrome.runtime.onInstalled.addListener(refreshButton);
