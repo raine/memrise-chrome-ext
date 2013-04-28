@@ -183,8 +183,6 @@ var refreshButton = function(fromOpts) {
 	});
 };
 
-refreshButton();
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	console.log('request "' + request + '"', sender);
 
@@ -209,3 +207,10 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 setInterval(refreshButton, UPDATE_INTERVAL);
+
+if (chrome.runtime && chrome.runtime.onStartup) {
+	chrome.runtime.onStartup.addListener(function() {
+		console.log('starting browser... refreshing icon');
+		refreshButton();
+	});
+}
