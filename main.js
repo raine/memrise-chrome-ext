@@ -212,7 +212,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 	refreshButton();
 });
 
-chrome.alarms.create('refresh', { periodInMinutes: 5 });
+chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
 
 if (chrome.runtime && chrome.runtime.onStartup) {
 	chrome.runtime.onStartup.addListener(function() {
