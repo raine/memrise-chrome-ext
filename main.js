@@ -243,7 +243,7 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 	});
 }
 
-// This icon animation code is from the Google Mail Checker extension that is
+// This icon animation code is derived from the Google Mail Checker extension that is
 // available as a sample on developer.chrome.com.
 // http://developer.chrome.com/extensions/examples/extensions/gmail.zip
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
