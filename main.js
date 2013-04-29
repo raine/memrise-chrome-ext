@@ -239,7 +239,7 @@ chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
 if (chrome.runtime && chrome.runtime.onStartup) {
 	chrome.runtime.onStartup.addListener(function() {
 		console.log('starting browser... refreshing');
-		refreshButton();
+		refreshButton({ animate: true });
 	});
 }
 
