@@ -80,7 +80,23 @@ var setBadge = function(group) {
 };
 
 var fetchGroups = function(cb) {
-	$.get(DASHBOARD_URL, function(html) {
+	// TODO: Override the dashboard url with local html when development env
+	// is detected from the manifest version which is 0.0.1.
+	var get = function(url, callback) {
+		if (chrome.app.getDetails().version === '0.0.1') {
+			url = chrome.extension.getURL('/assets/home.html');
+			var cb = function() {
+				var args = arguments;
+				setTimeout(function() {
+					callback.apply(null, args);
+				}, 2000);
+			}
+		}
+
+		$.get(url, cb);
+	};
+
+	get(DASHBOARD_URL, function(html) {
 		if (html.search(/'is_authenticated': false/) >= 0) {
 			return cb('not-logged-in');
 		}
@@ -153,11 +169,11 @@ var sortGroups = function(a, b) {
 	return 0;
 };
 
-var refreshButton = function(fromOpts) {
-	console.log('refreshing button');
+var refreshButton = function(opts) {
+	console.log('refreshing button', opts);
 
-	// Clear badge text if refreshing from options
-	if (fromOpts) {
+	if (opts && opts.animate) {
+		animateFlip();
 		setBadge();
 	}
 
@@ -189,12 +205,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request) {
 		case 'refresh':
 			var fromOpts = sender.tab.url.indexOf('options.html') > -1;
-			refreshButton(fromOpts);
+			refreshButton({ animate: fromOpts });
 			break;
 
 		case 'home':
 			if (noLogin) {
-				refreshButton(fromOpts);
+				refreshButton({ animate: true });
 			}
 			break;
 	}
@@ -206,7 +222,11 @@ chrome.browserAction.onClicked.addListener(function() {
 	}
 });
 
-chrome.runtime.onInstalled.addListener(refreshButton);
+chrome.runtime.onInstalled.addListener(function() {
+	console.log('installed... refreshing');
+	refreshButton({ animate: true });
+});
+
 chrome.alarms.onAlarm.addListener(function(alarm) {
 	console.log('got alarm', alarm);
 	refreshButton();
@@ -216,7 +236,49 @@ chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
 
 if (chrome.runtime && chrome.runtime.onStartup) {
 	chrome.runtime.onStartup.addListener(function() {
-		console.log('starting browser... refreshing icon');
+		console.log('starting browser... refreshing');
 		refreshButton();
 	});
+}
+
+// This icon animation code is from the Google Mail Checker extension that is
+// available as a sample on developer.chrome.com.
+// http://developer.chrome.com/extensions/examples/extensions/gmail.zip
+// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+var animationFrames = 18;
+var animationSpeed = 50;
+var rotation = 0;
+var canvas = document.getElementById('canvas');
+var memriseIcon = document.getElementById('memrise');
+var canvasContext = canvas.getContext('2d');
+
+function ease(x) {
+	return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
+}
+
+function animateFlip() {
+	rotation += 1/animationFrames;
+	drawIconAtRotation();
+
+	if (rotation <= 1) {
+		setTimeout(animateFlip, animationSpeed);
+	} else {
+		rotation = 0;
+		console.log('animation done');
+	}
+}
+
+function drawIconAtRotation() {
+	canvasContext.save();
+	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+	canvasContext.translate(
+		Math.ceil(canvas.width/2),
+		Math.ceil(canvas.height/2));
+	canvasContext.rotate(2*Math.PI*ease(rotation));
+	canvasContext.drawImage(memriseIcon,
+		-Math.ceil(canvas.width/2),
+		-Math.ceil(canvas.height/2));
+	canvasContext.restore();
+	chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0,
+		canvas.width, canvas.height)});
 }
