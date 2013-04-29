@@ -81,11 +81,12 @@ var setBadge = function(group) {
 
 var fetchGroups = function(cb) {
 	// TODO: Override the dashboard url with local html when development env
-	// is detected from the manifest version which is 0.0.1.
+	// is detected from the manifest version which is 0.0.1. Simulate delay.
 	var get = function(url, callback) {
+		var cb;
 		if (chrome.app.getDetails().version === '0.0.1') {
 			url = chrome.extension.getURL('/assets/home.html');
-			var cb = function() {
+			cb = function() {
 				var args = arguments;
 				setTimeout(function() {
 					callback.apply(null, args);
@@ -93,7 +94,7 @@ var fetchGroups = function(cb) {
 			}
 		}
 
-		$.get(url, cb);
+		$.get(url, cb || callback);
 	};
 
 	get(DASHBOARD_URL, function(html) {
