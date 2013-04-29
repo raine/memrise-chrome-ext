@@ -174,7 +174,6 @@ var refreshButton = function(opts) {
 	console.log('refreshing button', opts);
 
 	if (opts && opts.animate) {
-		setBadge();
 		anim(true);
 	}
 
