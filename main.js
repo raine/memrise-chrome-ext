@@ -173,11 +173,13 @@ var refreshButton = function(opts) {
 	console.log('refreshing button', opts);
 
 	if (opts && opts.animate) {
-		animateFlip();
 		setBadge();
+		anim(true);
 	}
 
 	fetchGroups(function(err, groups) {
+		anim(false);
+
 		if (err) {
 			console.log('error fetching data:', err);
 			setErrorBadge(err);
@@ -245,30 +247,47 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 // available as a sample on developer.chrome.com.
 // http://developer.chrome.com/extensions/examples/extensions/gmail.zip
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
-var animationFrames = 18;
-var animationSpeed = 50;
+var animationFrames = 36;
+var animationSpeed = 40;
 var rotation = 0;
 var canvas = document.getElementById('canvas');
 var memriseIcon = document.getElementById('memrise');
 var canvasContext = canvas.getContext('2d');
 
-function ease(x) {
-	return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
-}
+var ease = function(t) {
+	return t<.5 ? 2*t*t : -1+(4-2*t)*t;
+};
 
-function animateFlip() {
+var animateFlip = function(cb) {
 	rotation += 1/animationFrames;
 	drawIconAtRotation();
 
 	if (rotation <= 1) {
-		setTimeout(animateFlip, animationSpeed);
+		setTimeout(animateFlip.bind(null, cb), animationSpeed);
 	} else {
 		rotation = 0;
-		console.log('animation done');
+		cb();
 	}
-}
+};
 
-function drawIconAtRotation() {
+// anim(true) keeps animating the icon until anim(false) is called
+var animState = false;
+var anim = function(state) {
+	if (state === true) {
+		animState = true;
+		anim();
+	} else if (state === false) {
+		animState = false;
+	} else {
+		animateFlip(function() {
+			if (animState) {
+				anim();
+			}
+		});
+	}
+};
+
+var drawIconAtRotation = function() {
 	canvasContext.save();
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 	canvasContext.translate(
@@ -281,4 +300,4 @@ function drawIconAtRotation() {
 	canvasContext.restore();
 	chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0,
 		canvas.width, canvas.height)});
-}
+};
