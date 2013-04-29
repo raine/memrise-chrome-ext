@@ -206,8 +206,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 	switch (request) {
 		case 'refresh':
-			var fromOpts = sender.tab.url.indexOf('options.html') > -1;
-			refreshButton({ animate: fromOpts });
+			refreshButton({ animate: true });
 			break;
 
 		case 'home':
