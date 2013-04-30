@@ -36,13 +36,13 @@ var noBadge = function(url, title) {
 	action = createTab(url);
 	chrome.browserAction.setBadgeText({ text: '' });
 	chrome.browserAction.setTitle({ title: title });
-}
+};
 
 var setErrorBadge = function(err) {
 	if (err === 'not-logged-in') {
 		noBadge(LOGIN_URL, 'Log in to Memrise');
 	}
-}
+};
 
 var setBadge = function(group) {
 	if (group) {
