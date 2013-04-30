@@ -148,9 +148,7 @@ var fetchGroups = function(cb) {
 			groups.push(group);
 		});
 
-		return cb(null, groups);
-
-		cb(null, topics);
+		cb(null, groups);
 	});
 };
 
