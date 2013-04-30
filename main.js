@@ -26,14 +26,12 @@ var console = {
 	}
 };
 
-var createTab = function(url) {
-	return function() {
-		chrome.tabs.create({ 'url': url });
-	};
+var openURL = function(url) {
+	chrome.tabs.create({ 'url': url });
 };
 
 var noBadge = function(url, title) {
-	action = createTab(url);
+	localStorage.actionURL = url;
 	chrome.browserAction.setBadgeText({ text: '' });
 	chrome.browserAction.setTitle({ title: title });
 };
@@ -69,7 +67,7 @@ var setBadge = function(group) {
 			title += 's'
 		}
 
-		action = createTab(BASE_URL + path);
+		localStorage.actionURL = BASE_URL + path;
 
 		chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
 		chrome.browserAction.setBadgeText({ text: text });
@@ -216,8 +214,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.browserAction.onClicked.addListener(function() {
-	if (action) {
-		action();
+	var url;
+	if (url = localStorage.actionURL) {
+		openURL(url);
 	}
 });
 
