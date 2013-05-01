@@ -13,7 +13,7 @@ var STRINGS = {
 };
 
 var UPDATE_INTERVAL = 5; // Minutes
-var action, noLogin;
+var noLogin;
 var DEV_ENV = (chrome.app.getDetails().version === '0.0.1')
 
 var settings = new Store("settings", DEFAULTS);
