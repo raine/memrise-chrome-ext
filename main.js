@@ -14,6 +14,7 @@ var STRINGS = {
 
 var UPDATE_INTERVAL = 5; // Minutes
 var action, noLogin;
+var DEV_ENV = (chrome.app.getDetails().version === '0.0.1')
 
 var settings = new Store("settings", DEFAULTS);
 
@@ -82,7 +83,7 @@ var fetchGroups = function(cb) {
 	// is detected from the manifest version which is 0.0.1. Simulate delay.
 	var get = function(url, callback) {
 		var cb;
-		if (chrome.app.getDetails().version === '0.0.1') {
+		if (DEV_ENV) {
 			url = chrome.extension.getURL('/assets/home.html');
 			cb = function() {
 				var args = arguments;
