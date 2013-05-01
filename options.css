@@ -43,7 +43,6 @@ h1 {
   background-position: 5px 65%;
   text-indent: 36px;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
-  -webkit-padding-end: 24px;
   -webkit-user-select: none;
   border-bottom: 1px solid #eeeeee;
   color: #333;
@@ -139,4 +138,17 @@ input[type="checkbox"] {
 
 #feedback ul {
   padding: 0;
+}
+
+.right {
+  float: right;
+}
+
+#links {
+  font-size: 10pt;
+}
+
+.sep {
+  margin: 0 10px;
+  border-left: 1px dotted #ccc;
 }
