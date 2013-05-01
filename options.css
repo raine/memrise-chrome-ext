@@ -130,10 +130,13 @@ input[type="checkbox"] {
   display: none;
 }
 
+#feedback h3 {
+  margin-top: 0;
+}
+
 #feedback ul li {
   list-style-type: none;
   padding-bottom: 5px;
-  margin-left: 7px;
 }
 
 #feedback ul {
