@@ -23,6 +23,7 @@
 		"http://www.memrise.com/",
 		"alarms"
 	],
+	"content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'",
 	"content_scripts": [ {
 		"matches": [ "http://www.memrise.com/*" ],
 		"js": [ "page.js" ],

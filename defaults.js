@@ -1,3 +1,4 @@
 var DEFAULTS = {
-    "wilting-threshold": 1
+	"wilting-threshold": 1,
+	"track-usage": true
 };

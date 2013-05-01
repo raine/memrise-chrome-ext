@@ -275,6 +275,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.browserAction.onClicked.addListener(function() {
+	track('Button Click');
+
 	var url;
 	if (url = localStorage.actionURL) {
 		openURL(url);
@@ -282,6 +284,8 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
+	track('Extension Installed');
+
 	console.log('installed... refreshing');
 	refreshButton({ animate: true });
 });
