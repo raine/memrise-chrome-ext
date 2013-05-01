@@ -19,13 +19,15 @@ var DEV_ENV = (chrome.app.getDetails().version === '0.0.1')
 var settings = new Store("settings", DEFAULTS);
 
 var consoleHolder = console;
-var console = {
-	log: function() {
+var console = {};
+
+['log', 'info', 'error', 'debug'].forEach(function(e) {
+	console[e] = function() {
 		var args = Array.prototype.slice.call(arguments);
 		args.unshift('[' + (new Date()).toISOString() + ']');
-		consoleHolder.log.apply(consoleHolder, args);
+		consoleHolder[e].apply(consoleHolder, args);
 	}
-};
+});
 
 var openURL = function(url) {
 	chrome.tabs.create({ 'url': url });
