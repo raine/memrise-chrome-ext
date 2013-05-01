@@ -298,6 +298,10 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 	});
 }
 
+// As an event page, this code is run every time the extension wakes up for
+// whatever reason (alarm, opening options etc.) The point here is to make
+// sure the alarm set up. Technically it should only be necessary to set up
+// an alarm when the extension is installed.
 chrome.alarms.get('refresh', function(alarm) {
 	if (alarm) {
 		console.log('alarm exists', alarm);
