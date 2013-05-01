@@ -22,6 +22,16 @@ $(document).ready(function() {
 			}
 		});
 
+	$('input[type=checkbox]')
+		.each(function(i, el) {
+			var pref = $(this).attr('pref');
+			$(this).prop('checked', settings.get(pref));
+		}).change(function(event) {
+			var pref = $(this).attr('pref');
+			var val  = $(this).prop('checked');
+			settings.set(pref, val);
+		});
+
 	// Topics
 	$.get(HOME_URL, function(html) {
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
@@ -94,9 +104,18 @@ $(document).ready(function() {
 
 	$('#reset').click(function() {
 		settings.reset();
-		$('input[type=text]').each(function(i, el) {
+		$('input[pref]').each(function(i, el) {
 			var pref = $(this).attr('pref');
-			$(this).val(settings.get(pref));
+			var val  = settings.get(pref);
+
+			switch(el.type) {
+				case 'text':
+					$(this).val(val);
+					break;
+				case 'checkbox':
+					$(this).prop('checked', val);
+					break;
+			}
 		});
 
 		resetTopics();
