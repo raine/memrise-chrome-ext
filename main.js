@@ -79,8 +79,7 @@ var setBadge = function(group) {
 };
 
 var fetchGroups = function(cb) {
-	// Override the dashboard url with local html when development env
-	// is detected from the manifest version which is 0.0.1. Simulate delay.
+	// Override the dashboard url with local html when in dev env. Simulate delay.
 	var get = function(url, callback) {
 		var cb;
 		if (DEV_ENV) {
