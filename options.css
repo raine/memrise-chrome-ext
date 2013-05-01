@@ -64,7 +64,7 @@ section {
   border-bottom: 1px solid #eeeeee;
   display: -webkit-box;
   margin-top: 17px;
-  padding-bottom: 20px;
+  padding-bottom: 17px;
 }
 
 section:last-child {
@@ -82,6 +82,10 @@ section > h3 {
   vertical-align: middle;
   width: 130px;
   -webkit-padding-end: 10px;
+}
+
+section > div > p:first-child {
+  margin: 0;
 }
 
 .displaytable > section > * {
@@ -124,4 +128,13 @@ input[type="checkbox"] {
 #unlogged {
   margin-top: 10px;
   display: none;
+}
+
+#feedback ul li {
+  list-style-type: none;
+  padding-bottom: 0.4em
+}
+
+#feedback ul {
+  padding: 0;
 }
