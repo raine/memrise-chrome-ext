@@ -198,48 +198,6 @@ var refreshButton = function(opts) {
 	});
 };
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	console.log('request "' + request + '"', sender);
-
-	switch (request) {
-		case 'refresh':
-			refreshButton({ animate: true });
-			break;
-
-		case 'home':
-			if (noLogin) {
-				refreshButton({ animate: true });
-			}
-			break;
-	}
-});
-
-chrome.browserAction.onClicked.addListener(function() {
-	var url;
-	if (url = localStorage.actionURL) {
-		openURL(url);
-	}
-});
-
-chrome.runtime.onInstalled.addListener(function() {
-	console.log('installed... refreshing');
-	refreshButton({ animate: true });
-});
-
-chrome.alarms.onAlarm.addListener(function(alarm) {
-	console.log('got alarm', alarm);
-	refreshButton();
-});
-
-chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
-
-if (chrome.runtime && chrome.runtime.onStartup) {
-	chrome.runtime.onStartup.addListener(function() {
-		console.log('starting browser... refreshing');
-		refreshButton({ animate: true });
-	});
-}
-
 // This icon animation code is derived from the Google Mail Checker extension that is
 // available as a sample on developer.chrome.com.
 // http://developer.chrome.com/extensions/examples/extensions/gmail.zip
@@ -298,3 +256,52 @@ var drawIconAtRotation = function() {
 	chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0,
 		canvas.width, canvas.height)});
 };
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	console.log('request "' + request + '"', sender);
+
+	switch (request) {
+		case 'refresh':
+			refreshButton({ animate: true });
+			break;
+
+		case 'home':
+			if (noLogin) {
+				refreshButton({ animate: true });
+			}
+			break;
+	}
+});
+
+chrome.browserAction.onClicked.addListener(function() {
+	var url;
+	if (url = localStorage.actionURL) {
+		openURL(url);
+	}
+});
+
+chrome.runtime.onInstalled.addListener(function() {
+	console.log('installed... refreshing');
+	refreshButton({ animate: true });
+});
+
+chrome.alarms.onAlarm.addListener(function(alarm) {
+	console.log('got alarm', alarm);
+	refreshButton();
+});
+
+if (chrome.runtime && chrome.runtime.onStartup) {
+	chrome.runtime.onStartup.addListener(function() {
+		console.log('starting browser... refreshing');
+		refreshButton({ animate: true });
+	});
+}
+
+chrome.alarms.get('refresh', function(alarm) {
+	if (alarm) {
+		console.log('alarm exists', alarm);
+	} else {
+		console.log("alarm doesn't exist, creating a new alarm");
+		chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
+	}
+});
