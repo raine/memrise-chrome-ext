@@ -6,11 +6,11 @@
 body {
   cursor: default;
   font-size: 13px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+  color: #444;
   margin: 0;
   padding: 0 24px;
-  font-family: Helvetica, sans-serif;
 }
-
 
 a {
   color: #0088cc;
@@ -39,14 +39,14 @@ input[type='text']:disabled {
 h1 {
   background-image:url("/icons/icon19.png");
   background-repeat: no-repeat;
-  background-position: 5px 60%;
+  background-position: 5px 65%;
   text-indent: 36px;
-  font-family: Helvetica, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   -webkit-padding-end: 24px;
   -webkit-user-select: none;
   border-bottom: 1px solid #eeeeee;
   color: #333;
-  font-size: 200%;
+  font-size: 24px;
   font-weight: normal;
   margin: 0;
   padding-bottom: 4px;
@@ -113,7 +113,7 @@ input[pref="wilting-threshold"] {
 }
 
 input[type="checkbox"] {
-  margin-right: 0.5em;
+  margin-right: 7px;
 }
 
 .loading {
@@ -132,7 +132,7 @@ input[type="checkbox"] {
 
 #feedback ul li {
   list-style-type: none;
-  padding-bottom: 7px;
+  padding-bottom: 5px;
   margin-left: 7px;
 }
 
