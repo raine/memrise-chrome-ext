@@ -122,6 +122,9 @@ $(document).ready(function() {
 	});
 
 	$('#refresh').click(function() {
+		track('Refresh Click in Options');
 		chrome.extension.sendMessage('refresh');
 	});
 });
+
+track('Options Opened');
