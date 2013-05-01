@@ -113,7 +113,7 @@ input[pref="wilting-threshold"] {
 }
 
 input[type="checkbox"] {
-  margin-right: 7px;
+  margin-right: 5px;
 }
 
 .loading {
@@ -141,6 +141,7 @@ input[type="checkbox"] {
 
 #feedback ul {
   padding: 0;
+  margin-bottom: 5px;
 }
 
 .right {
