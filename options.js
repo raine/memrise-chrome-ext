@@ -1,4 +1,4 @@
-var HOME_URL = 'http://www.memrise.com/home/';
+var DASHBOARD_URL = 'http://www.memrise.com/home/';
 var settings = new Store("settings", DEFAULTS);
 var resetTopics;
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
 		});
 
 	// Topics
-	$.get(HOME_URL, function(html) {
+	$.get(DASHBOARD_URL, function(html) {
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
 		$('#topics .loading').hide();
 
