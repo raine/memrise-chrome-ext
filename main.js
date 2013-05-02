@@ -166,11 +166,23 @@ var refreshButton = function(opts) {
 			console.log('error fetching data:', err);
 			setErrorBadge(err);
 
-			// So that it knows to refresh next time user is at /home/
 			if (err === 'not-logged-in') {
+				anim.doNext(function() {
+					anim.drawIcon('unlogged');
+				});
+
+				// So that it knows to refresh next time user is at /home/
 				noLogin = true;
 			}
 		} else {
+			if (noLogin) {
+				anim.doNext(function() {
+					anim.drawIcon('logged');
+				});
+
+				noLogin = false;
+			}
+
 			var groupsSetting = settings.get('topics');
 			if (groupsSetting) {
 				groups = _.filter(groups, function(group) {
@@ -199,7 +211,7 @@ var Animation = function() {
 	this.animationSpeed = 40;
 	this.canvas = document.getElementById('canvas');
 	this.canvasContext = this.canvas.getContext('2d');
-	this.icon = document.getElementById('icon');
+	this.icon = document.getElementById('logged');
 };
 
 Animation.prototype.start = function() {
@@ -210,7 +222,10 @@ Animation.prototype.start = function() {
 		if (self.state) {
 			self.animateFlip(cb);
 		} else {
-			// Animation done
+			if (self.whenDone) {
+				self.whenDone();
+				delete self.whenDone;
+			}
 		}
 	};
 
@@ -220,6 +235,15 @@ Animation.prototype.start = function() {
 Animation.prototype.stop = function() {
 	this.state = false;
 };
+
+// Poor man's events
+Animation.prototype.doNext = function(cb) {
+	if (this.state || this.rotation !== 0) {
+		this.whenDone = cb;
+	} else {
+		cb();
+	}
+}
 
 Animation.prototype.animateFlip = function(cb) {
 	this.rotation += 1 / this.animationFrames;
@@ -249,6 +273,11 @@ Animation.prototype.drawIconAtRotation = function() {
 	chrome.browserAction.setIcon({imageData:this.canvasContext.getImageData(0, 0,
 		this.canvas.width, this.canvas.height)});
 };
+
+Animation.prototype.drawIcon = function(id) {
+	this.icon = document.getElementById(id);
+	this.drawIconAtRotation();
+}
 
 var anim = new Animation();
 
