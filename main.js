@@ -156,11 +156,11 @@ var refreshButton = function(opts) {
 	console.log('refreshing button', opts);
 
 	if (opts && opts.animate) {
-		anim(true);
+		anim.start();
 	}
 
 	fetchGroups(function(err, groups) {
-		anim(false);
+		anim.stop();
 
 		if (err) {
 			console.log('error fetching data:', err);
@@ -187,60 +187,68 @@ var refreshButton = function(opts) {
 // available as a sample on developer.chrome.com.
 // http://developer.chrome.com/extensions/examples/extensions/gmail.zip
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
-var animationFrames = 36;
-var animationSpeed = 40;
-var rotation = 0;
-var canvas = document.getElementById('canvas');
-var memriseIcon = document.getElementById('memrise');
-var canvasContext = canvas.getContext('2d');
 
 var ease = function(t) {
 	return t<.5 ? 2*t*t : -1+(4-2*t)*t;
 };
 
-var animateFlip = function(cb) {
-	rotation += 1/animationFrames;
-	drawIconAtRotation();
+var Animation = function() {
+	this.state = false;
+	this.rotation = 0;
+	this.animationFrames = 36;
+	this.animationSpeed = 40;
+	this.canvas = document.getElementById('canvas');
+	this.canvasContext = this.canvas.getContext('2d');
+	this.icon = document.getElementById('icon');
+};
 
-	if (rotation <= 1) {
-		setTimeout(animateFlip.bind(null, cb), animationSpeed);
+Animation.prototype.start = function() {
+	var self   = this;
+	this.state = true;
+
+	this.animateFlip(function() {
+		if (self.state) {
+			self.animateFlip();
+		} else {
+			// Animation done
+		}
+	});
+};
+
+Animation.prototype.stop = function() {
+	this.state = false;
+};
+
+Animation.prototype.animateFlip = function(cb) {
+	this.rotation += 1 / this.animationFrames;
+	this.drawIconAtRotation();
+
+	if (this.rotation <= 1) {
+		setTimeout(this.animateFlip.bind(this, cb), this.animationSpeed);
 	} else {
-		rotation = 0;
-		cb();
+		this.rotation = 0;
+		if (cb) {
+			cb();
+		}
 	}
 };
 
-// anim(true) keeps animating the icon until anim(false) is called
-var animState = false;
-var anim = function(state) {
-	if (state === true) {
-		animState = true;
-		anim();
-	} else if (state === false) {
-		animState = false;
-	} else {
-		animateFlip(function() {
-			if (animState) {
-				anim();
-			}
-		});
-	}
+Animation.prototype.drawIconAtRotation = function() {
+	this.canvasContext.save();
+	this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	this.canvasContext.translate(
+		Math.ceil(this.canvas.width/2),
+		Math.ceil(this.canvas.height/2));
+	this.canvasContext.rotate(2*Math.PI*ease(this.rotation));
+	this.canvasContext.drawImage(this.icon,
+		-Math.ceil(this.canvas.width/2),
+		-Math.ceil(this.canvas.height/2));
+	this.canvasContext.restore();
+	chrome.browserAction.setIcon({imageData:this.canvasContext.getImageData(0, 0,
+		this.canvas.width, this.canvas.height)});
 };
 
-var drawIconAtRotation = function() {
-	canvasContext.save();
-	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-	canvasContext.translate(
-		Math.ceil(canvas.width/2),
-		Math.ceil(canvas.height/2));
-	canvasContext.rotate(2*Math.PI*ease(rotation));
-	canvasContext.drawImage(memriseIcon,
-		-Math.ceil(canvas.width/2),
-		-Math.ceil(canvas.height/2));
-	canvasContext.restore();
-	chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0,
-		canvas.width, canvas.height)});
-};
+var anim = new Animation();
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	console.log('request "' + request + '"', sender);
