@@ -206,13 +206,15 @@ Animation.prototype.start = function() {
 	var self   = this;
 	this.state = true;
 
-	this.animateFlip(function() {
+	var cb = function() {
 		if (self.state) {
-			self.animateFlip();
+			self.animateFlip(cb);
 		} else {
 			// Animation done
 		}
-	});
+	};
+
+	this.animateFlip(cb);
 };
 
 Animation.prototype.stop = function() {
