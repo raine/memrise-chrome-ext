@@ -33,7 +33,7 @@ $(document).ready(function() {
 		});
 
 	// Topics
-	$.get(DASHBOARD_URL, function(html) {
+	get(DASHBOARD_URL, function(html) {
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
 		$('#topics .loading').hide();
 

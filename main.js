@@ -82,21 +82,6 @@ var setBadge = function(group) {
 
 var fetchGroups = function(cb) {
 	// Override the dashboard url with local html when in dev env. Simulate delay.
-	var get = function(url, callback) {
-		var cb;
-		if (DEV_ENV) {
-			url = chrome.extension.getURL('/assets/home.html');
-			cb = function() {
-				var args = arguments;
-				setTimeout(function() {
-					callback.apply(null, args);
-				}, 2000);
-			}
-		}
-
-		$.get(url, cb || callback);
-	};
-
 	get(DASHBOARD_URL, function(html) {
 		if (html.search(/'is_authenticated': false/) >= 0) {
 			return cb('not-logged-in');
