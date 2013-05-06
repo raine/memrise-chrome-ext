@@ -133,4 +133,6 @@ $(document).ready(function() {
 	}, 2000));
 });
 
-track('Options Opened');
+if (document.location.search !== '?installed') {
+	track('Options Opened');
+}
