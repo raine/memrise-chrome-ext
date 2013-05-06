@@ -211,6 +211,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			refreshButton({ animate: true });
 			break;
 
+		case 'refresh-from-cache':
+			refreshButton({ cache: true });
+			break;
+
 		case 'home':
 			if (noLogin) {
 				refreshButton({ animate: true });

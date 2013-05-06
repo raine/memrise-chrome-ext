@@ -87,6 +87,8 @@ $(document).ready(function() {
 
 					store[slug] = $box.prop('checked');
 					settings.set('topics', store);
+
+					chrome.extension.sendMessage('refresh-from-cache');
 				});
 
 				checkBox.prependTo(label);
