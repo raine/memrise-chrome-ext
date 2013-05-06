@@ -5,7 +5,9 @@ var observer = new window.WebKitMutationObserver(function(mutations, observer) {
 		for (var j = m.addedNodes.length - 1; j >= 0; j--){
 			var node = m.addedNodes[j];
 			if (node.className && node.className.indexOf('end_of_session') > -1) {
-				chrome.runtime.sendMessage('refresh');
+				setTimeout(function() {
+					chrome.runtime.sendMessage('refresh');
+				}, 1000);
 			}
 		};
 	};
