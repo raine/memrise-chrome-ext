@@ -15,6 +15,7 @@ var STRINGS = {
 var UPDATE_INTERVAL = 5; // Minutes
 var noLogin;
 var anim = new Animation();
+var groupsCache;
 
 var settings = new Store("settings", DEFAULTS);
 
@@ -80,7 +81,11 @@ var setBadge = function(group) {
 	}
 };
 
-var fetchGroups = function(cb) {
+var fetchGroups = function(cb, opts) {
+	if (groupsCache && opts && opts.cache) {
+		cb(null, groupsCache);
+	}
+
 	// Override the dashboard url with local html when in dev env. Simulate delay.
 	get(DASHBOARD_URL, function(html) {
 		if (html.search(/'is_authenticated': false/) >= 0) {
@@ -132,6 +137,8 @@ var fetchGroups = function(cb) {
 
 			groups.push(group);
 		});
+
+		groupsCache = groups;
 
 		cb(null, groups);
 	});
@@ -193,7 +200,7 @@ var refreshButton = function(opts) {
 
 			setBadge(_.last(groups.sort(sortGroups)));
 		}
-	});
+	}, opts);
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
