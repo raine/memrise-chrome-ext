@@ -123,10 +123,10 @@ $(document).ready(function() {
 		resetTopics();
 	});
 
-	$('#refresh').click(function() {
+	$('#refresh').click(_.throttle(function() {
 		track('Refresh Click in Options');
 		chrome.extension.sendMessage('refresh');
-	});
+	}, 2000));
 });
 
 track('Options Opened');
