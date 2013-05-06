@@ -13,4 +13,4 @@ An unofficial memrise extension to help you take care of your plants
 
 To prepare a zip for Chrome Store, run:
 
-	VERSION=1.0 make
+	VERSION=<version> make
