@@ -27,7 +27,7 @@ var console = {};
 		var args = Array.prototype.slice.call(arguments);
 		args.unshift('[' + (new Date()).toISOString() + ']');
 		consoleHolder[e].apply(consoleHolder, args);
-	}
+	};
 });
 
 var openURL = function(url) {
@@ -68,7 +68,7 @@ var setBadge = function(group) {
 
 		var title = STRINGS[type].replace('%d', count).replace('%s', group.name);
 		if (type === 'wilting' && count !== 1) {
-			title += 's'
+			title += 's';
 		}
 
 		localStorage.actionURL = BASE_URL + path;
@@ -77,7 +77,7 @@ var setBadge = function(group) {
 		chrome.browserAction.setBadgeText({ text: text });
 		chrome.browserAction.setTitle({ title: title });
 	} else {
-		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard')
+		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard');
 	}
 };
 
@@ -102,7 +102,7 @@ var parseHTML = function(html, cb) {
 		group.id = group.name // Used in options.js but I'm lazy
 			.toLowerCase()
 			.replace(/[^a-z\s]*/g, '')
-			.replace(/\s+/, '-')
+			.replace(/\s+/, '-');
 
 		var m, href, btn = $('.group-header .btn', this);
 		if (href = btn.attr('href')) {
