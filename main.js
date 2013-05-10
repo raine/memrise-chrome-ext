@@ -237,6 +237,10 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	console.log('installed... refreshing');
 	refreshButton({ animate: true });
+
+	if (!localStorage.firstInstalled) {
+		localStorage.firstInstalled = Date.now();
+	}
 });
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
