@@ -81,66 +81,76 @@ var setBadge = function(group) {
 	}
 };
 
+var parseHTML = function(html, cb) {
+	if (html.search(/'is_authenticated': false/) >= 0) {
+		return cb('not-logged-in');
+	}
+
+	html = html.replace(/<img\b[^>]*\/>/ig,'');
+	var $html  = $($.parseHTML(html));
+	var groups = [];
+
+	// .whitebox is a single group of courses, like "Animals"
+	$('.whitebox', $html).each(function() {
+		var group = {
+			name: $('.groupname', this).text(),
+			wilting: 0,
+			courses: []
+		};
+
+
+		group.id = group.name // Used in options.js but I'm lazy
+			.toLowerCase()
+			.replace(/[^a-z\s]*/g, '')
+			.replace(/\s+/, '-')
+
+		var m, href, btn = $('.group-header .btn', this);
+		if (href = btn.attr('href')) {
+			group.waterPath = href;
+
+			if (m = btn.text().match(/Water (\d+)/)) {
+				group.wilting = parseInt(m[1]);
+			}
+		}
+
+		$('.course-box-wrapper', this).each(function() {
+			var course = {
+				title: $('a.inner-wrap', this).attr('title'),
+				id: parseInt($('.course-progress-box', this).attr('data-course-id'))
+			};
+
+			var $harvest = $('.btn[href*="harvest"]', this);
+			if ($harvest.length > 0) {
+				course.harvestPath = $harvest.attr('href');
+
+				// Make it easier to check which groups have harvestable
+				group.harvestable = true;
+			}
+
+			group.courses.push(course);
+		});
+
+		groups.push(group);
+	});
+
+	cb(null, groups);
+};
+
 var fetchGroups = function(cb, opts) {
 	if (groupsCache && opts && opts.cache) {
-		cb(null, groupsCache);
+		return cb(null, groupsCache);
 	}
 
 	// Override the dashboard url with local html when in dev env. Simulate delay.
 	get(DASHBOARD_URL, function(html) {
-		if (html.search(/'is_authenticated': false/) >= 0) {
-			return cb('not-logged-in');
-		}
-
-		html = html.replace(/<img\b[^>]*\/>/ig,'');
-		var $html  = $($.parseHTML(html));
-		var groups = [];
-
-		// .whitebox is a single group of courses, like "Animals"
-		$('.whitebox', $html).each(function() {
-			var group = {
-				name: $('.groupname', this).text(),
-				wilting: 0,
-				courses: []
-			};
-			
-			group.id = group.name // Used in options.js but I'm lazy
-				.toLowerCase()
-				.replace(/[^a-z\s]*/g, '')
-				.replace(/\s+/, '-')
-
-			var m, href, btn = $('.group-header .btn', this);
-			if (href = btn.attr('href')) {
-				group.waterPath = href;
-
-				if (m = btn.text().match(/Water (\d+)/)) {
-					group.wilting = parseInt(m[1]);
-				}
+		parseHTML(html, function(err, groups) {
+			if (err) {
+				cb(err);
+			} else {
+				cb(null, groups);
+				groupsCache = groups;
 			}
-
-			$('.course-box-wrapper', this).each(function() {
-				var course = {
-					title: $('a.inner-wrap', this).attr('title'),
-					id: parseInt($('.course-progress-box', this).attr('data-course-id'))
-				};
-
-				var $harvest = $('.btn[href*="harvest"]', this);
-				if ($harvest.length > 0) {
-					course.harvestPath = $harvest.attr('href');
-
-					// Make it easier to check which groups have harvestable
-					group.harvestable = true;
-				}
-
-				group.courses.push(course);
-			});
-
-			groups.push(group);
 		});
-
-		groupsCache = groups;
-
-		cb(null, groups);
 	});
 };
 
