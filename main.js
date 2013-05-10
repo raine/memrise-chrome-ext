@@ -178,6 +178,8 @@ var sortGroups = function(a, b) {
 };
 
 var refreshButton = function(opts) {
+	reschedule();
+
 	opts = opts !== undefined ? opts : {};
 	console.log('refreshing button', opts);
 
@@ -267,6 +269,10 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 	});
 }
 
+function reschedule() {
+	chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
+}
+
 // As an event page, this code is run every time the extension wakes up for
 // whatever reason (alarm, opening options etc.) The point here is to make
 // sure the alarm set up. Technically it should only be necessary to set up
@@ -276,6 +282,6 @@ chrome.alarms.get('refresh', function(alarm) {
 		console.log('alarm exists', alarm);
 	} else {
 		console.log("alarm doesn't exist, creating a new alarm");
-		chrome.alarms.create('refresh', { periodInMinutes: UPDATE_INTERVAL });
+		reschedule();
 	}
 });
