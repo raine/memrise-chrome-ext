@@ -13,7 +13,6 @@ var STRINGS = {
 };
 
 var UPDATE_INTERVAL = 5; // Minutes
-var noLogin;
 var anim = new Animation();
 var groupsCache;
 
@@ -137,12 +136,13 @@ var parseHTML = function(html, cb) {
 };
 
 var fetchGroups = function(cb, opts) {
-	if (groupsCache && opts && opts.cache) {
+	opts = opts !== undefined ? opts : {};
+
+	if (groupsCache && opts.cache) {
 		return cb(null, groupsCache);
 	}
 
-	// Override the dashboard url with local html when in dev env. Simulate delay.
-	get(DASHBOARD_URL, function(html) {
+	var parse = function(html) {
 		parseHTML(html, function(err, groups) {
 			if (err) {
 				cb(err);
@@ -151,7 +151,14 @@ var fetchGroups = function(cb, opts) {
 				groupsCache = groups;
 			}
 		});
-	});
+	};
+
+	if (opts.html) {
+		console.log('fetchGroups: parsing html');
+		parse(opts.html);
+	} else {
+		get(DASHBOARD_URL, parse);
+	}
 };
 
 var sortGroups = function(a, b) {
@@ -171,9 +178,10 @@ var sortGroups = function(a, b) {
 };
 
 var refreshButton = function(opts) {
+	opts = opts !== undefined ? opts : {};
 	console.log('refreshing button', opts);
 
-	if (opts && opts.animate) {
+	if (opts.animate) {
 		anim.start();
 	}
 
@@ -188,18 +196,14 @@ var refreshButton = function(opts) {
 				anim.doNext(function() {
 					anim.drawIcon('unlogged');
 				});
-
-				// So that it knows to refresh next time user is at /home/
-				noLogin = true;
 			}
 		} else {
-			if (noLogin) {
-				anim.doNext(function() {
-					anim.drawIcon('logged');
-				});
-
-				noLogin = false;
-			}
+			// Makes sure the icon is not grey if user is logged in.
+			// No reason to run this if the icon is not currently grey, but
+			// on the other hand there is no harm either.
+			anim.doNext(function() {
+				anim.drawIcon('logged');
+			});
 
 			var groupsSetting = settings.get('topics');
 			if (groupsSetting) {
@@ -224,9 +228,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			refreshButton({ cache: true });
 		},
 		'home': function() {
-			if (noLogin) {
-				refreshButton({ animate: true });
-			}
+			refreshButton({ html: request.html });
 		}
 	};
 

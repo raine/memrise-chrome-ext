@@ -26,6 +26,7 @@ if (gardeningArea) {
 
 if (document.location.pathname === '/home/') {
 	chrome.runtime.sendMessage({
-		type: 'home'
+		type: 'home',
+		html: document.documentElement.innerHTML
 	});
 }
