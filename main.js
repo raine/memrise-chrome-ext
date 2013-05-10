@@ -204,23 +204,22 @@ var refreshButton = function(opts) {
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	console.log('request "' + request + '"', sender);
+	console.log('request "' + request.type + '"', sender);
 
-	switch (request) {
-		case 'refresh':
+	var handler;
+	(handler = {
+		'refresh': function() {
 			refreshButton({ animate: true });
-			break;
-
-		case 'refresh-from-cache':
+		},
+		'refresh-from-cache': function() {
 			refreshButton({ cache: true });
-			break;
-
-		case 'home':
+		},
+		'home': function() {
 			if (noLogin) {
 				refreshButton({ animate: true });
 			}
-			break;
-	}
+		}
+	}[request.type]) && handler();
 });
 
 chrome.browserAction.onClicked.addListener(function() {

@@ -88,7 +88,9 @@ $(document).ready(function() {
 					store[slug] = $box.prop('checked');
 					settings.set('topics', store);
 
-					chrome.extension.sendMessage('refresh-from-cache');
+					chrome.extension.sendMessage({
+						type: 'refresh-from-cache'
+					});
 				});
 
 				checkBox.prependTo(label);
@@ -125,7 +127,9 @@ $(document).ready(function() {
 
 	$('#refresh').click(_.throttle(function() {
 		track('Refresh Click in Options');
-		chrome.extension.sendMessage('refresh');
+		chrome.extension.sendMessage({
+			type: 'refresh'
+		});
 	}, 2000));
 });
 

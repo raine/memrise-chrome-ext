@@ -6,7 +6,9 @@ var observer = new window.WebKitMutationObserver(function(mutations, observer) {
 			var node = m.addedNodes[j];
 			if (node.className && node.className.indexOf('end_of_session') > -1) {
 				setTimeout(function() {
-					chrome.runtime.sendMessage('refresh');
+					chrome.runtime.sendMessage({
+						type: 'refresh'
+					});
 				}, 1000);
 			}
 		};
@@ -23,5 +25,7 @@ if (gardeningArea) {
 }
 
 if (document.location.pathname === '/home/') {
-	chrome.runtime.sendMessage('home');
+	chrome.runtime.sendMessage({
+		type: 'home'
+	});
 }
