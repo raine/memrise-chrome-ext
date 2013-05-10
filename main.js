@@ -216,7 +216,7 @@ var refreshButton = function(opts) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	console.log('request "' + request.type + '"', sender);
 
-	{
+	var methods = {
 		'refresh': function() {
 			refreshButton({ animate: true });
 		},
@@ -228,7 +228,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 				refreshButton({ animate: true });
 			}
 		}
-	}[request.type]();
+	};
+
+	methods[request.type]();
 });
 
 chrome.browserAction.onClicked.addListener(function() {
