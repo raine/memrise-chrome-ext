@@ -247,7 +247,10 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
-	track('Extension Installed', { 'version': chrome.app.getDetails().version });
+	track('Extension Installed', {
+		'version': chrome.app.getDetails().version
+		'update': !!localStorage.firstInstalled
+	});
 
 	console.log('installed... refreshing');
 	refreshButton({ animate: true });
