@@ -1,6 +1,13 @@
 .PHONY: all
 
-all: clean check-version
+CHDIR_SHELL := $(SHELL)
+define chdir
+   $(eval _D=$(firstword $(1) $(@D)))
+   $(info $(MAKE): cd $(_D)) $(eval SHELL = cd $(_D); $(CHDIR_SHELL))
+endef
+
+all: clean check-version clone
+	$(call chdir,build)
 	mkdir -p dist/
 	find . -maxdepth 1 -type d \( -path ./.git -o -path ./assets -o -path ./dist \) -prune -o \
 		-name '*' ! -name '.*' ! -name 'README.md' ! -name 'Makefile' ! -name '*.rb' -print | \
@@ -10,11 +17,15 @@ all: clean check-version
 	ruby manifest_version.rb dist/manifest.json $(VERSION)
 	find dist -type f -name ".*" | xargs rm
 	cd dist && zip -r ../memrise-button .
+	zsh -c "setopt extendedglob; rm -rf ^(dist|memrise-button*)"
 	open .
 
 clean:
 	rm -rf memrise-button*
-	rm -rf dist/
+	rm -rf build/
+
+clone:
+	git clone .git build/
 
 publish:
 	open https://chrome.google.com/webstore/developer/edit/mahhgdkliaknjffpmocpaglcoljnhodn
