@@ -248,7 +248,7 @@ chrome.browserAction.onClicked.addListener(function() {
 
 chrome.runtime.onInstalled.addListener(function() {
 	track('Extension Installed', {
-		'version': chrome.app.getDetails().version
+		'version': chrome.app.getDetails().version,
 		'update': !!localStorage.firstInstalled
 	});
 
