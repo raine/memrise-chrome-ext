@@ -263,7 +263,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.browserAction.onClicked.addListener(function() {
-	track('Button Click');
+	track('Button Click', prepareProps());
 
 	var url;
 	if (url = localStorage.actionURL) {
