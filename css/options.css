@@ -38,7 +38,7 @@ input[type='text']:disabled {
 }
 
 h1 {
-  background-image:url("/icons/icon19.png");
+  background-image:url("../icons/icon19.png");
   background-repeat: no-repeat;
   background-position: 5px 65%;
   text-indent: 36px;
@@ -117,7 +117,7 @@ input[type="checkbox"] {
 }
 
 .loading {
-  background-image:url("/loading.gif");
+  background-image:url("../loading.gif");
   background-repeat: no-repeat;
   padding-left: 24px;
   margin-top: 10px;
