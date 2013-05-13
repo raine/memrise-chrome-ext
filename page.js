@@ -11,8 +11,8 @@ var observer = new window.WebKitMutationObserver(function(mutations, observer) {
 					});
 				}, 1000);
 			}
-		};
-	};
+		}
+	}
 });
 
 var gardeningArea = document.getElementById('gardening-area');

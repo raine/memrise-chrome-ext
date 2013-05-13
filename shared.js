@@ -13,7 +13,7 @@ var get = function(url, callback) {
 			setTimeout(function() {
 				callback.apply(null, args);
 			}, 2000);
-		}
+		};
 	}
 
 	$.get(url, cb || callback);

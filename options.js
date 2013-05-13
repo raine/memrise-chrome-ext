@@ -51,11 +51,11 @@ $(document).ready(function() {
 						.toLowerCase()
 						.replace(/[^a-z\s]*/g, '')
 						.replace(/\s+/, '-')
-			}
+			};
 		});
 
 		if (topics && topics.length > 0) {
-			if (settings.get('topics') == undefined) {
+			if (settings.get('topics') === undefined) {
 				console.log('topics was empty');
 				settings.set('topics', {});
 			}
@@ -64,7 +64,7 @@ $(document).ready(function() {
 
 			resetTopics = function() {
 				$('#topics .checkboxes input').prop('checked', true);
-				for (slug in store) {
+				for (var slug in store) {
 					store[slug] = true;
 				}
 
