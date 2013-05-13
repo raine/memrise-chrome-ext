@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='options'>
     <head>
         <meta charset="utf-8">
         <title id="title">Memrise Button</title>
@@ -12,11 +12,11 @@
         <script src="lib/store.js"></script>
         <script src="lib/jquery-1.9.1.min.js"></script>
         <script src="lib/underscore.min.js"></script>
+        <script src="lib/angular.min.js"></script>
         <script src="shared.js"></script>
-        <script src="lib/mixpanel.js"></script>
-        <script src="options.js"></script>
+        <script src="js/app.js"></script>
     </head>
-    <body>
+    <body ng-controller='OptionsController' ng-csp>
       <h1>
         Memrise Button
         <span class="version">v%VERSION%</span>
@@ -31,59 +31,12 @@
         </div>
       </h1>
 
-      <div class="displaytable">
-        <section>
-          <h3>Badge options</h3>
-          <div>
-            <div class="text">
-              <label>
-                <input type="text" pref="wilting-threshold">
-                <span>Number of plants that must be wilting until blue badge is shown</span>
-              </label>
-            </div>
-          </div>
-        </section>
+      <section ng-controller='TopicsController'>
+        lol
+      </section>
 
-        <section id="topics">
-          <h3>Topics</h3>
-          <div>
-            <div>Select topics to be tracked by the extension</div>
-            <div class="loading">
-              Loading topics...
-            </div>
-            <div id="unlogged">
-              <a href="http://www.memrise.com/login/" \>Log in to Memrise</a>
-            </div>
-            <div class="checkboxes"></div>
-          </div>
-        </section>
-
-        <section>
-          <button id="refresh" class="btn btn-small">Manual refresh</button>
-          <button id="reset" class="btn btn-small">Reset to defaults</button>
-        </section>
-
-        <section id="feedback">
-          <div>
-            <h3>Feedback</h3>
-            <p>
-              If you're having trouble, got a suggestion or just want to say hi,
-              try one of these:
-            </p>
-
-            <ul>
-              <li><a href="http://www.memrise.com/thread/1292545">Thread on Memrise Forums</a></li>
-              <li><a href="mailto:raine.virta@gmail.com?subject=Memrise%20Chrome%20Extension">raine.virta@gmail.com</a></li>
-              <li><a href="http://twitter.com/rane">@rane on Twitter</a></li>
-            </ul>
-            <div class="text">
-              <label>
-                <input type="checkbox" pref="track-usage">
-                <span>Send anonymous usage statistics</span>
-              </label>
-            </div>
-          </div>
-        </section>
-      </div>
+      <section>
+        <button ng-click="refresh()" class="btn btn-small">Manual refresh</button>
+      </section>
     </body>
 </html>
