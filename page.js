@@ -10,6 +10,7 @@ var observer = new window.WebKitMutationObserver(function(mutations, observer) {
 						type: 'refresh'
 					});
 				}, 1000);
+				break;
 			}
 		}
 	}
