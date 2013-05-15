@@ -48,26 +48,12 @@ rivets.formatters.number = {
 		},
 
 		sync: function(method, model, options) {
-			console.log('settings sync', method, model, options);
-
-			var saveObj = function(obj) {
-				for (var key in obj) {
-					localStorage['settings.' + key] = obj[key];
-				}
-			};
-
-			var getItem = function(key) {
-				var value = localStorage['settings.' + key]
-				if (value === null) { return undefined; }
-				try { return JSON.parse(value); } catch (e) { return null; }
-			};
-
 			switch(method) {
 				case 'create':
-					saveObj(model.changed);
+					this._writeObj(model.changed);
 					break;
 				case 'update':
-					saveObj(model.attributes);
+					this._writeObj(model.attributes);
 					break;
 				case 'delete':
 					console.log('delete unimpl');
@@ -78,7 +64,7 @@ rivets.formatters.number = {
 					for (var i = (localStorage.length - 1); i >= 0; i--) {
 						if (localStorage.key(i).substring(0, name.length) === name) {
 							var key = localStorage.key(i).substring(name.length);
-							var value = getItem(key);
+							var value = this._getItem(key);
 							if (value !== undefined) { values[key] = value; }
 						}
 					}
@@ -91,6 +77,18 @@ rivets.formatters.number = {
 
 					return model;
 			}
+		},
+
+		_writeObj: function(obj) {
+			for (var key in obj) {
+				localStorage['settings.' + key] = obj[key];
+			}
+		},
+
+		_getItem: function(key) {
+			var value = localStorage['settings.' + key]
+			if (value === null) { return undefined; }
+			try { return JSON.parse(value); } catch (e) { return null; }
 		}
 	});
 })();
