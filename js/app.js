@@ -37,6 +37,7 @@ rivets.formatters.number = {
 (function() {
 	app.Settings = Backbone.Model.extend({
 		defaults: OPTIONS_DEFAULTS,
+
 		initialize: function() {
 			this.on('change', function(model) {
 				model.save();
@@ -45,6 +46,7 @@ rivets.formatters.number = {
 			this.sync('read', this);
 			this.sync('update', this);
 		},
+
 		sync: function(method, model, options) {
 			console.log('settings sync', method, model, options);
 
