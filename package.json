@@ -7,6 +7,8 @@
 	},
 	"devDependencies": {
 		"mocha": "latest",
-		"chai": "latest"
+		"chai": "latest",
+		"grunt": "0.3.17",
+		"grunt-exec": "0.2.1"
 	}
 }

@@ -10,6 +10,4 @@ app = connect()
   // .use(connect.static('app'))
   // .use('/js/lib/', connect.static('node_modules/requirejs/'))
 
-http.createServer(app).listen(8080, function() {
-  console.log('Running on http://localhost:8080');
-});
+module.exports = http.createServer(app);
