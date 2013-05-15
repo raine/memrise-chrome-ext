@@ -3,3 +3,5 @@ assets/
 build/
 memrise-button/
 memrise-button.zip
+
+node_modules/

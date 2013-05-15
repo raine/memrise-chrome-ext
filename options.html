@@ -1,42 +1,54 @@
 <!DOCTYPE html>
-<html ng-app='options'>
-    <head>
-        <meta charset="utf-8">
-        <title id="title">Memrise Button</title>
-        
-        <link id="favicon" rel="icon" href="icons/icon16-t.png">
-        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
-        <link rel="stylesheet" href="css/bootstrap.css" media="screen">
-        <link rel="stylesheet" href="css/options.css" media="screen">
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title id="title">Memrise Button</title>
 
-        <script src="lib/store.js"></script>
-        <script src="lib/jquery-1.9.1.min.js"></script>
-        <script src="lib/underscore.min.js"></script>
-        <script src="lib/angular.min.js"></script>
-        <script src="shared.js"></script>
-        <script src="js/app.js"></script>
-    </head>
-    <body ng-controller='OptionsController' ng-csp>
-      <h1>
-        Memrise Button
-        <span class="version">v%VERSION%</span>
-        <div id="links" class="right">
-          <span class="github">
-            <a href="http://github.com/raneksi/memrise-chrome-ext">Project on GitHub</a>
-          </span>
-          <span class="sep"></span>
-          <span class="store">
-            <a href="https://chrome.google.com/webstore/detail/memrise-button/mahhgdkliaknjffpmocpaglcoljnhodn">Chrome Store</a>
-          </span>
+    <link id="favicon" rel="icon" href="icons/icon16-t.png">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="css/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="css/options.css" media="screen">
+
+    <script src="lib/store.js"></script>
+    <script src="lib/jquery-1.9.1.min.js"></script>
+    <script src="lib/underscore.min.js"></script>
+    <script src="lib/backbone.js"></script> <!-- TODO: use min -->
+    <script src="lib/rivets.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body id="app">
+    <h1>
+      Memrise Button
+      <span class="version">v%VERSION%</span>
+      <div id="links" class="right">
+        <span class="github">
+          <a href="http://github.com/raneksi/memrise-chrome-ext">Project on GitHub</a>
+        </span>
+        <span class="sep"></span>
+        <span class="store">
+          <a href="https://chrome.google.com/webstore/detail/memrise-button/mahhgdkliaknjffpmocpaglcoljnhodn">Chrome Store</a>
+        </span>
+      </div>
+    </h1>
+
+    <div class="displaytable">
+      <section>
+        <h3>Badge options</h3>
+        <div>
+          <div class="text">
+            <label>
+              <input type="text" pref="wilting-threshold" data-value="settings.wilting-threshold | number">
+              <span>Number of plants that must be wilting until blue badge is shown</span>
+            </label>
+          </div>
         </div>
-      </h1>
-
-      <section ng-controller='TopicsController'>
-        lol
       </section>
 
       <section>
-        <button ng-click="refresh()" class="btn btn-small">Manual refresh</button>
+        <button id="refresh" class="btn btn-small">Manual refresh</button>
+        <button id="test" class="btn btn-small">Test</button>
       </section>
-    </body>
+    </div>
+  </body>
 </html>

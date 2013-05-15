@@ -1,0 +1,12 @@
+{
+	"name": "opts",
+	"version": "0.0.0",
+	"private": true,
+	"dependencies": {
+		"connect": "2.7.0"
+	},
+	"devDependencies": {
+		"mocha": "latest",
+		"chai": "latest"
+	}
+}
