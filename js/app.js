@@ -43,11 +43,11 @@ rivets.formatters.number = {
 
 		initialize: function() {
 			this.on('change', function(model) {
-				model.save();
+				model.save(); // Triggers sync with 'create'
 			});
 
-			this.sync('read', this);
-			this.sync('update', this);
+			this.sync('read', this);   // Read values from localStorage
+			this.sync('update', this); // Write to localStorage, in case of first run
 		},
 
 		sync: function(method, model, options) {
