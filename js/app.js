@@ -100,9 +100,9 @@ rivets.formatters.number = {
 		initialize: function() {
 			var settings = new app.Settings();
 
-            rivets.bind(this.$el, {
-                settings: settings
-            });
+			rivets.bind(this.$el, {
+				settings: settings
+			});
 		},
 
 		events: {
