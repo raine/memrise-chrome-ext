@@ -12,12 +12,14 @@ rivets.configure({
 		subscribe: function(obj, keypath, callback) {
 			obj.on('change:' + keypath, callback);
 		},
+
 		unsubscribe: function(obj, keypath, callback) {
 			obj.off('change:' + keypath, callback);
 		},
 		read: function(obj, keypath) {
 			return obj.get(keypath);
 		},
+
 		publish: function(obj, keypath, value) {
 			console.log('publish', keypath, value);
 			obj.set(keypath, value);
@@ -29,6 +31,7 @@ rivets.formatters.number = {
 	read: function(value) {
 		return value;
 	},
+
 	publish: function(value) {
 		return +value;
 	}
@@ -50,8 +53,6 @@ rivets.formatters.number = {
 		sync: function(method, model, options) {
 			switch(method) {
 				case 'create':
-					this._writeObj(model.changed);
-					break;
 				case 'update':
 					this._writeObj(model.attributes);
 					break;
@@ -60,10 +61,10 @@ rivets.formatters.number = {
 					break;
 				case 'read':
 					var values = {};
-					var name = "settings.";
+					var prefix = "settings.";
 					for (var i = (localStorage.length - 1); i >= 0; i--) {
-						if (localStorage.key(i).substring(0, name.length) === name) {
-							var key = localStorage.key(i).substring(name.length);
+						if (localStorage.key(i).substring(0, prefix.length) === prefix) {
+							var key = localStorage.key(i).substring(prefix.length);
 							var value = this._getItem(key);
 							if (value !== undefined) { values[key] = value; }
 						}
@@ -79,6 +80,11 @@ rivets.formatters.number = {
 			}
 		},
 
+		reset: function() {
+			this._clear();
+			this.save(this.defaults);
+		},
+
 		_writeObj: function(obj) {
 			for (var key in obj) {
 				localStorage['settings.' + key] = obj[key];
@@ -89,6 +95,15 @@ rivets.formatters.number = {
 			var value = localStorage['settings.' + key]
 			if (value === null) { return undefined; }
 			try { return JSON.parse(value); } catch (e) { return null; }
+		},
+
+		_clear: function() {
+			var prefix = "settings.";
+			for (var i = (localStorage.length - 1); i >= 0; i--) {
+				if (localStorage.key(i).substring(0, prefix.length) === prefix) {
+					localStorage.removeItem(localStorage.key(i));
+				}
+			}
 		}
 	});
 })();
@@ -98,21 +113,26 @@ rivets.formatters.number = {
 		el: '#app',
 
 		initialize: function() {
-			var settings = new app.Settings();
+			this.settings = new app.Settings();
 
 			rivets.bind(this.$el, {
-				settings: settings
+				settings: this.settings
 			});
 		},
 
 		events: {
-			'click #refresh': 'refresh'
+			'click #refresh': 'refresh',
+			'click #reset': 'resetToDefaults'
 		},
 
 		refresh: function() {
 			chrome.extension.sendMessage({
 				type: 'refresh'
 			});
+		},
+
+		resetToDefaults: function() {
+			this.settings.reset();
 		}
 	});
 })(jQuery);

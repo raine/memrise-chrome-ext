@@ -42,4 +42,20 @@ suite('app.Settings', function() {
 			assert.equal(s.get('track-usage'), OPTIONS_DEFAULTS['track-usage']);
 		});
 	});
+
+	suite('reset()', function() {
+		test('should return settings to defaults', function() {
+			var settings = new app.Settings();
+			settings.set({
+				'wilting-threshold': 10,
+				'track-usage': false
+			});
+
+			settings.reset();
+			for (var key in OPTIONS_DEFAULTS) {
+				var value = OPTIONS_DEFAULTS[key];
+				assert.equal(settings.get(key), value);
+			}
+		});
+	});
 });
