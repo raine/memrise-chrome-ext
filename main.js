@@ -255,6 +255,10 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
+	// Make sure the super properties are set in the events that are sent
+	// before going to the options for the first time
+	mixpanel.register(prepareProps());
+
 	track('Extension Installed', {
 		'version': chrome.app.getDetails().version,
 		'update': !!localStorage.firstInstalled
