@@ -16,8 +16,8 @@ var OPTIONS_DEFAULTS = {
 				model.save(); // Triggers sync with 'create'
 			});
 
-			this.sync('read', this);   // Read values from localStorage
-			this.sync('update', this); // Write to localStorage, in case of first run
+			this.fetch(); // Read values from localStorage
+			this.save();  //  Write to localStorage, in case of first run
 		},
 
 		sync: function(method, model, options) {
