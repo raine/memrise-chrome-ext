@@ -6,7 +6,7 @@ var resetTopics;
 var oldset = settings.set;
 settings.set = function() {
 	oldset.apply(settings, arguments);
-	mixpanel.register(prepareProps());
+	mixpanel.register(prepareSuperProps());
 };
 
 $(document).ready(function() {
