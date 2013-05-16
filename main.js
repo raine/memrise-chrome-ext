@@ -31,27 +31,10 @@ var console = {};
 
 var openURL = function(url, newTab) {
 	if (newTab) {
-		return chrome.tabs.create({ 'url': url });
+		chrome.tabs.create({ 'url': url });
+	} else {
+		chrome.tabs.update({ 'url': url });
 	}
-
-	chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
-		var matchers = [
-			"/home",
-			"/course/.*",
-			"/garden/.*"
-		];
-
-		var tabURL = tabs[0].url;
-		var onMemrise;
-		if (tabURL.indexOf(BASE_URL) === 0) {
-			onMemrise = _.any(matchers, function(m) {
-				return new RegExp(m).test(tabs[0].url);
-			});
-		}
-
-		var method = (onMemrise ? 'update' : 'create');
-		chrome.tabs[method]({ 'url': url });
-	});
 };
 
 var openOptions = function() {
