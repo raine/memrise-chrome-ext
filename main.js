@@ -246,7 +246,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.browserAction.onClicked.addListener(function() {
-	track('Button Click', prepareProps());
+	track('Button Click');
 
 	var url;
 	if (url = localStorage.actionURL) {

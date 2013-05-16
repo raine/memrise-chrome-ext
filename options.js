@@ -2,6 +2,29 @@ var DASHBOARD_URL = 'http://www.memrise.com/home/';
 var settings = new Store("settings", DEFAULTS);
 var resetTopics;
 
+// Build an object from options Store to track how settings are used
+var prepareProps = function() {
+	var props = {};
+
+	var topics = settings.get('topics');
+	if (topics) {
+		props['Topics Disabled'] = _.contains(_.values(topics), false);
+	} else {
+		props['Topics Disabled'] = false;
+	}
+
+	props['Wilting Threshold'] = settings.get('wilting-threshold');
+
+	return props;
+};
+
+// HACK: Store bindEvent doesn't work
+var oldset = settings.set;
+settings.set = function() {
+	oldset.apply(settings, arguments);
+	mixpanel.register(prepareProps());
+};
+
 $(document).ready(function() {
 	// Text input logic
 	$('input[type=text]')
