@@ -32,21 +32,21 @@ var OPTIONS_DEFAULTS = {
 					console.log('delete unimpl');
 					break;
 				case 'read':
+					// Read existing settings from localStorage
 					var values = {};
 					var prefix = "settings.";
 					for (var i = (localStorage.length - 1); i >= 0; i--) {
-						if (localStorage.key(i).substring(0, prefix.length) === prefix) {
+						if (localStorage.key(i).indexOf(prefix) === 0) {
 							var key = localStorage.key(i).substring(prefix.length);
 							var value = this._getItem(key);
-							if (value !== undefined) { values[key] = value; }
+							if (value !== undefined) {
+								values[key] = value;
+							}
 						}
 					}
 
-					for (var key in values) {
-						if (!model.hasOwnProperty(key)) {
-							model.attributes[key] = values[key];
-						}
-					}
+					// Copy settings from localStorage to model's attributes
+					_.extend(model.attributes, values);
 
 					return model;
 			}
