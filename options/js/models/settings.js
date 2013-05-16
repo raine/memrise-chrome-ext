@@ -1,5 +1,3 @@
-'use strict';
-
 var app = app || {};
 
 var OPTIONS_DEFAULTS = {
@@ -7,37 +5,9 @@ var OPTIONS_DEFAULTS = {
 	'track-usage': true
 };
 
-rivets.configure({
-	adapter: {
-		subscribe: function(obj, keypath, callback) {
-			obj.on('change:' + keypath, callback);
-		},
-
-		unsubscribe: function(obj, keypath, callback) {
-			obj.off('change:' + keypath, callback);
-		},
-		read: function(obj, keypath) {
-			return obj.get(keypath);
-		},
-
-		publish: function(obj, keypath, value) {
-			console.log('publish', keypath, value);
-			obj.set(keypath, value);
-		}
-	}
-});
-
-rivets.formatters.number = {
-	read: function(value) {
-		return value;
-	},
-
-	publish: function(value) {
-		return +value;
-	}
-};
-
 (function() {
+	'use strict';
+
 	app.Settings = Backbone.Model.extend({
 		defaults: OPTIONS_DEFAULTS,
 
@@ -51,6 +21,8 @@ rivets.formatters.number = {
 		},
 
 		sync: function(method, model, options) {
+			console.log(method, model);
+
 			switch(method) {
 				case 'create':
 				case 'update':
@@ -107,36 +79,3 @@ rivets.formatters.number = {
 		}
 	});
 })();
-
-(function($) {
-	app.AppView = Backbone.View.extend({
-		el: '#app',
-
-		initialize: function() {
-			this.settings = new app.Settings();
-
-			rivets.bind(this.$el, {
-				settings: this.settings
-			});
-		},
-
-		events: {
-			'click #refresh': 'refresh',
-			'click #reset': 'resetToDefaults'
-		},
-
-		refresh: function() {
-			chrome.extension.sendMessage({
-				type: 'refresh'
-			});
-		},
-
-		resetToDefaults: function() {
-			this.settings.reset();
-		}
-	});
-})(jQuery);
-
-$(function() {
-	new app.AppView();
-});
