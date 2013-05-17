@@ -24,7 +24,7 @@
 		"alarms",
 		"tabs"
 	],
-	"content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'",
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.mxpnl.com; object-src 'self'",
 	"content_scripts": [ {
 		"matches": [ "http://www.memrise.com/*" ],
 		"js": [ "page.js" ],
