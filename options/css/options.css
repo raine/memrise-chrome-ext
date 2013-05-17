@@ -112,6 +112,23 @@ input[pref="wilting-threshold"] {
   display: block;
 }
 
+.checkboxes li {
+  list-style-type: none;
+  padding: 1px 0px;
+}
+
+.checkboxes > ul {
+  -webkit-padding-start: 0px;
+}
+
+.checkboxes > ul > li:not(first-child) {
+  margin-top: 5px;
+}
+
+.checkboxes ul ul {
+  -webkit-padding-start: 20px;
+}
+
 input[type="checkbox"] {
   margin-right: 5px;
 }
@@ -123,6 +140,8 @@ input[type="checkbox"] {
   margin-top: 10px;
   line-height: 18px;
   color: #666;
+
+  display: none;
 }
 
 #unlogged {

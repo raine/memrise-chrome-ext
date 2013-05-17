@@ -1,5 +1,6 @@
 var app = app || {};
 
+// Tests use this, therefore outside
 var OPTIONS_DEFAULTS = {
 	'wilting-threshold': 1,
 	'track-usage': true

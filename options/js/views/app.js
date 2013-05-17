@@ -8,6 +8,7 @@ var app = app || {};
 
 		initialize: function() {
 			this.settings = new app.Settings();
+			this.topics   = new app.Topics();
 
 			rivets.bind(this.$el, {
 				settings: this.settings
