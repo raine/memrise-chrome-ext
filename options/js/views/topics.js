@@ -43,7 +43,7 @@ var app = app || {};
 			var self = this;
 
 			// Initialize topic DOM and the checkboxes
-			this.$el.html(this.topicTmpl(this.model.toJSON()));
+			this.setElement(this.topicTmpl(this.model.toJSON()).trim());
 			this.$el.find('input').each(function(i, input) {
 				var keyPath = $(input).attr('data-keypath');
 				$(input).prop('checked', self.model.get(keyPath));
