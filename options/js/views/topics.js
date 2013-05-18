@@ -3,37 +3,6 @@ var app = app || {};
 (function($) {
 	'use strict';
 
-	var topics = [
-		{
-			"name": "Animals",
-			"slug": "animals",
-			"courses": [
-				{
-					"name": "Horses",
-					"slug": "horses"
-				},
-				{
-					"name": "Dogs",
-					"slug": "dogs"
-				}
-			]
-		},
-		{
-			"name": "English",
-			"slug": "english",
-			"courses": [
-				{
-					"name": "Cast Out",
-					"slug": "cast-out"
-				},
-				{
-					"name": "SAT Essential",
-					"slug": "sat-essential"
-				}
-			]
-		}
-	];
-
 	app.TopicView = Backbone.View.extend({
 		initialize: function() {
 			this.topicTmpl = _.template($('#topic-item').html());
@@ -53,10 +22,10 @@ var app = app || {};
 		},
 
 		events: {
-			'change input': 'checkboxToggle'
+			'change input': 'toggleCheckbox'
 		},
 
-		checkboxToggle: function(ev) {
+		toggleCheckbox: function(ev) {
 			var $input  = $(ev.target);
 			var keyPath = $input.attr('data-keypath');
 			this.model.set(keyPath, !this.model.get(keyPath));
@@ -79,28 +48,46 @@ var app = app || {};
 	app.Topics = Backbone.Collection.extend({
 		model: app.Topic,
 		initialize: function() {
-			this.set(topics.map(function(t) {
-				return new app.Topic({
-					name: t.name,
-					slug: t.slug,
-					courses: t.courses
+			this.on('change', this.wtf, this);
+		},
+
+		sync: function(method, coll, options) {
+			console.log('sync', method, coll, options);
+
+			if (method === 'read') {
+				Memrise.getDB(function(html) {
+					options.success(html);
 				});
-			}));
+			}
+		},
+
+		parse: function(html) {
+			var res = Memrise.parseHTML(html);
+			if (typeof res === 'string') {
+				throw('error', err);
+			} else {
+				return res;
+			}
+		},
+
+		wtf: function(model, val, options) {
+			console.log('wtf', model.toJSON());
 		},
 	});
 
 	app.TopicsWhitelist = Backbone.View.extend({
-		location: '#topics .checkboxes',
-		tagName: 'ul',
+		loadingEl : '#topics .loading',
+		location  : '#topics .checkboxes',
+		tagName   : 'ul',
 
 		initialize: function() {
 			this.topics = new app.Topics();
-			this.render();
+			this.listenTo(this.topics, 'fetch', this.loading);
+			this.listenTo(this.topics, 'reset', this.render);
+			this.topics.fetch({ reset: true });
 		},
 
 		render: function() {
-			this.$el.empty();
-
 			this.topics.each(function(topic) {
 				var view = new app.TopicView({ model: topic });
 				this.$el.append(view.render().el);
@@ -108,6 +95,10 @@ var app = app || {};
 
 			$(this.location).html(this.el);
 			return this;
+		},
+
+		loading: function() {
+			$(this.location).append($(this.loadingEl).clone().show());
 		}
 	});
 })(jQuery);
