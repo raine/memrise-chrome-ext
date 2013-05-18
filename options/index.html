@@ -13,6 +13,7 @@
     <script src="/lib/jquery-1.9.1.min.js"></script>
     <script src="/lib/underscore.min.js"></script>
     <script src="/lib/backbone.js"></script> <!-- TODO: use min -->
+    <script src="/lib/deep-model.min.js"></script>
     <script src="/lib/rivets.min.js"></script>
     <script src="/shared.js"></script>
     <script src="js/models/settings.js"></script>
@@ -22,9 +23,15 @@
   </head>
   <body id="app">
     <script type="text/template" id="topic-item" class="template">
-      <li><label><input type="checkbox"><%- name %></label></li>
+      <li>
+        <label><input type="checkbox" data-checked="topic.enabled"><%- name %></label>
+        <ul>
+          <li data-each-course="topic.courses">
+            <label><input type="checkbox" data-checked="course.enabled"><span data-text="course.name"/></label>
+          </li>
+        </ul>
+      </li>
     </script>
-
 
      <!--
        <script type="text/template" id="topics-whitelist" class="template">

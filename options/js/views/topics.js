@@ -6,11 +6,31 @@ var app = app || {};
 	var topics = [
 		{
 			"name": "Animals",
-			"slug": "animals"
+			"slug": "animals",
+			"courses": [
+				{
+					"name": "Horses",
+					"slug": "horses"
+				},
+				{
+					"name": "Dogs",
+					"slug": "dogs"
+				}
+			]
 		},
 		{
 			"name": "English",
-			"slug": "english"
+			"slug": "english",
+			"courses": [
+				{
+					"name": "Cast Out",
+					"slug": "cast-out"
+				},
+				{
+					"name": "SAT Essential",
+					"slug": "sat-essential"
+				}
+			]
 		}
 	];
 
@@ -49,15 +69,41 @@ var app = app || {};
 		}
 	}
 
-	app.Topic = Backbone.Model.extend({
+	// app.Course = Backbone.Model.extend({
+	// 	defaults: {
+	// 		enabled: true
+	// 	},
 
+	// 	initialize: function(obj) {
+	// 		console.log(obj);
+
+	// 		this.on('change', function() {
+	// 			console.log('foo');
+	// 		});
+	// 	}
+	// });
+
+	app.Topic = Backbone.DeepModel.extend({
+		defaults: {
+			enabled: true
+		},
+
+		initialize: function() {
+			_.each(this.attributes.courses, function(obj) {
+				obj.parent = this;
+			}, this);
+		}
 	});
 
 	app.Topics = Backbone.Collection.extend({
 		model: app.Topic,
 		initialize: function() {
 			this.set(topics.map(function(t) {
-				return new app.Topic({ name: t.name, slug: t.slug });
+				return new app.Topic({
+					name: t.name,
+					slug: t.slug,
+					courses: t.courses
+				});
 			}));
 		}
 	});
@@ -75,7 +121,13 @@ var app = app || {};
 			this.$el.html('');
 
 			this.topics.forEach(function(topic) {
-				this.$el.append(this.topicTmpl(topic.toJSON()));
+				var $topic = $(this.topicTmpl(topic.toJSON()).trim());
+
+				rivets.bind($topic, {
+					topic : topic
+				});
+
+				this.$el.append($topic);
 			}.bind(this));
 
 			$('#topics .checkboxes').html(this.el);
@@ -83,8 +135,3 @@ var app = app || {};
 		}
 	});
 })(jQuery);
-
-
-// rivets.bind(this.$el, {
-// 	topics: this.topicsWhitelist
-// });
