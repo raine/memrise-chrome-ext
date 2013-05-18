@@ -24,11 +24,11 @@
   <body id="app">
     <script type="text/template" id="topic-item" class="template">
       <li>
-        <label><input type="checkbox" data-checked="topic.enabled"><%- name %></label>
+        <label><input data-keypath="enabled" type="checkbox"><%- name %></label>
         <ul>
-          <li data-each-course="topic.courses">
-            <label><input type="checkbox" data-checked="course.enabled"><span data-text="course.name"/></label>
-          </li>
+          <% courses.forEach(function(course, i) { %>
+            <li><label><input data-keypath="courses.<%- i %>.enabled" type="checkbox"><%- course.name %></label></li>
+          <% }); %>
         </ul>
       </li>
     </script>

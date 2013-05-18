@@ -69,19 +69,33 @@ var app = app || {};
 		}
 	}
 
-	// app.Course = Backbone.Model.extend({
-	// 	defaults: {
-	// 		enabled: true
-	// 	},
+	app.TopicView = Backbone.View.extend({
+		initialize: function() {
+			this.topicTmpl = _.template($('#topic-item').html());
+		},
 
-	// 	initialize: function(obj) {
-	// 		console.log(obj);
+		render: function() {
+			var self = this;
 
-	// 		this.on('change', function() {
-	// 			console.log('foo');
-	// 		});
-	// 	}
-	// });
+			this.$el.html(this.topicTmpl(this.model.toJSON()));
+			this.$el.find('input').each(function(i, input) {
+				var keyPath = $(input).attr('data-keypath');
+				$(input).prop('checked', self.model.get(keyPath));
+			});
+
+			return this;
+		},
+
+		events: {
+			'change input': 'somethingHappened'
+		},
+
+		somethingHappened: function(ev) {
+			var $input  = $(ev.target);
+			var keyPath = $input.attr('data-keypath');
+			this.model.set(keyPath, !this.model.get(keyPath));
+		}
+	});
 
 	app.Topic = Backbone.DeepModel.extend({
 		defaults: {
@@ -89,9 +103,9 @@ var app = app || {};
 		},
 
 		initialize: function() {
-			_.each(this.attributes.courses, function(obj) {
-				obj.parent = this;
-			}, this);
+			_.each(this.attributes.courses, function(c) {
+				c.enabled = true;
+			});
 		}
 	});
 
@@ -105,14 +119,14 @@ var app = app || {};
 					courses: t.courses
 				});
 			}));
-		}
+		},
 	});
 
 	app.TopicsWhitelist = Backbone.View.extend({
+		location: '#topics .checkboxes',
 		tagName: 'ul',
 
 		initialize: function() {
-			this.topicTmpl = _.template($('#topic-item').html());
 			this.topics = new app.Topics();
 			this.render();
 		},
@@ -121,16 +135,11 @@ var app = app || {};
 			this.$el.html('');
 
 			this.topics.forEach(function(topic) {
-				var $topic = $(this.topicTmpl(topic.toJSON()).trim());
-
-				rivets.bind($topic, {
-					topic : topic
-				});
-
-				this.$el.append($topic);
+				var view = new app.TopicView({ model: topic });
+				this.$el.append(view.render().el);
 			}.bind(this));
 
-			$('#topics .checkboxes').html(this.el);
+			$(this.location).html(this.el);
 			return this;
 		}
 	});
