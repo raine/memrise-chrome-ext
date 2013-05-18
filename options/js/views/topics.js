@@ -34,41 +34,6 @@ var app = app || {};
 		}
 	];
 
-	rivets.binders.append = {
-		// The thing that decides if the element should be checked
-		routine: function(el, value) {
-			// el.checked = _.contains(value, el.value)
-			console.log('routine', value);
-			el.checked = true;
-		},
-
-		bind: function(el) {
-			var adapter = rivets.config.adapter;
-			var self = this;
-
-			this.callback = function() {
-				adapter.publish(self.model, self.keypath, 'foo');
-			};
-
-			// 	currentValue = _.clone(adapter.read(self.model, self.keypath))
-			// 	if(el.value && _.contains(currentValue, el.value)) {
-			// 		newValue = _.without(currentValue, el.value)
-			// 		adapter.publish(self.model, self.keypath, newValue)
-			// 	} else {
-			// 		currentValue.push(el.value)
-			// 		adapter.publish(self.model, self.keypath, currentValue)
-			// 	}
-			// }
-			// console.log(el);
-
-			$(el).on('change', this.callback)
-		},
-
-		unbind: function(el) {
-			$(el).off('change', this.callback)
-		}
-	}
-
 	app.TopicView = Backbone.View.extend({
 		initialize: function() {
 			this.topicTmpl = _.template($('#topic-item').html());
@@ -77,6 +42,7 @@ var app = app || {};
 		render: function() {
 			var self = this;
 
+			// Initialize topic DOM and the checkboxes
 			this.$el.html(this.topicTmpl(this.model.toJSON()));
 			this.$el.find('input').each(function(i, input) {
 				var keyPath = $(input).attr('data-keypath');
@@ -87,10 +53,10 @@ var app = app || {};
 		},
 
 		events: {
-			'change input': 'somethingHappened'
+			'change input': 'checkboxToggle'
 		},
 
-		somethingHappened: function(ev) {
+		checkboxToggle: function(ev) {
 			var $input  = $(ev.target);
 			var keyPath = $input.attr('data-keypath');
 			this.model.set(keyPath, !this.model.get(keyPath));
@@ -103,8 +69,9 @@ var app = app || {};
 		},
 
 		initialize: function() {
-			_.each(this.attributes.courses, function(c) {
+			_.each(this.attributes.courses, function(c, index) {
 				c.enabled = true;
+				c.keyPath = "courses." + index +  ".enabled";
 			});
 		}
 	});

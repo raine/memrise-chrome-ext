@@ -26,8 +26,8 @@
       <li>
         <label><input data-keypath="enabled" type="checkbox"><%- name %></label>
         <ul>
-          <% courses.forEach(function(course, i) { %>
-            <li><label><input data-keypath="courses.<%- i %>.enabled" type="checkbox"><%- course.name %></label></li>
+          <% courses.forEach(function(course) { %>
+            <li><label><input data-keypath="<%- course.keyPath %>" type="checkbox"><%- course.name %></label></li>
           <% }); %>
         </ul>
       </li>
