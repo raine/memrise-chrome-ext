@@ -21,21 +21,20 @@
     <script src="js/app.js"></script>
   </head>
   <body id="app">
-     <script type="text/template" id="topics-whitelist" class="template">
-       <ul>
-         <% topics.forEach(function(topic) { %>
-           <li>
-             <label><input type="checkbox"><%= topic.name %></label>
-             <ul>
-               <% topic.courses.forEach(function(course) { %>
-                 <li><label><input type="checkbox"><%= course.name %></label></li>
-               <% }); %>
-             </ul>
-           </li>
-         <% }); %>
-       </ul>
-     </script>
+    <script type="text/template" id="topic-item" class="template">
+      <li><label><input type="checkbox"><%- name %></label></li>
+    </script>
 
+
+     <!--
+       <script type="text/template" id="topics-whitelist" class="template">
+         <ul>
+           <% topics.forEach(function(topic) { %>
+             <li><label><input type="checkbox"><%= topic.get('name') %></label></li>
+           <% }); %>
+         </ul>
+       </script>
+     -->
     <h1>
       Memrise Button
       <span class="version">v%VERSION%</span>
@@ -71,7 +70,8 @@
           <div id="unlogged">
             <a href="http://www.memrise.com/login/" \>Log in to Memrise</a>
           </div>
-          <div class="checkboxes"></div>
+          <div class="checkboxes">
+          </div>
         </div>
       </section>
 

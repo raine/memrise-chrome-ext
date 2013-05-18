@@ -22,7 +22,7 @@ var OPTIONS_DEFAULTS = {
 		},
 
 		sync: function(method, model, options) {
-			console.log(method, model);
+			// console.log(method, model);
 
 			switch(method) {
 				case 'create':

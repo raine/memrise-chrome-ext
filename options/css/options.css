@@ -122,7 +122,7 @@ input[pref="wilting-threshold"] {
 }
 
 .checkboxes > ul > li:not(first-child) {
-  margin-top: 5px;
+  /* margin-top: 5px; */
 }
 
 .checkboxes ul ul {
