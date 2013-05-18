@@ -109,14 +109,13 @@ var fetchGroups = function(cb, opts) {
 	}
 
 	var parse = function(html) {
-		Memrise.parseHTML(html, function(err, groups) {
-			if (err) {
-				cb(err);
-			} else {
-				cb(null, groups);
-				groupsCache = groups;
-			}
-		});
+		var res = Memrise.parseHTML(html);
+		if (typeof res === 'string') {
+			cb(err);
+		} else {
+			cb(null, res);
+			groupsCache = res;
+		}
 	};
 
 	if (opts.html) {

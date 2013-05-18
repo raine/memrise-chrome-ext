@@ -25,9 +25,9 @@ var Memrise = {
 		$.get(url, cb || callback);
 	},
 
-	parseHTML: function(html, cb) {
+	parseHTML: function(html) {
 		if (html.search(/'is_authenticated': false/) >= 0) {
-			return cb('not-logged-in');
+			return 'not-logged-in';
 		}
 
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
@@ -77,6 +77,6 @@ var Memrise = {
 			groups.push(group);
 		});
 
-		cb(null, groups);
+		return groups;
 	}
 };
