@@ -99,12 +99,12 @@ var app = app || {};
 		},
 
 		render: function() {
-			this.$el.html('');
+			this.$el.empty();
 
-			this.topics.forEach(function(topic) {
+			this.topics.each(function(topic) {
 				var view = new app.TopicView({ model: topic });
 				this.$el.append(view.render().el);
-			}.bind(this));
+			}, this);
 
 			$(this.location).html(this.el);
 			return this;
