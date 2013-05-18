@@ -1,7 +1,3 @@
-var BASE_URL      = 'http://www.memrise.com';
-var DASHBOARD_URL = BASE_URL + '/home/';
-var LOGIN_URL     = BASE_URL + '/login/';
-
 var COLORS = {
 	harvest: [ 250, 177, 31, 255 ],
 	wilting: [ 21, 161, 236, 255 ]
@@ -49,7 +45,7 @@ var noBadge = function(url, title) {
 
 var setErrorBadge = function(err) {
 	if (err === 'not-logged-in') {
-		noBadge(LOGIN_URL, 'Log in to Memrise');
+		noBadge(Memrise.LOGIN_URL, 'Log in to Memrise');
 	}
 };
 
@@ -70,7 +66,7 @@ var setBadge = function(group) {
 				count = group.wilting,
 				text  = group.wilting.toString();
 		} else {
-			return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard');
+			return noBadge(Memrise.DASHBOARD_URL, 'Go to Memrise dashboard');
 		}
 
 		var title = STRINGS[type].replace('%d', count).replace('%s', group.name);
@@ -78,69 +74,14 @@ var setBadge = function(group) {
 			title += 's';
 		}
 
-		localStorage.actionURL = BASE_URL + path;
+		localStorage.actionURL = Memrise.BASE_URL + path;
 
 		chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
 		chrome.browserAction.setBadgeText({ text: text });
 		chrome.browserAction.setTitle({ title: title });
 	} else {
-		return noBadge(DASHBOARD_URL, 'Go to Memrise dashboard');
+		return noBadge(Memrise.DASHBOARD_URL, 'Go to Memrise dashboard');
 	}
-};
-
-var parseHTML = function(html, cb) {
-	if (html.search(/'is_authenticated': false/) >= 0) {
-		return cb('not-logged-in');
-	}
-
-	html = html.replace(/<img\b[^>]*\/>/ig,'');
-	var $html  = $($.parseHTML(html));
-	var groups = [];
-
-	// .whitebox is a single group of courses, like "Animals"
-	$('.whitebox', $html).each(function() {
-		var group = {
-			name: $('.groupname', this).text(),
-			wilting: 0,
-			courses: []
-		};
-
-
-		group.id = group.name // Used in options.js but I'm lazy
-			.toLowerCase()
-			.replace(/[^a-z\s]*/g, '')
-			.replace(/\s+/, '-');
-
-		var m, href, btn = $('.group-header .btn', this);
-		if (href = btn.attr('href')) {
-			group.waterPath = href;
-
-			if (m = btn.text().match(/Water (\d+)/)) {
-				group.wilting = parseInt(m[1]);
-			}
-		}
-
-		$('.course-box-wrapper', this).each(function() {
-			var course = {
-				title: $('a.inner-wrap', this).attr('title'),
-				id: parseInt($('.course-progress-box', this).attr('data-course-id'))
-			};
-
-			var $harvest = $('.btn[href*="harvest"]', this);
-			if ($harvest.length > 0) {
-				course.harvestPath = $harvest.attr('href');
-
-				// Make it easier to check which groups have harvestable
-				group.harvestable = true;
-			}
-
-			group.courses.push(course);
-		});
-
-		groups.push(group);
-	});
-
-	cb(null, groups);
 };
 
 var fetchGroups = function(cb, opts) {
@@ -151,7 +92,7 @@ var fetchGroups = function(cb, opts) {
 	}
 
 	var parse = function(html) {
-		parseHTML(html, function(err, groups) {
+		Memrise.parseHTML(html, function(err, groups) {
 			if (err) {
 				cb(err);
 			} else {
@@ -165,7 +106,7 @@ var fetchGroups = function(cb, opts) {
 		console.log('fetchGroups: parsing html');
 		parse(opts.html);
 	} else {
-		get(DASHBOARD_URL, parse);
+		Memrise.getDB(parse);
 	}
 };
 
@@ -218,7 +159,7 @@ var refreshButton = function(opts) {
 			var groupsSetting = settings.get('topics');
 			if (groupsSetting) {
 				groups = _.filter(groups, function(group) {
-					return groupsSetting[group.id] === true;
+					return groupsSetting[group.slug] === true;
 				});
 			}
 
