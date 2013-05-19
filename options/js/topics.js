@@ -48,7 +48,7 @@ var app = app || {};
 	app.Topics = Backbone.Collection.extend({
 		model: app.Topic,
 		initialize: function() {
-			this.on('change', this.wtf, this); // When models change
+			this.on('change', this.save, this); // When models change
 			this.on('reset', this.applyStorage, this);
 		},
 
@@ -63,7 +63,7 @@ var app = app || {};
 					cObj[course.id] = { enabled: course.enabled };
 				});
 
-				tObj[topic.slug] = { enabled: true, courses: cObj }
+				tObj[topic.slug] = { enabled: topic.enabled, courses: cObj }
 			});
 
 			return tObj;
@@ -72,9 +72,31 @@ var app = app || {};
 		applyStorage: function() {
 			var topicStore = app.settings.get('topics');
 
-			console.log(topicStore);
+			for (var slug in topicStore) {
+				var tObj  = topicStore[slug];
+				var topic = this.find(function(t) {
+					return t.get('slug') === slug;
+				});
 
-			// app.settings.set('topics', this.toObject());
+				if (topic) {
+					topic.set('enabled', tObj.enabled);
+					topic.set('courses',
+						topic.get('courses').map(function(c) {
+							if (_.has(tObj.courses, c.id)) {
+								c.enabled = tObj.courses[c.id].enabled;
+							}
+
+							return c;
+						})
+					);
+				}
+			}
+
+			this.save();
+		},
+
+		save: function() {
+			app.settings.set('topics', this.toObject());
 		},
 
 		sync: function(method, coll, options) {
@@ -94,11 +116,7 @@ var app = app || {};
 			} else {
 				return res;
 			}
-		},
-
-		wtf: function(model, val, options) {
-			console.log('wtf', model.toJSON());
-		},
+		}
 	});
 
 	app.TopicsWhitelist = Backbone.View.extend({
