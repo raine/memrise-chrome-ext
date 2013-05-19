@@ -9,7 +9,7 @@ var OPTIONS_DEFAULTS = {
 (function() {
 	'use strict';
 
-	app.Settings = Backbone.Model.extend({
+	var settings = Backbone.Model.extend({
 		defaults: OPTIONS_DEFAULTS,
 
 		initialize: function() {
@@ -79,4 +79,6 @@ var OPTIONS_DEFAULTS = {
 			}
 		}
 	});
+
+	app.Settings = new settings();		
 })();
