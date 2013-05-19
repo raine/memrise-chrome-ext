@@ -18,11 +18,11 @@ var OPTIONS_DEFAULTS = {
 			});
 
 			this.fetch(); // Read values from localStorage
-			this.save();  //  Write to localStorage, in case of first run
+			this.save();  // Write to localStorage, in case of first run
 		},
 
 		sync: function(method, model, options) {
-			// console.log(method, model);
+			console.log('Settings: sync', method, model);
 
 			switch(method) {
 				case 'create':
@@ -60,8 +60,19 @@ var OPTIONS_DEFAULTS = {
 
 		_writeObj: function(obj) {
 			for (var key in obj) {
-				localStorage['settings.' + key] = obj[key];
+				var val = obj[key];
+				this._setItem(key, val);
 			}
+		},
+
+		_setItem: function(key, value){
+			try {
+				value = JSON.stringify(value);
+			} catch (e) {
+				value = null;
+			}
+
+			localStorage['settings.' + key] = value;
 		},
 
 		_getItem: function(key) {
