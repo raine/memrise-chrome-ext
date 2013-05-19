@@ -53,55 +53,28 @@ var app = app || {};
 		},
 
 		// Returns the collection with only the values that are saved to localStorage
-		toArray: function(){
-			var topicKeys  = ['slug', 'enabled', 'courses'];
-			var courseKeys = ['id', 'enabled'];
-
+		toObject: function(){
 			var coll = this.toJSON();
-			var filtered = coll.map(function(topic) {
-				topic.courses = topic.courses.map(function(course) {
-					return _.pick(course, courseKeys);
+			var tObj = {};
+
+			_.each(coll, function(topic) {
+				var cObj = {}
+				_.each(topic.courses, function(course) {
+					cObj[course.id] = { enabled: course.enabled };
 				});
 
-				return _.pick(topic, topicKeys);
+				tObj[topic.slug] = { enabled: true, courses: cObj }
 			});
 
-			return filtered;
+			return tObj;
 		},
 
 		applyStorage: function() {
-			// Write topics to localStorage
 			var topicStore = app.settings.get('topics');
 
-			topicStore.slice(0,1).forEach(function(t1) {
-				// Find topic by slug
-				var topic = this.find(function(t2) {
-					return t2.get('slug') === t1.slug;
-				})
+			console.log(topicStore);
 
-				topic.set('enabled', t1.enabled);
-
-				var courses = topic.get('courses');
-
-				courses.map(function(c) {
-					c.enabled
-				});
-
-				// t1.courses.forEach(function(c1) {
-				// 	c
-				// });
-				// topic.get('courses').map(function(c) {
-				// 	console.log(c);
-				// });
-				// var c= topic.get('courses');
-				// console.log(c);
-			}.bind(this));
-
-
-			// this.each(function(topic) {
-			// 	topic.set('enabled', false, { silent: true });
-			// });
-			// app.settings.set('topics', this.toArray());
+			// app.settings.set('topics', this.toObject());
 		},
 
 		sync: function(method, coll, options) {
