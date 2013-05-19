@@ -16,8 +16,8 @@ var app = app || {};
 		},
 
 		events: {
-			'click #refresh': 'refresh',
-			'click #reset': 'resetToDefaults'
+			'click #refresh' : 'refresh',
+			'click #reset'   : 'resetToDefaults'
 		},
 
 		refresh: function() {
