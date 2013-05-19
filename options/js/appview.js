@@ -7,7 +7,7 @@ var app = app || {};
 		el: '#app',
 
 		initialize: function() {
-			this.settings  = app.Settings;
+			this.settings  = app.settings;
 			this.whitelist = new app.TopicsWhitelist();
 
 			rivets.bind(this.$el, {
