@@ -2,6 +2,13 @@ var DASHBOARD_URL = 'http://www.memrise.com/home/';
 var settings = new Store("settings", DEFAULTS);
 var resetTopics;
 
+// HACK: Store bindEvent doesn't work
+var oldset = settings.set;
+settings.set = function() {
+	oldset.apply(settings, arguments);
+	mixpanel.register(prepareSuperProps());
+};
+
 $(document).ready(function() {
 	// Text input logic
 	$('input[type=text]')

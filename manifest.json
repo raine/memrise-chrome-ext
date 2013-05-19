@@ -21,8 +21,7 @@
 	},
 	"permissions": [
 		"http://www.memrise.com/",
-		"alarms",
-		"tabs"
+		"alarms"
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.mxpnl.com; object-src 'self'",
 	"content_scripts": [ {
