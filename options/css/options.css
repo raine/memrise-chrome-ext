@@ -99,7 +99,7 @@ section > div > p:first-child {
   color: #aaa;
 }
 
-input[pref="wilting-threshold"] {
+input.wilting-threshold {
   width: 2em;
   margin-right: 5px;
 }
