@@ -4,63 +4,23 @@ var app = app || {};
 	'use strict';
 
 	app.TopicView = Backbone.View.extend({
+		bindings: null,
+
 		initialize: function() {
 			this.topicTmpl = _.template($('#topic-item').html());
-			this.listenTo(this.model, '_reset', this.refreshCheckboxes);
-		},
-
-		refreshCheckboxes: function() {
-			this.$el.find('input').each(function(i, input) {
-				var keyPath = $(input).attr('data-keypath');
-				$(input).prop('checked', this.model.get(keyPath));
-			}.bind(this));
 		},
 
 		render: function() {
-			var self = this;
-
 			// Initialize topic DOM and the checkboxes
-			this.setElement(this.topicTmpl(this.model.toJSON()).trim());
-			this.refreshCheckboxes();
+			this.setElement(this.topicTmpl().trim());
+			this.bindings = rivets.bind(this.$el, { topic: this.model });
 			return this;
-		},
-
-		events: {
-			'change input': 'toggleCheckbox'
-		},
-
-		toggleCheckbox: function(ev) {
-			var $input  = $(ev.target);
-			var keyPath = $input.attr('data-keypath');
-			this.model.set(keyPath, !this.model.get(keyPath));
 		}
 	});
 
 	app.Topic = Backbone.DeepModel.extend({
 		defaults: {
 			enabled: true
-		},
-
-		initialize: function() {
-			_.each(this.attributes.courses, function(c, index) {
-				c.enabled = true;
-				c.keyPath = "courses." + index +  ".enabled";
-			});
-		},
-
-		reset: function() {
-			var defaults = _.extend(this.defaults, {
-				courses: this.get('courses').map(function(c) {
-					c = _.clone(c);
-					c.enabled = true;
-					return c;
-				})
-			});
-
-			this.set(defaults, { silent: true });
-			this.trigger('_reset');
-			// There's an underscore because 'reset' would bubble up to the
-			// collection and fuck up everything.
 		}
 	});
 
@@ -69,12 +29,6 @@ var app = app || {};
 		initialize: function() {
 			this.on('change', this.save, this); // When models change
 			this.on('reset', this.applyStorage, this);
-			this.listenTo(app.settings, 'reset', this.settingsReset);
-		},
-
-		settingsReset: function() {
-			_.invoke(this.models, 'reset');
-			this.save();
 		},
 
 		// Returns the collection with only the values that are saved to localStorage

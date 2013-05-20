@@ -3,6 +3,7 @@ var app = app || {};
 rivets.configure({
 	adapter: {
 		subscribe: function(obj, keypath, callback) {
+			console.log('subscribe', obj, keypath, callback);
 			obj.on('change:' + keypath, callback);
 		},
 
@@ -11,6 +12,7 @@ rivets.configure({
 		},
 
 		read: function(obj, keypath) {
+			console.log('read', obj, keypath);
 			return obj.get(keypath);
 		},
 
