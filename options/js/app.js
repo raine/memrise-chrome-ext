@@ -1,5 +1,27 @@
 var app = app || {};
 
+rivets.binders['disable-if'] = {
+	routine: function(el, courses) {
+		el.disabled = courses.every(function(c) {
+			return !c.get('enabled');
+		});
+	},
+
+	bind: function(el) {
+		var self = this;
+
+		this.change = function() {
+			self.binder.routine(self.el, this.get('courses'));
+		};
+
+		this.model.on('change', this.change);
+	},
+
+	unbind: function() {
+		this.model.off('change', this.change);
+	}
+};
+
 rivets.configure({
 	adapter: {
 		subscribe: function(obj, keypath, callback) {
@@ -15,7 +37,6 @@ rivets.configure({
 		},
 
 		publish: function(obj, keypath, value) {
-			console.log('publish', keypath, value);
 			obj.set(keypath, value);
 		}
 	}

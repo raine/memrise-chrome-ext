@@ -6,6 +6,10 @@ var app = app || {};
 	app.TopicView = Backbone.View.extend({
 		bindings: null,
 
+		events: {
+			'change .courses input': 'refreshTopic'
+		},
+
 		initialize: function() {
 			this.topicTmpl = _.template($('#topic-item').html());
 		},
@@ -14,7 +18,18 @@ var app = app || {};
 			// Initialize topic DOM and the checkboxes
 			this.setElement(this.topicTmpl().trim());
 			this.bindings = rivets.bind(this.$el, { topic: this.model });
+			this.refreshTopic();
 			return this;
+		},
+
+		refreshTopic: function(ev) {
+			this.$el.find('.topic-checkbox').prop('disabled', this.allCoursesDisabled());
+		},
+
+		allCoursesDisabled: function() {
+			return this.model.get('courses').every(function(c) {
+				return !c.get('enabled');
+			});
 		}
 	});
 
@@ -37,7 +52,7 @@ var app = app || {};
 			var courses = attr.courses.map(function(c) {
 				var c = new app.Course(c);
 				this.listenTo(c, 'change', function() {
-					this.trigger('change');
+					this.trigger('change', c);
 				});
 
 				return c;

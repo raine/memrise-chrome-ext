@@ -24,10 +24,10 @@
     <script type="text/template" id="topic-item" class="template">
       <li>
         <label>
-          <input type="checkbox" data-checked="topic.enabled">
+          <input class="topic-checkbox" type="checkbox" data-checked="topic.enabled">
           <span data-text="topic.name" />
         </label>
-        <ul>
+        <ul class="courses">
           <li data-each-course="topic.courses">
             <label>
               <input data-enabled="topic.enabled" type="checkbox" data-checked="course.enabled">
