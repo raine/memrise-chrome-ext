@@ -18,34 +18,50 @@ var app = app || {};
 		}
 	});
 
+	app.Course = Backbone.Model.extend({
+		defaults: {
+			enabled: true
+		}
+	});
+
 	app.Topic = Backbone.DeepModel.extend({
 		defaults: {
 			enabled: true
+		},
+
+		initialize: function(attr, opts) {
+			// XXX: Courses should possibly be a Collection that has models
+			// Trigger change on Topic if a course changes
+			var courses = attr.courses.map(function(c) {
+				var c = new app.Course(c);
+				this.listenTo(c, 'change', function() {
+					this.trigger('change');
+				});
+
+				return c;
+			}, this);
+
+			this.set('courses', courses);
 		}
 	});
 
 	app.Topics = Backbone.Collection.extend({
 		model: app.Topic,
 		initialize: function() {
-			this.on('change', this.save, this); // When models change
 			this.on('reset', this.applyStorage, this);
 		},
 
 		// Returns the collection with only the values that are saved to localStorage
+		// { `topic.slug`: { enabled: true, courses: { `course.id`: { enabled: true } } }, ... }
 		toObject: function(){
-			var coll = this.toJSON();
-			var tObj = {};
-
-			_.each(coll, function(topic) {
-				var cObj = {}
-				_.each(topic.courses, function(course) {
-					cObj[course.id] = { enabled: course.enabled };
-				});
-
-				tObj[topic.slug] = { enabled: topic.enabled, courses: cObj }
-			});
-
-			return tObj;
+			return _.object(this.map(function(topic) {
+				return [ topic.get('slug'), {
+					enabled: topic.get('enabled'),
+					courses: _.object(topic.get('courses').map(function(course) {
+						return [ course.get('id'), { enabled: course.get('enabled') } ];
+					}))
+				}];
+			}));
 		},
 
 		applyStorage: function() {
@@ -59,18 +75,16 @@ var app = app || {};
 
 				if (topic) {
 					topic.set('enabled', tObj.enabled);
-					topic.set('courses',
-						topic.get('courses').map(function(c) {
-							if (_.has(tObj.courses, c.id)) {
-								c.enabled = tObj.courses[c.id].enabled;
-							}
-
-							return c;
-						})
-					);
+					topic.get('courses').forEach(function(c) {
+						var id = c.get('id');
+						if (_.has(tObj.courses, id)) {
+							c.set('enabled', tObj.courses[id].enabled);
+						}
+					});
 				}
 			}
 
+			this.on('change', this.save, this); // When models change
 			this.save();
 		},
 

@@ -33,7 +33,10 @@
         </label>
         <ul>
           <li data-each-course="topic.courses">
-            <span data-text="course:name" />
+            <label>
+              <input type="checkbox" data-checked="course.enabled">
+              <span data-text="course.name" />
+            </label>
           </li>
         </ul>
       </li>
