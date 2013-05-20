@@ -22,7 +22,7 @@ var OPTIONS_DEFAULTS = {
 		},
 
 		sync: function(method, model, options) {
-			console.log('Settings: sync', method, model);
+			console.log('Settings: sync', method, model, JSON.stringify(model.attributes))
 
 			switch(method) {
 				case 'create':
@@ -54,8 +54,10 @@ var OPTIONS_DEFAULTS = {
 		},
 
 		reset: function() {
-			this._clear();
-			this.save(this.defaults);
+			this._clear(); // Clear localStorage
+			this.clear({ silent: true });
+			this.set(this.defaults);
+			this.trigger('reset');
 		},
 
 		_writeObj: function(obj) {
