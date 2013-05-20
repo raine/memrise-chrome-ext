@@ -30,7 +30,9 @@ var app = app || {};
 		},
 
 		initialize: function(attr, opts) {
-			// XXX: Courses should possibly be a Collection that has models
+			// XXX: Courses should possibly be a Collection that has models.
+			// Change events would be visible to the collection and wouldn't
+			// have to bind separately.
 			// Trigger change on Topic if a course changes
 			var courses = attr.courses.map(function(c) {
 				var c = new app.Course(c);
@@ -42,6 +44,11 @@ var app = app || {};
 			}, this);
 
 			this.set('courses', courses);
+		},
+
+		reset: function() {
+			this.set('enabled', true);
+			_.invoke(this.get('courses'), 'set', 'enabled', true);
 		}
 	});
 
@@ -49,6 +56,15 @@ var app = app || {};
 		model: app.Topic,
 		initialize: function() {
 			this.on('reset', this.applyStorage, this);
+			this.listenTo(app.settings, 'reset', this.settingsReset);
+		},
+
+		settingsReset: function() {
+			_.invoke(this.models, 'reset');
+			// If none of the models change because of the reset, save()
+			// won't be called. This ensures that topics are added to
+			// localStorage after a reset.
+			this.save();
 		},
 
 		// Returns the collection with only the values that are saved to localStorage
@@ -89,16 +105,22 @@ var app = app || {};
 		},
 
 		save: function() {
-			app.settings.set('topics', this.toObject());
+			this.sync('create', this);
 		},
 
 		sync: function(method, coll, options) {
-			console.log('sync start', method, coll, options);
-
 			if (method === 'read') {
 				Memrise.getDB(function(html) {
 					options.success(html);
 				});
+			} else if (method === 'create') {
+				// When the models are reset, 'change' triggers multiple times and
+				// save is called. With this the topics are sent as a batch
+				// to localStorage. I feel this is better than using silent: true
+				// or unbinding 'change' until reset is done.
+				clearTimeout(this.timer);
+				var set    = _.bind(app.settings.set, app.settings);
+				this.timer = _.delay(set, 50, 'topics', this.toObject());
 			}
 		},
 
