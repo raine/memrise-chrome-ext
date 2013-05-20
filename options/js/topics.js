@@ -22,14 +22,9 @@ var app = app || {};
 			return this;
 		},
 
-		refreshTopic: function(ev) {
-			this.$el.find('.topic-checkbox').prop('disabled', this.allCoursesDisabled());
-		},
-
-		allCoursesDisabled: function() {
-			return this.model.get('courses').every(function(c) {
-				return !c.get('enabled');
-			});
+		refreshTopic: function() {
+			this.$el.find('.topic-checkbox')
+				.prop('disabled', this.model.allCoursesDisabled());
 		}
 	});
 
@@ -64,6 +59,12 @@ var app = app || {};
 		reset: function() {
 			this.set('enabled', true);
 			_.invoke(this.get('courses'), 'set', 'enabled', true);
+		},
+
+		allCoursesDisabled: function() {
+			return this.get('courses').every(function(c) {
+				return !c.get('enabled');
+			});
 		}
 	});
 
