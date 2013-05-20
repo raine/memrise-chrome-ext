@@ -53,5 +53,5 @@ rivets.formatters.number = {
 };
 
 $(function() {
-	new app.AppView();
+	new app.SettingsView();
 });

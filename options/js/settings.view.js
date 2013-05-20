@@ -3,8 +3,8 @@ var app = app || {};
 (function($) {
 	'use strict';
 
-	app.AppView = Backbone.View.extend({
-		el: '#app',
+	app.SettingsView = Backbone.View.extend({
+		el: '#settings',
 
 		initialize: function() {
 			this.settings  = app.settings;
