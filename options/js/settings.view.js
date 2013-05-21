@@ -20,6 +20,10 @@ var app = app || {};
 			'click #reset'   : 'resetToDefaults'
 		},
 
+		render: function() {
+			console.log('render');
+		},
+
 		refresh: function() {
 			chrome.extension.sendMessage({
 				type: 'refresh'

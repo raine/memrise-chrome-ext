@@ -37,7 +37,7 @@ input[type='text']:disabled {
   color: #888;
 }
 
-h1 {
+#header h1 {
   background-image:url("/icons/icon19.png");
   background-repeat: no-repeat;
   background-position: 5px 65%;
