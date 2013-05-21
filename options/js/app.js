@@ -11,7 +11,7 @@ app.WhatsNewView = Marionette.ItemView.extend({
 	},
 
 	fetch: function(cb) {
-		$.get(chrome.extension.getURL("CHANGES.html"), function(data) {
+		$.get(chrome.extension.getURL('CHANGES.html'), function(data) {
 			cb(data);
 		});
 	},
@@ -21,25 +21,17 @@ app.WhatsNewView = Marionette.ItemView.extend({
 	}
 });
 
-app.AppView = Backbone.View.extend({
-	el: '#content',
+app.Layout = Backbone.Marionette.Layout.extend({
+	el: '#main',
 
-	initialize: function() {
-		this.whatsNewView = new app.WhatsNewView();
-	},
-
-	render: function() {
-		this.whatsNewView.setElement(this.$('.whats-new'));
-		return this;
+	regions: {
+		content: '#content'
 	}
 });
 
 $(function() {
-	content = new Marionette.Region({
-		el: "#content"
-	});
-
+	var layout   = new app.Layout();
 	var whatsnew = new app.WhatsNewView();
 
-	content.show(whatsnew);
+	layout.content.show(whatsnew);
 });
