@@ -3,19 +3,29 @@ var app = app || {};
 (function($) {
 	'use strict';
 
-	app.Options = new Marionette.Application();
-	app.Options.addRegions({
+	var opts = app.Options = new Marionette.Application();
+
+	opts.addRegions({
 		content: '#content'
 	})
 
-	app.Options.addInitializer(function(options) {
-		var whatsnew = new app.Changes();
-		var settings = new app.SettingsView();
+	opts.addInitializer(function(options) {
+		app.views = {
+			changes  : new app.Changes(),
+			settings : new app.SettingsView()
+		}
+	});
 
-		app.Options.content.show(settings);
+	opts.vent.on('view', function(view) {
+		opts.content.show(app.views[view]);
 	});
 })(jQuery);
 
 $(function() {
+	app.Options.on('start', function(options) {
+		new app.Router();
+		Backbone.history.start(); // Great time to do this
+	});
+
 	app.Options.start();
 });
