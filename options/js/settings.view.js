@@ -4,6 +4,7 @@ var app = app || {};
 	'use strict';
 
 	app.SettingsView = Marionette.ItemView.extend({
+		// Marionette automatically renders the template
 		template: '#settings-tmpl',
 
 		initialize: function() {
@@ -13,7 +14,7 @@ var app = app || {};
 
 		events: {
 			'click #refresh' : 'refresh',
-			'click #reset'   : 'resetToDefaults'
+			'click #reset'   : 'settings.reset'
 		},
 
 		onRender: function() {
@@ -26,10 +27,6 @@ var app = app || {};
 			chrome.extension.sendMessage({
 				type: 'refresh'
 			});
-		},
-
-		resetToDefaults: function() {
-			this.settings.reset();
 		}
 	});
 })(jQuery);
