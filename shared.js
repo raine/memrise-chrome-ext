@@ -22,7 +22,7 @@ var Memrise = {
 			};
 		}
 
-		$.get(url, cb || callback);
+		return $.get(url, cb || callback);
 	},
 
 	parseHTML: function(html) {

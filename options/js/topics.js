@@ -120,7 +120,7 @@ var app = app || {};
 
 		sync: function(method, coll, options) {
 			if (method === 'read') {
-				Memrise.getDB(function(html) {
+				return Memrise.getDB(function(html) {
 					options.success(html);
 				});
 			} else if (method === 'create') {
