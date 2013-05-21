@@ -24,19 +24,19 @@ var app = app || {};
 		}
 	});
 
-	app.Layout = Backbone.Marionette.Layout.extend({
-		el: '#main',
+	app.App = new Marionette.Application();
+	app.App.addRegions({
+		content: '#content'
+	})
 
-		regions: {
-			content: '#content'
-		}
+	app.App.addInitializer(function(options) {
+		var whatsnew = new app.WhatsNewView();
+		var settings = new app.SettingsView();
+
+		app.App.content.show(settings);
 	});
 })(jQuery);
 
 $(function() {
-	var layout   = new app.Layout();
-	var whatsnew = new app.WhatsNewView();
-	var settings = new app.SettingsView();
-
-	layout.content.show(settings);
+	app.App.start();
 });
