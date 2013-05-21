@@ -1,37 +1,42 @@
 var app = app || {};
 
-app.WhatsNewView = Marionette.ItemView.extend({
-	initialize: function() {
-		this.on('fetch', this.render);
+(function($) {
+	'use strict';
 
-		this.fetch(function(data) {
-			this.data = data;
-			this.trigger('fetch');	
-		}.bind(this));
-	},
+	app.WhatsNewView = Marionette.ItemView.extend({
+		initialize: function() {
+			this.on('fetch', this.render);
 
-	fetch: function(cb) {
-		$.get(chrome.extension.getURL('CHANGES.html'), function(data) {
-			cb(data);
-		});
-	},
+			this.fetch(function(data) {
+				this.data = data;
+				this.trigger('fetch');	
+			}.bind(this));
+		},
 
-	render: function() {
-		this.$el.html(this.data);
-	}
-});
+		fetch: function(cb) {
+			$.get(chrome.extension.getURL('CHANGES.html'), function(data) {
+				cb(data);
+			});
+		},
 
-app.Layout = Backbone.Marionette.Layout.extend({
-	el: '#main',
+		render: function() {
+			this.$el.html(this.data);
+		}
+	});
 
-	regions: {
-		content: '#content'
-	}
-});
+	app.Layout = Backbone.Marionette.Layout.extend({
+		el: '#main',
+
+		regions: {
+			content: '#content'
+		}
+	});
+})(jQuery);
 
 $(function() {
 	var layout   = new app.Layout();
 	var whatsnew = new app.WhatsNewView();
+	var settings = new app.SettingsView();
 
-	layout.content.show(whatsnew);
+	layout.content.show(settings);
 });

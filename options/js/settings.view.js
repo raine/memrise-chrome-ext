@@ -3,16 +3,12 @@ var app = app || {};
 (function($) {
 	'use strict';
 
-	app.SettingsView = Backbone.View.extend({
-		el: '#settings',
+	app.SettingsView = Marionette.ItemView.extend({
+		template: '#settings-tmpl',
 
 		initialize: function() {
 			this.settings  = app.settings;
 			this.whitelist = new app.TopicsWhitelist();
-
-			rivets.bind(this.$el, {
-				settings: this.settings
-			});
 		},
 
 		events: {
@@ -20,8 +16,10 @@ var app = app || {};
 			'click #reset'   : 'resetToDefaults'
 		},
 
-		render: function() {
-			console.log('render');
+		onRender: function() {
+			rivets.bind(this.$el, {
+				settings: this.settings
+			});
 		},
 
 		refresh: function() {
