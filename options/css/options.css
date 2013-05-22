@@ -37,6 +37,11 @@ input[type='text']:disabled {
   color: #888;
 }
 
+#header {
+  overflow: hidden;
+  border-bottom: 1px solid #eee;
+}
+
 #header h1 {
   background-image:url("/icons/icon19.png");
   background-repeat: no-repeat;
@@ -44,7 +49,6 @@ input[type='text']:disabled {
   text-indent: 36px;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   -webkit-user-select: none;
-  border-bottom: 1px solid #eeeeee;
   color: #333;
   font-size: 24px;
   font-weight: normal;
@@ -52,6 +56,7 @@ input[type='text']:disabled {
   padding-bottom: 4px;
   padding-top: 13px;
   text-shadow: white 0 1px 2px;
+  float: left;
 }
 
 .displaytable {
@@ -171,6 +176,7 @@ input[type="checkbox"]:disabled + span {
 }
 
 #links {
+  padding-top: 13px;
   font-size: 10pt;
 }
 
