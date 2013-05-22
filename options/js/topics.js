@@ -45,7 +45,7 @@ var app = app || {};
 			// have to bind separately.
 			// Trigger change on Topic if a course changes
 			var courses = attr.courses.map(function(c) {
-				var c = new app.Course(c);
+				c = new app.Course(c);
 				this.listenTo(c, 'change:enabled', function() {
 					this.trigger('change', c);
 				});
