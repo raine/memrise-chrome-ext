@@ -146,7 +146,6 @@ var app = app || {};
 
 	app.TopicsWhitelist = Backbone.View.extend({
 		loadingEl : '#topics .loading',
-		location  : '#topics .checkboxes',
 		tagName   : 'ul',
 
 		initialize: function() {
@@ -157,12 +156,10 @@ var app = app || {};
 		},
 
 		render: function() {
-			this.topics.each(function(topic) {
-				var view = new app.TopicView({ model: topic });
-				this.$el.append(view.render().el);
-			}, this);
+			this.$el.append(this.topics.map(function(topic) {
+				return new app.TopicView({ model: topic }).render().el;
+			}));
 
-			$(this.location).html(this.el);
 			return this;
 		},
 

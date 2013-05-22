@@ -17,10 +17,17 @@ var app = app || {};
 			'click #reset'   : 'settings.reset'
 		},
 
+		ui: {
+			'topics': '#topics .checkboxes'
+		},
+
 		onRender: function() {
 			rivets.bind(this.$el, {
 				settings: this.settings
 			});
+
+			var topics = this.whitelist.render().el;
+			this.ui.topics.html(topics);
 		},
 
 		refresh: function() {
