@@ -6,6 +6,6 @@ app = connect()
   .use('/node_modules', connect.static('node_modules'))
   .use('/test', connect.static('test/'))
   .use('/lib', connect.static('lib/'))
-  .use('/options', connect.static('options/'))
+  .use('/options', connect.static('options/'));
 
 module.exports = http.createServer(app);

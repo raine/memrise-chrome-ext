@@ -7,7 +7,7 @@ var app = app || {};
 
 	opts.addRegions({
 		content: '#content'
-	})
+	});
 
 	opts.addInitializer(function(options) {
 		app.views = {
