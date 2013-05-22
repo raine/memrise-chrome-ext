@@ -150,9 +150,17 @@ var app = app || {};
 
 		initialize: function() {
 			this.topics = new app.Topics();
-			this.listenTo(this.topics, 'reset', this.render);
-			this.topics.fetch({ reset: true });
+			this.listenTo(this.topics, 'reset', this.reset);
+			this.fetch();
 			this.loading();
+		},
+
+		reset: function() {
+			app.Options.vent.trigger('topics:ready');
+		},
+
+		fetch: function() {
+			return this.topics.fetch({ reset: true });
 		},
 
 		render: function() {

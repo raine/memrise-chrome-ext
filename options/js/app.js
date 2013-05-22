@@ -13,19 +13,20 @@ var app = app || {};
 		app.views = {
 			changes  : new app.Changes(),
 			settings : new app.SettingsView()
-		}
+		};
 	});
 
 	opts.vent.on('view', function(view) {
 		opts.content.show(app.views[view]);
 	});
-})(jQuery);
 
-$(function() {
-	app.Options.on('start', function(options) {
+	opts.vent.on('topics:ready', function(view) {
+		// Start router when topics collection is ready for service
 		new app.Router();
 		Backbone.history.start(); // Great time to do this
 	});
+})(jQuery);
 
+$(function() {
 	app.Options.start();
 });
