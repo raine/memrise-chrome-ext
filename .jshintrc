@@ -1,4 +1,5 @@
 {
   "-W065": false, // disable: Missing radix parameter.
-  "boss": true
+  "boss": true,
+  "loopfunc": true
 }
