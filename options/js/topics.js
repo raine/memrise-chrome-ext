@@ -170,7 +170,7 @@ var app = app || {};
 		render: function() {
 			_.chain(this.topicViews)
 				.invoke('render').pluck('$el')
-				.invoke('appendTo', this.$el);
+				.invoke('appendTo', this.$el.empty());
 
 			return this;
 		},
