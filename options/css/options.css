@@ -41,9 +41,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
+.nav {
+  margin-bottom: 0;
+}
+
 #header {
   overflow: hidden;
-  border-bottom: 1px solid #eee;
 }
 
 #header h1 {
@@ -55,12 +58,21 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-user-select: none;
   color: #333;
   font-size: 24px;
-  font-weight: normal;
-  margin: 0;
+  font-weight: 400;
+  margin: 0 20px 0 0;
   padding-bottom: 4px;
   padding-top: 13px;
   text-shadow: white 0 1px 2px;
   float: left;
+}
+
+#links {
+  float: right;
+}
+
+.sep {
+  margin: 0 10px;
+  border-left: 1px dotted #ccc;
 }
 
 .displaytable {
@@ -173,18 +185,4 @@ input[type="checkbox"]:disabled + span {
 #feedback ul {
   padding: 0;
   margin-bottom: 5px;
-}
-
-.right {
-  float: right;
-}
-
-#links {
-  padding-top: 13px;
-  font-size: 10pt;
-}
-
-.sep {
-  margin: 0 10px;
-  border-left: 1px dotted #ccc;
 }
