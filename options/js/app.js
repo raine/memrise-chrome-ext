@@ -17,7 +17,7 @@ var app = app || {};
 	});
 
 	opts.vent.on('view', function(view) {
-		opts.content.show(app.views[view]);
+		opts.content.show(app.views[view || 'settings']);
 	});
 
 	opts.vent.on('topics:ready', function(view) {

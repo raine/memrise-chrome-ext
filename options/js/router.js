@@ -3,16 +3,12 @@ var app = app || {};
 (function($) {
 	app.Router = Backbone.Router.extend({
 		routes: {
-			"changes": "changes",
-			"*actions": "settings"
-		},
-	
-		changes: function() {
-			app.Options.vent.trigger('view', 'changes');
+			':tab'     : 'view',
+			'*actions' : 'view'
 		},
 
-		settings: function() {
-			app.Options.vent.trigger('view', 'settings');
+		view: function(view) {
+			app.Options.vent.trigger('view', view);
 		}
 	});
 })(jQuery);
