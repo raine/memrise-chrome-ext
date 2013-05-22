@@ -14,11 +14,15 @@ var app = app || {};
 
 		events: {
 			'click #refresh' : 'refresh',
-			'click #reset'   : 'settings.reset'
+			'click #reset'   : 'reset'
 		},
 
 		ui: {
 			'topics': '#topics .checkboxes'
+		},
+
+		reset: function() {
+			this.settings.reset();
 		},
 
 		onRender: function() {
