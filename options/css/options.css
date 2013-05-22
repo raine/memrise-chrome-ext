@@ -37,6 +37,10 @@ input[type='text']:disabled {
   color: #888;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
 #header {
   overflow: hidden;
   border-bottom: 1px solid #eee;
