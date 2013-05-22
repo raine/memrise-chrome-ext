@@ -156,6 +156,10 @@ var app = app || {};
 		},
 
 		reset: function() {
+			this.topicViews = this.topics.map(function(topic) {
+				return new app.TopicView({ model: topic });
+			});
+
 			app.Options.vent.trigger('topics:ready');
 		},
 
@@ -164,9 +168,9 @@ var app = app || {};
 		},
 
 		render: function() {
-			this.$el.append(this.topics.map(function(topic) {
-				return new app.TopicView({ model: topic }).render().el;
-			}));
+			_.chain(this.topicViews)
+				.invoke('render').pluck('$el')
+				.invoke('appendTo', this.$el);
 
 			return this;
 		},
