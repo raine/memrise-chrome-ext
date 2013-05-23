@@ -23,8 +23,7 @@ var app = app || {};
 
 		activeTab: function(name) {
 			this.ui.links.removeClass('active');
-			var li = this.ui[name].parent();
-			li.addClass('active');
+			this.ui[name].parent().addClass('active');
 		},
 
 		initialize: function() {
