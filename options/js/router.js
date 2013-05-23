@@ -5,12 +5,16 @@ var app = app || {};
 
 	app.Router = Backbone.Router.extend({
 		routes: {
-			':tab'     : 'view',
-			'*actions' : 'view'
+			':view'    : 'view',
+			'*actions' : 'default'
+		},
+
+		default: function() {
+			this.navigate('/settings', { trigger: true });
 		},
 
 		view: function(view) {
-			app.Options.vent.trigger('view', view);
+			app.Options.showView(view);
 		}
 	});
 })(jQuery);
