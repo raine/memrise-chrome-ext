@@ -16,12 +16,12 @@ var app = app || {};
 			'click a': function(event) {
 				var href = event.target.getAttribute('href');
 				Backbone.history.navigate(href, { trigger: true });
-				this.active(href.replace('/', ''));
+				this.activeTab(href.replace('/', ''));
 				return false;
 			}
 		},
 
-		active: function(name) {
+		activeTab: function(name) {
 			this.ui.links.removeClass('active');
 			var li = this.ui[name].parent();
 			li.addClass('active');
@@ -29,10 +29,6 @@ var app = app || {};
 
 		initialize: function() {
 			this.bindUIElements();
-
-			Backbone.history.on('route', function(router, method, args) {
-				this.active(args[0]);
-			}, this);
 		}
 	});
 })(jQuery);
@@ -55,6 +51,7 @@ var app = app || {};
 	});
 
 	opts.showView = function(view) {
+		app.views.navigation.activeTab(view);
 		this.content.show(app.views[view]);
 	};
 

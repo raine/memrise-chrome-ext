@@ -6,11 +6,12 @@ var app = app || {};
 	app.Router = Backbone.Router.extend({
 		routes: {
 			':view'    : 'view',
-			'*actions' : 'default'
+			'*default' : 'index'
 		},
 
-		default: function() {
-			this.navigate('/settings', { trigger: true });
+		index: function() {
+			Backbone.history.navigate('/settings', { replace: true });
+			app.Options.showView('settings');
 		},
 
 		view: function(view) {
