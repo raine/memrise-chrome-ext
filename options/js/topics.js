@@ -34,7 +34,7 @@ var app = app || {};
 		}
 	});
 
-	app.Topic = Backbone.DeepModel.extend({
+	app.Topic = Backbone.Model.extend({
 		defaults: {
 			enabled: true
 		},
