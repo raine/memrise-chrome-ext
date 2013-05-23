@@ -8,7 +8,6 @@ var app = app || {};
 		template: '#settings-tmpl',
 
 		initialize: function() {
-			this.settings  = app.settings;
 			this.whitelist = new app.TopicsWhitelist();
 		},
 
@@ -22,12 +21,12 @@ var app = app || {};
 		},
 
 		reset: function() {
-			this.settings.reset();
+			app.settings.reset();
 		},
 
 		onRender: function() {
 			rivets.bind(this.$el, {
-				settings: this.settings
+				settings: app.settings
 			});
 
 			var topics = this.whitelist.render().el;
