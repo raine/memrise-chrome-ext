@@ -20,8 +20,8 @@ var app = app || {};
 		opts.content.show(app.views[view || 'settings']);
 	});
 
+	// Start router when topics collection is ready
 	opts.vent.on('topics:ready', function(view) {
-		// Start router when topics collection is ready for service
 		new app.Router();
 		Backbone.history.start();
 	});
