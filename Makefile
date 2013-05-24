@@ -16,6 +16,7 @@ all: clean check-version clone
 		xargs sed -i '' -e "s/%VERSION%/$$VERSION/g"
 	ruby-1.9.3-p194 manifest_version.rb dist/manifest.json $(VERSION)
 	find dist -type f -name ".*" | xargs rm
+	marked -o dist/CHANGES.html dist/CHANGES.md
 	cd dist && zip -r ../memrise-button .
 	zsh -c "setopt extendedglob; rm -rf ^(dist|memrise-button*)"
 	open .
