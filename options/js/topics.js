@@ -144,15 +144,17 @@ var app = app || {};
 		}
 	});
 
-	app.TopicsWhitelist = Backbone.View.extend({
-		loadingEl : '#topics .loading',
-		tagName   : 'ul',
-
+	app.TopicsWhitelist = Marionette.ItemView.extend({
 		initialize: function() {
 			this.topics = new app.Topics();
-			this.listenTo(this.topics, 'reset', this.render);
+			this.listenTo(this.topics, 'reset', this.renderTopics);
 			this.fetch();
-			this.loading();
+			this.render();
+		},
+
+		ui: {
+			'checkboxes' : '.checkboxes',
+			'loading'    : '.loading'
 		},
 
 		fetch: function() {
@@ -160,19 +162,24 @@ var app = app || {};
 		},
 
 		render: function() {
+			this.bindUIElements();
+			this.ui.loading.show();
+			return this;
+		},
+
+		renderTopics: function() {
+			this.ui.loading.hide();
 			this.topicViews = this.topics.map(function(topic) {
 				return new app.TopicView({ model: topic });
 			});
 
+			var ul = $('<ul>');
 			_.chain(this.topicViews)
 				.invoke('render').pluck('$el')
-				.invoke('appendTo', this.$el.empty());
+				.invoke('appendTo', ul);
+			ul.appendTo(this.ui.checkboxes);
 
 			return this;
 		},
-
-		loading: function() {
-			$(this.location).append($(this.loadingEl).clone().show());
-		}
 	});
 })(jQuery);
