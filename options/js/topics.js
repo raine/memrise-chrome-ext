@@ -147,7 +147,6 @@ var app = app || {};
 	app.TopicsWhitelist = Marionette.ItemView.extend({
 		initialize: function() {
 			this.topics = new app.Topics();
-			this.listenTo(this.topics, 'reset', this.renderTopics);
 			this.fetch();
 		},
 
@@ -166,7 +165,8 @@ var app = app || {};
 			if (this.topics.length > 0) {
 				this.renderTopics();
 			} else {
-				this.ui.loading.show(); // TODO: if not ready
+				this.listenTo(this.topics, 'reset', this.renderTopics);
+				this.ui.loading.show();
 			}
 
 			return this;
@@ -174,6 +174,7 @@ var app = app || {};
 
 		renderTopics: function() {
 			this.ui.loading.hide();
+
 			this.topicViews = this.topics.map(function(topic) {
 				return new app.TopicView({ model: topic });
 			});
