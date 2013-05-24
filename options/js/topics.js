@@ -149,7 +149,6 @@ var app = app || {};
 			this.topics = new app.Topics();
 			this.listenTo(this.topics, 'reset', this.renderTopics);
 			this.fetch();
-			this.render();
 		},
 
 		ui: {
@@ -163,7 +162,13 @@ var app = app || {};
 
 		render: function() {
 			this.bindUIElements();
-			this.ui.loading.show();
+
+			if (this.topics.length > 0) {
+				this.renderTopics();
+			} else {
+				this.ui.loading.show(); // TODO: if not ready
+			}
+
 			return this;
 		},
 

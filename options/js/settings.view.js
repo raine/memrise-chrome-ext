@@ -7,6 +7,10 @@ var app = app || {};
 		// Marionette automatically renders the template
 		template: '#settings-tmpl',
 
+		initialize: function() {
+			this.whitelist = new app.TopicsWhitelist();
+		},
+
 		events: {
 			'click #refresh' : 'refresh',
 			'click #reset'   : 'reset'
@@ -25,7 +29,8 @@ var app = app || {};
 				settings: app.settings
 			});
 
-			this.whitelist = new app.TopicsWhitelist({ el: this.ui.topics });
+			this.whitelist.setElement(this.ui.topics);
+			this.whitelist.render();
 		},
 
 		refresh: function() {
