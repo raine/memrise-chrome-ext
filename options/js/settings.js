@@ -18,7 +18,6 @@ var OPTIONS_DEFAULTS = {
 			});
 
 			this.fetch(); // Read values from localStorage
-			this.save();  // Write to localStorage, in case of first run
 		},
 
 		sync: function(method, model, options) {
@@ -36,6 +35,7 @@ var OPTIONS_DEFAULTS = {
 					// Read existing settings from localStorage
 					var values = {};
 					var prefix = "settings.";
+
 					for (var i = (localStorage.length - 1); i >= 0; i--) {
 						if (localStorage.key(i).indexOf(prefix) === 0) {
 							var key = localStorage.key(i).substring(prefix.length);
@@ -46,8 +46,13 @@ var OPTIONS_DEFAULTS = {
 						}
 					}
 
-					// Copy settings from localStorage to model's attributes
-					_.extend(model.attributes, values);
+					if (_.isEmpty(values)) {
+						// Running for the first time if localStorage is empty
+						this.save();
+					} else {
+						// Copy settings from localStorage to model's attributes
+						_.extend(model.attributes, values);
+					}
 
 					return model;
 			}
