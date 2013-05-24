@@ -186,6 +186,6 @@ var app = app || {};
 			ul.appendTo(this.ui.checkboxes);
 
 			return this;
-		},
+		}
 	});
 })(jQuery);

@@ -4,16 +4,20 @@ Releases without meaningful changes omitted. See the [git commit
 log](https://github.com/raneksi/memrise-chrome-ext/commits/master) for all
 changes.
 
-## 1.33 (May 16, 2013)
+## May 20, 2013 (2.0.0)
+
+* You can now disable tracking of individual courses.
+
+## May 16, 2013 (1.33)
 
 * Based on the analytics, decided to remove `Tabs` as a required permission.
   The next session always open in the current tab.
 
-## 1.32 (May 13, 2013)
+## May 13, 2013 (1.32)
 
 * When clicking the button, open in the current tab under certain conditions.
 * Added `Tabs` to required permissions.
 
-## 1.30 (May 11, 2013)
+## May 11, 2013 (1.30)
 
 * Refresh button when visiting Memrise.com dashboard.
