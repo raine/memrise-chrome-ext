@@ -53,14 +53,11 @@ var app = app || {};
 		app.views.navigation.activeTab(view);
 		this.content.show(app.views[view]);
 	};
-
-	// Start router when topics collection is ready
-	opts.vent.on('topics:ready', function(view) {
-		new app.Router();
-		Backbone.history.start();
-	});
 })(jQuery);
 
 $(function() {
 	app.Options.start();
+
+	new app.Router();
+	Backbone.history.start();
 });

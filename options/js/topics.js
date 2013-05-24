@@ -150,17 +150,9 @@ var app = app || {};
 
 		initialize: function() {
 			this.topics = new app.Topics();
-			this.listenTo(this.topics, 'reset', this.reset);
+			this.listenTo(this.topics, 'reset', this.render);
 			this.fetch();
 			this.loading();
-		},
-
-		reset: function() {
-			this.topicViews = this.topics.map(function(topic) {
-				return new app.TopicView({ model: topic });
-			});
-
-			app.Options.vent.trigger('topics:ready');
 		},
 
 		fetch: function() {
@@ -168,6 +160,10 @@ var app = app || {};
 		},
 
 		render: function() {
+			this.topicViews = this.topics.map(function(topic) {
+				return new app.TopicView({ model: topic });
+			});
+
 			_.chain(this.topicViews)
 				.invoke('render').pluck('$el')
 				.invoke('appendTo', this.$el.empty());

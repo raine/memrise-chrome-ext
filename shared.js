@@ -18,7 +18,7 @@ var Memrise = {
 				var args = arguments;
 				setTimeout(function() {
 					callback.apply(null, args);
-				}, 1);
+				}, 1000);
 			};
 		}
 
