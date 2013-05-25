@@ -33,18 +33,7 @@ var OPTIONS_DEFAULTS = {
 					break;
 				case 'read':
 					// Read existing settings from localStorage
-					var values = {};
-					var prefix = "settings.";
-
-					for (var i = (localStorage.length - 1); i >= 0; i--) {
-						if (localStorage.key(i).indexOf(prefix) === 0) {
-							var key = localStorage.key(i).substring(prefix.length);
-							var value = this._getItem(key);
-							if (value !== undefined) {
-								values[key] = value;
-							}
-						}
-					}
+					var values = this._readObj();
 
 					if (_.isEmpty(values)) {
 						// Running for the first time if localStorage is empty
@@ -63,6 +52,23 @@ var OPTIONS_DEFAULTS = {
 			this.clear({ silent: true });
 			this.set(this.defaults);
 			this.trigger('reset');
+		},
+
+		_readObj: function() {
+			var values = {};
+			var prefix = "settings.";
+
+			for (var i = (localStorage.length - 1); i >= 0; i--) {
+				if (localStorage.key(i).indexOf(prefix) === 0) {
+					var key = localStorage.key(i).substring(prefix.length);
+					var value = this._getItem(key);
+					if (value !== undefined) {
+						values[key] = value;
+					}
+				}
+			}
+
+			return values;
 		},
 
 		_writeObj: function(obj) {
