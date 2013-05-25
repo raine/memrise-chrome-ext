@@ -21,7 +21,7 @@ var OPTIONS_DEFAULTS = {
 		},
 
 		sync: function(method, model, options) {
-			console.log('Settings: sync', method, model, JSON.stringify(model.attributes))
+			console.log('Settings: sync', method, model, JSON.stringify(model.attributes));
 
 			switch(method) {
 				case 'create':
@@ -67,8 +67,9 @@ var OPTIONS_DEFAULTS = {
 
 		_writeObj: function(obj) {
 			for (var key in obj) {
-				var val = obj[key];
-				this._setItem(key, val);
+				if (Object.prototype.hasOwnProperty.call(obj, key)) {
+					this._setItem(key, obj[key]);
+				}
 			}
 		},
 
@@ -83,7 +84,7 @@ var OPTIONS_DEFAULTS = {
 		},
 
 		_getItem: function(key) {
-			var value = localStorage['settings.' + key]
+			var value = localStorage['settings.' + key];
 			if (value === null) { return undefined; }
 			try { return JSON.parse(value); } catch (e) { return null; }
 		},
