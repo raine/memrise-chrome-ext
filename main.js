@@ -159,7 +159,7 @@ var refreshButton = function(opts) {
 			var groupsSetting = settings.get('topics');
 			if (groupsSetting) {
 				groups = _.filter(groups, function(group) {
-					return groupsSetting[group.slug] === true;
+					return !(groupsSetting[group.slug] === false)
 				});
 			}
 
