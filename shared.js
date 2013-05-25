@@ -35,7 +35,7 @@ var Memrise = {
 		var groups = [];
 
 		// .whitebox is a single group of courses, like "Animals"
-		$('.whitebox', $html).each(function() {
+		$html.find('#content .container .page .whitebox').each(function() {
 			var group = {
 				name: $('.groupname', this).text(),
 				wilting: 0,
