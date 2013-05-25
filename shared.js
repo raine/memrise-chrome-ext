@@ -52,7 +52,7 @@ var Memrise = {
 			if (href = btn.attr('href')) {
 				group.waterPath = href;
 
-				if (m = btn.text().match(/Water (\d+)/)) {
+				if (m = btn.text().match(/Water\s*\(?(\d+)\)?/)) {
 					group.wilting = parseInt(m[1]);
 				}
 			}
