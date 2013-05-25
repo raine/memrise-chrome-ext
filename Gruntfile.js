@@ -5,9 +5,27 @@ module.exports = function(grunt) {
 	});
 
 	grunt.initConfig({
+		coffee: {
+			glob_to_multiple: {
+				expand: true,
+				flatten: true,
+				cwd: 'test/',
+				src: ['*.coffee'],
+				dest: 'test/',
+				ext: '.test.js'
+			}
+		},
+
 		watch: {
-			files: ['test/**/*.js', 'options/**/*.js'],
-			tasks: 'exec'
+			coffee: {
+				files: 'test/**/*.coffee',
+				tasks: 'coffee'
+			},
+
+			tests: {
+				files: ['test/**/*.js', 'options/**/*.js'],
+				tasks: 'exec'
+			}
 		},
 
 		exec: {
@@ -19,6 +37,11 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.registerTask('default', ['server', 'exec', 'watch']);
+	grunt.registerTask('default', function() {
+		var tasks = ['server', 'coffee', 'exec', 'watch'];
+		grunt.option('force', true);
+		grunt.task.run(tasks);
+	});
 };
