@@ -33,10 +33,6 @@ var openURL = function(url, newTab) {
 	}
 };
 
-var openOptions = function() {
-	openURL('options.html?installed', true);
-};
-
 var noBadge = function(url, title) {
 	localStorage.actionURL = url;
 	chrome.browserAction.setBadgeText({ text: '' });
@@ -209,7 +205,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	if (!localStorage.firstInstalled) {
 		localStorage.firstInstalled = Date.now();
-		openURL('options.html?installed', true);
+		openURL('options/options.html?installed', true);
 	}
 });
 
