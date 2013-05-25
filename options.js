@@ -40,7 +40,7 @@ $(document).ready(function() {
 		});
 
 	// Topics
-	get(DASHBOARD_URL, function(html) {
+	Memrise.getDB(function(html) {
 		html = html.replace(/<img\b[^>]*\/>/ig,'');
 		$('#topics .loading').hide();
 
