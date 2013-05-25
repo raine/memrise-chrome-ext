@@ -19,5 +19,6 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-exec');
-	grunt.registerTask('default', 'server exec watch');
-}
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.registerTask('default', ['server', 'exec', 'watch']);
+};
