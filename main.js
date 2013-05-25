@@ -51,20 +51,20 @@ var setErrorBadge = function(err) {
 
 var setBadge = function(group) {
 	if (group) {
-		var count;
+		var path, type, text, count;
 
 		if (group.harvestable) {
-			var path = _.find(group.courses, function(c) {
+			path = _.find(group.courses, function(c) {
 				return c.harvestPath;
 			}).harvestPath;
 
-			var type = 'harvest',
-				text = 'H';
+			type = 'harvest';
+			text = 'H';
 		} else if (group.wilting && group.wilting > settings.get('wilting-threshold')) {
-			var path  = group.waterPath,
-				type  = 'wilting',
-				count = group.wilting,
-				text  = group.wilting.toString();
+			path  = group.waterPath;
+			type  = 'wilting';
+			count = group.wilting;
+			text  = group.wilting.toString();
 		} else {
 			return noBadge(Memrise.DASHBOARD_URL, 'Go to Memrise dashboard');
 		}
