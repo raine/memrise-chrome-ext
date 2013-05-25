@@ -63,7 +63,17 @@ var Memrise = {
 					id: parseInt($('.course-progress-box', this).attr('data-course-id'))
 				};
 
-				var $harvest = $('.btn[href*="harvest"]', this);
+				// TODO: you could combine these because both can't be active
+				var $water = $('.cta-wrap .btn[href*="water"]', this);
+				if ($water.length > 0) {
+					course.waterPath = $water.attr('href');
+
+					if (m = $water.text().match((/Water\s*\(?(\d+)\)?/))) {
+						course.wilting = parseInt(m[1]);
+					}
+				}
+
+				var $harvest = $('.ctn-wrap btn[href*="harvest"]', this);
 				if ($harvest.length > 0) {
 					course.harvestPath = $harvest.attr('href');
 
