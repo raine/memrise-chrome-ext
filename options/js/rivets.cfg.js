@@ -1,16 +1,21 @@
 rivets.binders['disable-if'] = {
-	routine: function(el, courses) {
-		el.disabled = courses.every(function(c) {
-			return !c.get('enabled');
-		});
-	},
+	// Using my own routine since this function gets called from outside with
+	// value for which I have no use.
+	routine: function(el, value) { },
 
 	bind: function(el) {
 		var self = this;
 
-		this.change = function() {
-			self.binder.routine(self.el, this.get('courses'));
+		var checkCourses = function() {
+			var courses = self.model.get('courses');
+
+			el.disabled = courses.every(function(c) {
+				return !c.get('enabled');
+			});
 		};
+
+		this.change = checkCourses;
+		this.change();
 
 		this.model.on('change', this.change);
 	},

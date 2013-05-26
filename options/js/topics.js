@@ -14,17 +14,7 @@ var app = app || {};
 			// Initialize topic DOM and the checkboxes
 			this.setElement(this.topicTmpl().trim());
 			this.bindings = rivets.bind(this.$el, { topic: this.model });
-			this.listenTo(this.model, 'change', this.refreshTopic);
-			this.refreshTopic();
 			return this;
-		},
-
-		refreshTopic: function() {
-			this.$el.find('.topic-checkbox').prop('disabled', this.allUnchecked());
-		},
-
-		allUnchecked: function() {
-			return $(this.$el).find('.courses input:checked').length === 0;
 		}
 	});
 
