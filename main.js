@@ -33,18 +33,6 @@ var openURL = function(url, newTab) {
 	}
 };
 
-var noBadge = function(url, title) {
-	localStorage.actionURL = url;
-	chrome.browserAction.setBadgeText({ text: '' });
-	chrome.browserAction.setTitle({ title: title });
-};
-
-var setErrorBadge = function(err) {
-	if (err === 'not-logged-in') {
-		noBadge(Memrise.LOGIN_URL, 'Log in to Memrise');
-	}
-};
-
 var getTitle = function(name, count) {
 	var title = STRINGS.wilting
 		.replace('%s', name)
@@ -54,14 +42,37 @@ var getTitle = function(name, count) {
 	return title;
 };
 
-var setBadge = function(text, title, color) {
+var updateButton = function(url, text, title, color) {
 	console.log(arguments);
-	chrome.browserAction.setBadgeBackgroundColor({ color: color });
-	chrome.browserAction.setBadgeText({ text: text });
+
+	if (color) {
+		chrome.browserAction.setBadgeBackgroundColor({ color: color });
+	}
+
+	chrome.browserAction.setBadgeText({ text: text || '' });
 	chrome.browserAction.setTitle({ title: title });
+
+	localStorage.actionURL = url;
+};
+
+var setNoBadge = function(url, title) {
+	updateButton(url, null, title);
+};
+
+var setErrorBadge = function(err) {
+	if (err === 'not-logged-in') {
+		setNoBadge(Memrise.LOGIN_URL, 'Log in to Memrise');
+	}
 };
 
 var setButton = function(opts) {
+	console.log('setButton', opts);
+
+	// If called without arguments; nothing to do
+	if (!opts) {
+		return setNoBadge(Memrise.DASHBOARD_URL, 'Go to dashboard');
+	}
+
 	var obj = opts.obj;
 	var count;
 
@@ -74,9 +85,9 @@ var setButton = function(opts) {
 	var text  = count.toString();
 	var color = COLORS.wilting;
 	var title = getTitle(obj.name, count);
+	var url   = Memrise.BASE_URL + obj.waterPath;
 
-	localStorage.actionURL = Memrise.BASE_URL + obj.waterPath;
-	setBadge(text, title, color);
+	updateButton(url, text, title, color);
 };
 
 var fetchGroups = function(cb, opts) {
@@ -213,8 +224,11 @@ var refreshButton = function(opts) {
 						}
 					});
 
-					// TODO: If maxGroup is null, there are no wilting plants
+					// If maxGroup is null, there are no wilting plants
 					// and there's no point getting the maxCourse
+					if (!maxGroup) {
+						return setButton();
+					}
 
 					var maxCourse = _.chain(maxGroup.courses)
 						.where({ enabled: true})
