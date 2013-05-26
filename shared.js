@@ -60,7 +60,8 @@ var Memrise = {
 			$('.course-box-wrapper', this).each(function() {
 				var course = {
 					name: $('a.inner-wrap', this).attr('title'),
-					id: parseInt($('.course-progress-box', this).attr('data-course-id'))
+					id: parseInt($('.course-progress-box', this).attr('data-course-id')),
+					wilting: 0
 				};
 
 				// TODO: you could combine these because both can't be active
