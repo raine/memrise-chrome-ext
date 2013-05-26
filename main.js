@@ -210,6 +210,13 @@ var refreshButton = function(opts) {
 
 				var maxGroup;
 				if (disabledCourses) {
+					// TODO: There's a problem here that because Memrise
+					// dashboarb shows "Plant" button without wilting count
+					// for courses that are not fully planted, the
+					// course.wilting will be 0 here for courses that
+					// actually have wilting plants, and those courses will
+					// be skipped.
+					//
 					// Get wilting count from courses
 					enabledGroups.forEach(function(group) {
 						var coursesObj   = groupsWL[group.slug].courses;
