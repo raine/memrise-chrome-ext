@@ -162,25 +162,36 @@ var refreshButton = function(opts) {
 				// 	  for the group that has most wilting plants (based on
 				// 	  the wilting counts from enabled courses). Pick the
 				// 	  course with most wilting plants.
-				var disabledCourses;
 				var enabledGroups = _.filter(groups, function(group) {
 					var groupObj = groupsWL[group.slug];
 					if (groupObj && groupObj.enabled) {
-						var coursesObj = groupObj.courses;
+						var coursesObj  = groupObj.courses;
+						var allDisabled = true;
 						group.courses.forEach(function(course) {
 							var c;
 							if (c = coursesObj[course.id]) {
 								course.enabled = c.enabled;
-								if (c.enabled === false) { disabledCourses = true; }
 							} else {
 								course.enabled = true; // Enabled unless false
 							}
+
+							if (course.enabled === true) {
+								allDisabled = false;
+							}
 						});
-						return true;
+
+						// Regard groups with all courses disabled as disabled
+						return !allDisabled;
 					} else if (groupObj === undefined) {
 						return true;
 					}
 				});
+
+				// Returns the first disabled course, if any
+				var disabledCourses = _.chain(enabledGroups)
+					.pluck('courses').flatten()
+					.findWhere({ enabled: false })
+					.value();
 
 				var maxGroup;
 				if (disabledCourses) {
@@ -201,6 +212,9 @@ var refreshButton = function(opts) {
 							maxGroup = group;
 						}
 					});
+
+					// TODO: If maxGroup is null, there are no wilting plants
+					// and there's no point getting the maxCourse
 
 					var maxCourse = _.chain(maxGroup.courses)
 						.where({ enabled: true})
