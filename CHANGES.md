@@ -8,6 +8,11 @@ changes.
 
 * You can now disable tracking of individual courses.
 
+## May 25, 2013 (1.3.7)
+
+* Fixed a bug where new courses would be regarded as disabled. Thanks
+  [iseg](http://www.memrise.com/user/iseg/).
+
 ## May 16, 2013 (1.33)
 
 * Based on the analytics, decided to remove `Tabs` as a required permission.
