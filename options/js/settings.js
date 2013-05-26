@@ -52,7 +52,7 @@ var OPTIONS_DEFAULTS = {
 		reset: function() {
 			this.ls.clear(); // Clear localStorage
 			this.clear({ silent: true });
-			this.set(this.defaults);
+			this.set(this.defaults, { silent: true });
 			this.trigger('reset');
 		}
 	});
