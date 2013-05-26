@@ -198,6 +198,10 @@ var refreshButton = function(opts) {
 					}
 				});
 
+				if (_.isEmpty(enabledGroups)) {
+					return setButton();
+				}
+
 				// Returns the first disabled course, if any
 				var disabledCourses = _.chain(enabledGroups)
 					.pluck('courses').flatten()
