@@ -12,7 +12,7 @@ var UPDATE_INTERVAL = 5; // Minutes
 var anim = new Animation();
 var groupsCache;
 
-var settings = new Store("settings", DEFAULTS);
+var settings = new LocalStore('settings', DEFAULTS);
 
 var consoleHolder = console;
 var console = {};
@@ -45,39 +45,38 @@ var setErrorBadge = function(err) {
 	}
 };
 
-var setBadge = function(group) {
-	if (group) {
-		var path, type, text, count;
+var getTitle = function(name, count) {
+	var title = STRINGS.wilting
+		.replace('%s', name)
+		.replace('%d', count);
 
-		if (group.harvestable) {
-			path = _.find(group.courses, function(c) {
-				return c.harvestPath;
-			}).harvestPath;
+	if (count !== 1) { title += 's'; }
+	return title;
+};
 
-			type = 'harvest';
-			text = 'H';
-		} else if (group.wilting && group.wilting > settings.get('wilting-threshold')) {
-			path  = group.waterPath;
-			type  = 'wilting';
-			count = group.wilting;
-			text  = group.wilting.toString();
-		} else {
-			return noBadge(Memrise.DASHBOARD_URL, 'Go to Memrise dashboard');
-		}
+var setBadge = function(text, title, color) {
+	console.log(arguments);
+	chrome.browserAction.setBadgeBackgroundColor({ color: color });
+	chrome.browserAction.setBadgeText({ text: text });
+	chrome.browserAction.setTitle({ title: title });
+};
 
-		var title = STRINGS[type].replace('%d', count).replace('%s', group.name);
-		if (type === 'wilting' && count !== 1) {
-			title += 's';
-		}
+var setButton = function(opts) {
+	var obj = opts.obj;
+	var count;
 
-		localStorage.actionURL = Memrise.BASE_URL + path;
-
-		chrome.browserAction.setBadgeBackgroundColor({ color: COLORS[type] });
-		chrome.browserAction.setBadgeText({ text: text });
-		chrome.browserAction.setTitle({ title: title });
-	} else {
-		return noBadge(Memrise.DASHBOARD_URL, 'Go to Memrise dashboard');
+	if (opts.type === 'group') {
+		count = obj.wilting;
+	} else if (opts.type === 'course') {
+		count = obj.group.wiltingReduced;
 	}
+
+	var text  = count.toString();
+	var color = COLORS.wilting;
+	var title = getTitle(obj.name, count);
+
+	localStorage.actionURL = Memrise.BASE_URL + obj.waterPath;
+	setBadge(text, title, color);
 };
 
 var fetchGroups = function(cb, opts) {
@@ -105,6 +104,7 @@ var fetchGroups = function(cb, opts) {
 	}
 };
 
+// TODO: remove?
 var sortGroups = function(a, b) {
 	if (a.harvestable) {
 		return 1;
@@ -151,14 +151,71 @@ var refreshButton = function(opts) {
 				anim.drawIcon('logged');
 			});
 
-			var groupsSetting = settings.get('topics');
-			if (groupsSetting) {
-				groups = _.filter(groups, function(group) {
-					return groupsSetting[group.slug] === true;
+			// TODO: harvestable?
+			var groupsWL = settings.get('topics');
+			if (groupsWL) {
+				// -  Remove groups that are disabled
+				// -  Get disabled courses for all groups
+				// -  If there are no disabled courses, sort groups by
+				// 	  wilting count and pick the one with highest count.
+				// -  If there are disabled courses, get enabled courses
+				// 	  for the group that has most wilting plants (based on
+				// 	  the wilting counts from enabled courses). Pick the
+				// 	  course with most wilting plants.
+				var disabledCourses;
+				var enabledGroups = _.filter(groups, function(group) {
+					var groupObj = groupsWL[group.slug];
+					if (groupObj && groupObj.enabled) {
+						var coursesObj = groupObj.courses;
+						group.courses.forEach(function(course) {
+							var c;
+							if (c = coursesObj[course.id]) {
+								course.enabled = c.enabled;
+								if (c.enabled === false) { disabledCourses = true; }
+							} else {
+								course.enabled = true; // Enabled unless false
+							}
+						});
+						return true;
+					} else if (groupObj === undefined) {
+						return true;
+					}
 				});
-			}
 
-			setBadge(_.last(groups.sort(sortGroups)));
+				var maxGroup;
+				if (disabledCourses) {
+					// Get wilting count from courses
+					enabledGroups.forEach(function(group) {
+						var coursesObj   = groupsWL[group.slug].courses;
+						var wiltingTotal = group.courses.reduce(function(prev, course){
+							if (course.enabled) {
+								return prev + course.wilting;
+							} else {
+								return prev + 0;
+							}
+						}, 0);
+
+						group.wiltingReduced = wiltingTotal;
+						// Get the group with most wilting while we're at it
+						if (wiltingTotal > ((maxGroup && maxGroup.wiltingReduced) || 0)) {
+							maxGroup = group;
+						}
+					});
+
+					var maxCourse = _.chain(maxGroup.courses)
+						.where({ enabled: true})
+						.sortBy('wilting')
+						.last().value();
+
+					maxCourse.group = maxGroup; // Add a reference to the group
+					setButton({ type: 'course', obj: maxCourse });
+				} else {
+					// No disabled courses; sort groups by wilting count,
+					// pick the one with most
+					maxGroup = _.last(_.sortBy(enabledGroups, 'wilting'));
+					setButton({ type: 'group', obj: maxGroup });
+				}
+			}
 		}
 	}, opts);
 };
