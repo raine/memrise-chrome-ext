@@ -233,7 +233,9 @@ var refreshButton = function(opts) {
 						}
 
 						var getWilting = function(obj) {
-							return (obj && (obj.wiltingReduced || obj.wilting)) || 0;
+							if (!obj) return 0;
+							return ('wiltingReduced' in obj) ?
+								obj.wiltingReduced : obj.wilting;
 						};
 
 						// Use either wiltingReduced or wilting for
