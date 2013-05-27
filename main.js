@@ -249,13 +249,19 @@ var refreshButton = function(opts) {
 						return setButton();
 					}
 
-					var maxCourse = _.chain(maxGroup.courses)
-						.where({ enabled: true})
-						.sortBy('wilting')
-						.last().value();
+					// Set group as a button if there are no disabled courses
+					var disabled = _.findWhere(maxGroup.courses, { enabled: false });
+					if (disabled) {
+						var maxCourse = _.chain(maxGroup.courses)
+							.where({ enabled: true})
+							.sortBy('wilting')
+							.last().value();
 
-					maxCourse.group = maxGroup; // Add a reference to the group
-					setButton({ type: 'course', obj: maxCourse });
+						maxCourse.group = maxGroup; // Add a reference to the group
+						setButton({ type: 'course', obj: maxCourse });
+					} else {
+						setButton({ type: 'group', obj: maxGroup });
+					}
 				} else {
 					// No disabled courses; sort groups by wilting count,
 					// pick the one with most
