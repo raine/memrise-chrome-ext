@@ -168,7 +168,7 @@ input[type="checkbox"]:disabled + span {
   display: none;
 }
 
-#unlogged {
+.not-logged-in {
   margin-top: 10px;
   display: none;
 }
