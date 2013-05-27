@@ -186,3 +186,7 @@ input[type="checkbox"]:disabled + span {
   padding: 0;
   margin-bottom: 5px;
 }
+
+.news {
+  max-width: 600px;
+}

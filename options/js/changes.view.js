@@ -4,6 +4,8 @@ var app = app || {};
 	'use strict';
 
 	app.Changes = Marionette.ItemView.extend({
+		className: 'news',
+
 		initialize: function() {
 			this.on('fetch', this.render);
 
