@@ -219,7 +219,6 @@ var refreshButton = function(opts) {
 					//
 					// Get wilting count from courses
 					enabledGroups.forEach(function(group) {
-						var coursesObj   = groupsWL[group.slug].courses;
 						var wiltingTotal = group.courses.reduce(function(prev, course){
 							if (course.enabled) {
 								return prev + course.wilting;
