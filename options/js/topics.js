@@ -127,7 +127,7 @@ var app = app || {};
 		parse: function(html) {
 			var res = Memrise.parseHTML(html);
 			if (typeof res === 'string') {
-				throw('error', err);
+				throw('error', res);
 			} else {
 				return res;
 			}
