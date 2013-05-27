@@ -4,11 +4,17 @@ Releases without meaningful changes omitted. See the [git commit
 log](https://github.com/raneksi/memrise-chrome-ext/commits/master) for all
 changes.
 
-## May 20, 2013 (2.0.0)
+## May 30, 2013 (2.0.0)
 
-* You can now disable tracking of individual courses.
+* You can now disable tracking of individual courses. Due to limitations in
+  available data, the feature only works properly for courses that are fully
+  planted.
 
-## May 25, 2013 (1.3.7)
+  In other words, you're better off not using this feature with
+  topics that have courses with unplanted flowers, unless you don't want to
+  water those courses.
+
+## May 25, 2013 (1.37)
 
 * Fixed a bug where new courses would be regarded as disabled. Thanks
   [iseg](http://www.memrise.com/user/iseg/).
