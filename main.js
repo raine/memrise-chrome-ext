@@ -219,17 +219,26 @@ var refreshButton = function(opts) {
 					//
 					// Get wilting count from courses
 					enabledGroups.forEach(function(group) {
-						var wiltingTotal = group.courses.reduce(function(prev, course){
-							if (course.enabled) {
-								return prev + course.wilting;
-							} else {
-								return prev + 0;
-							}
-						}, 0);
+						var disabled = _.findWhere(group.courses, { enabled: false });
+						if (disabled) {
+							var wiltingTotal = group.courses.reduce(function(prev, course){
+								if (course.enabled) {
+									return prev + course.wilting;
+								} else {
+									return prev + 0;
+								}
+							}, 0);
 
-						group.wiltingReduced = wiltingTotal;
-						// Get the group with most wilting while we're at it
-						if (wiltingTotal > ((maxGroup && maxGroup.wiltingReduced) || 0)) {
+							group.wiltingReduced = wiltingTotal;
+						}
+
+						var getWilting = function(obj) {
+							return (obj && (obj.wiltingReduced || obj.wilting)) || 0;
+						};
+
+						// Use either wiltingReduced or wilting for
+						// comparison whichever is available
+						if (getWilting(group) > getWilting(maxGroup)) {
 							maxGroup = group;
 						}
 					});
