@@ -1,6 +1,7 @@
 {
-  "-W065"    : false, // disable: Missing radix parameter.
-  "boss"     : true,
-  "loopfunc" : true,
-  "-W099"    : true   // allow mixed tabs and spaces
+  "-W065"     : false, // disable: Missing radix parameter.
+  "boss"      : true,
+  "loopfunc"  : true,
+  "-W099"     : true,  // allow mixed tabs and spaces
+  "funcscope" : true
 }
