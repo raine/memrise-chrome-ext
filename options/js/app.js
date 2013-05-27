@@ -10,6 +10,7 @@ var app = app || {};
 	});
 
 	opts.addInitializer(function(options) {
+		app.controller = new app.OptionsController();
 		app.views = {
 			navigation : new app.Navigation(),
 			changes    : new app.Changes(),
