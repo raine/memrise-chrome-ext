@@ -30,6 +30,7 @@ var app = app || {};
 				settings: app.settings
 			});
 
+			this.delegateEvents();
 			this.whitelist.setElement(this.ui.topics);
 			this.whitelist.render();
 		},
