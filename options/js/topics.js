@@ -111,7 +111,14 @@ var app = app || {};
 		sync: function(method, coll, options) {
 			if (method === 'read') {
 				return Memrise.getDB(function(html) {
-					options.success(html);
+					// This can't be done in parse because parse() is called
+					// when resetting and it's too late to error
+					var res = Memrise.parseHTML(html);
+					if (typeof res === 'string') {
+						options.error(res);
+					} else {
+						options.success(res);
+					}
 				});
 			} else if (method === 'create') {
 				// When the models are reset, 'change' triggers multiple times and
@@ -121,15 +128,6 @@ var app = app || {};
 				clearTimeout(this.timer);
 				var set    = _.bind(app.settings.set, app.settings);
 				this.timer = _.delay(set, 50, 'topics', this.toObject());
-			}
-		},
-
-		parse: function(html) {
-			var res = Memrise.parseHTML(html);
-			if (typeof res === 'string') {
-				throw('error', res);
-			} else {
-				return res;
 			}
 		}
 	});
@@ -142,11 +140,19 @@ var app = app || {};
 
 		ui: {
 			'checkboxes' : '.checkboxes',
-			'loading'    : '.loading'
+			'loading'    : '.loading',
+			'nologin'    : '.not-logged-in'
 		},
 
 		fetch: function() {
-			return this.topics.fetch({ reset: true });
+			var self = this;
+
+			return this.topics.fetch({
+				reset: true,
+				error: this.fetchError.bind(this)
+			}).done(function() {
+				self.ui.loading.hide();
+			});
 		},
 
 		render: function() {
@@ -163,7 +169,7 @@ var app = app || {};
 		},
 
 		renderTopics: function() {
-			this.ui.loading.hide();
+			this.ui.nologin.hide();
 
 			this.topicViews = this.topics.map(function(topic) {
 				return new app.TopicView({ model: topic });
@@ -176,6 +182,12 @@ var app = app || {};
 			ul.appendTo(this.ui.checkboxes);
 
 			return this;
-		}
+		},
+
+		fetchError: function(coll, err, options) {
+			if (err === 'not-logged-in') {
+				this.ui.nologin.show();
+			}
+		},
 	});
 })(jQuery);
