@@ -1,3 +1,37 @@
+rivets.binders['show-if-any-disabled'] = {
+	// Using my own routine since this function gets called from outside with
+	// value for which I have no use.
+	routine: function(el, value) { },
+
+	bind: function(el) {
+		var self = this;
+
+		var anyDisabled = function() {
+			return self.model.models.some(function(t) {
+				return t.get('courses').some(function(c) {
+					return c.get('enabled') === false;
+				});
+			});
+		};
+
+		var checkTopics = function(arg) {
+			if (anyDisabled()) {
+				$(el).slideDown(arg === true ? 0 : void(0));
+			} else {
+				$(el).slideUp();
+			}
+		};
+
+		this.change = checkTopics;
+		this.model.on('change',  this.change);
+		this.model.once('reset', this.change.bind(this, true));
+	},
+
+	unbind: function() {
+		this.model.off('change', this.change);
+	}
+};
+
 rivets.binders['disable-if'] = {
 	// Using my own routine since this function gets called from outside with
 	// value for which I have no use.

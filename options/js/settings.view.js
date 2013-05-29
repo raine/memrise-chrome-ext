@@ -26,7 +26,8 @@ var app = app || {};
 
 		onRender: function() {
 			rivets.bind(this.$el, {
-				settings: app.settings
+				settings: app.settings,
+				topics: this.whitelist.topics
 			});
 
 			this.delegateEvents();

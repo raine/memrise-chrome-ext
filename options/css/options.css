@@ -13,10 +13,15 @@ body {
   min-width: 800px;
 }
 
+b {
+  font-weight: 600;
+}
+
 a {
   color: #0088cc;
   text-decoration: none;
 }
+
 a:hover,
 a:focus {
   color: #005580;
@@ -189,4 +194,9 @@ input[type="checkbox"]:disabled + span {
 
 .news {
   max-width: 600px;
+}
+
+.note {
+  color: #777;
+  display: none;
 }
