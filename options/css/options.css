@@ -164,7 +164,7 @@ input[type="checkbox"]:disabled + span {
 }
 
 .loading {
-  background-image:url("/loading.gif");
+  background-image:url("../img/loading.gif");
   background-repeat: no-repeat;
   padding-left: 24px;
   margin-top: 10px;
