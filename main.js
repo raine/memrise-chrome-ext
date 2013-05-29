@@ -12,7 +12,7 @@ var UPDATE_INTERVAL = 5; // Minutes
 var anim = new Animation();
 var groupsCache;
 
-var settings = new LocalStore('settings', DEFAULTS);
+var settings = new LocalStore('settings', OPTIONS_DEFAULTS);
 
 var consoleHolder = console;
 var console = {};

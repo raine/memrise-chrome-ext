@@ -1,5 +1,5 @@
-var DEV_ENV  = (chrome.app.getDetails().version === '0.0.1');
-var DEFAULTS = {
+var DEV_ENV = (chrome.app.getDetails().version === '0.0.1');
+var OPTIONS_DEFAULTS = {
 	"wilting-threshold": 1,
 	"track-usage": true
 };
