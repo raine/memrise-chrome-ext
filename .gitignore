@@ -3,5 +3,6 @@ assets/
 build/
 memrise-button/
 memrise-button.zip
+CHANGES.html
 
 node_modules/
