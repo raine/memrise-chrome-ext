@@ -1,9 +1,5 @@
 # What's new in Memrise Button
 
-Releases without meaningful changes omitted. See the [git commit
-log](https://github.com/raneksi/memrise-chrome-ext/commits/master) for all
-changes.
-
 ## May 30, 2013 (2.0.0)
 
 * You can now disable tracking of individual courses. Due to limitations in
