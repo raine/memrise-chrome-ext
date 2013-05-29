@@ -1,6 +1,8 @@
 <img id="unlogged" src="icons/icon19-bw.png">
 <img id="logged" src="icons/icon19.png">
 <canvas id="canvas" width="19" height="19">
+
+<!--(if target dev)><!-->
 <script src='shared.js'></script>
 <script src='lib/localstore.js'></script>
 <script src='lib/animation.js'></script>
@@ -8,3 +10,8 @@
 <script src='lib/underscore.min.js'></script>
 <script src='lib/jquery-1.9.1.min.js'></script>
 <script src='main.js'></script>
+<!--<!(endif)-->
+
+<!--(if target dist)>
+<script src="main.min.js"></script>
+<!(endif)-->

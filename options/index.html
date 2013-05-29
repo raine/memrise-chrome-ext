@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.css" media="screen">
     <link rel="stylesheet" href="css/options.css" media="screen">
 
+<!--(if target dev)><!-->
     <script src="/shared.js"></script>
     <script src="/lib/localstore.js"></script>
     <script src="/lib/jquery-1.9.1.min.js"></script>
@@ -26,6 +27,12 @@
     <script src="js/settings.view.js"></script>
     <script src="js/navigation.view.js"></script>
     <script src="js/app.js"></script>
+<!--<!(endif)-->
+
+<!--(if target dist)>
+    <script src="lib/common.min.js"></script>
+    <script src="js/options.min.js"></script>
+<!(endif)-->
   </head>
   <body>
     <div id="main">

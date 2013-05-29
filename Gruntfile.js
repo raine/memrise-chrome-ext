@@ -69,28 +69,38 @@ module.exports = function(grunt) {
 						'main.js'
 					]
 				}
-            }
-        },
+			}
+		},
 
-        uglify: {
-            options: {
-                mangle: { }
-            },
+		uglify: {
+			options: {
+				mangle: { }
+			},
 
-            my_target: {
-                files: {
-                    'dist/options.min.js' : ['dist/options.concat.js'],
-                    'dist/common.min.js'  : ['dist/common.concat.js'],
-                    'dist/main.min.js'    : ['dist/main.concat.js']
-                }
-            }
-        },
+			my_target: {
+				files: {
+					'dist/options.min.js' : ['dist/options.concat.js'],
+					'dist/common.min.js'  : ['dist/common.concat.js'],
+					'dist/main.min.js'    : ['dist/main.concat.js']
+				}
+			}
+		},
+
+		targethtml: {
+			dist: {
+				files: {
+					'dist/index.html' : 'options/index.html',
+					'dist/main.html'  : 'main.html'
+				}
+			}
+		},
 	});
 
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-targethtml');
 	grunt.registerTask('build', ['concat', 'uglify']);
 	grunt.registerTask('default', function() {
 		var tasks = ['server', 'coffee', 'exec', 'watch'];
