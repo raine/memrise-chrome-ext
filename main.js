@@ -122,7 +122,7 @@ var processGroups = function(groups) {
 
 	var groupsWL = settings.get('topics');
 	if (!groupsWL) {
-		return setButton({ type: 'group', obj: getMaxByWilting(groups) });
+		return { type: 'group', obj: getMaxByWilting(groups) }
 	}
 
 	// -  Remove groups that are disabled
@@ -159,7 +159,7 @@ var processGroups = function(groups) {
 	});
 
 	if (_.isEmpty(enabledGroups)) {
-		return setButton();
+		return;
 	}
 
 	// Returns the first disabled course, if any
@@ -171,7 +171,7 @@ var processGroups = function(groups) {
 	// No disabled courses; sort groups by wilting count,
 	// pick the one with most
 	if (!disabledCourses) {
-		return setButton({ type: 'group', obj: getMaxByWilting(groups) });
+		return { type: 'group', obj: getMaxByWilting(groups) };
 	}
 
 	// TODO: There's a problem here that because Memrise
@@ -213,7 +213,7 @@ var processGroups = function(groups) {
 	// If maxGroup is null, there are no wilting plants
 	// and there's no point getting the maxCourse
 	if (!maxGroup) {
-		return setButton();
+		return;
 	}
 
 	// Set group as a button if there are no disabled courses
@@ -225,9 +225,9 @@ var processGroups = function(groups) {
 			.last().value();
 
 		maxCourse.group = maxGroup; // Add a reference to the group
-		setButton({ type: 'course', obj: maxCourse });
+		return { type: 'course', obj: maxCourse };
 	} else {
-		setButton({ type: 'group', obj: maxGroup });
+		return { type: 'group', obj: maxGroup };
 	}
 };
 
@@ -261,7 +261,18 @@ var refreshButton = function(opts) {
 				anim.drawIcon('logged');
 			});
 
-			processGroups(groups);
+			// processGroups returns instructions for setButton
+			var thing = processGroups(groups);
+			if (thing) {
+				var wilting = thing.type === 'course' ?
+					thing.obj.group.wiltingReduced : thing.obj.wilting;
+
+				if (wilting < settings.get('wilting-threshold')) {
+					return setButton();
+				}
+			}
+
+			setButton(thing);
 		}
 	}, opts);
 };
