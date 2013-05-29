@@ -94,7 +94,7 @@ var app = app || {};
 					topic.get('courses').forEach(function(c) {
 						var id = c.get('id');
 						if (_.has(tObj.courses, id)) {
-							c.set('enabled', tObj.courses[id].enabled);
+							c.set('enabled', tObj.courses[id].enabled, { silent: true });
 						}
 					});
 				}
