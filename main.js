@@ -43,8 +43,6 @@ var getTitle = function(name, count) {
 };
 
 var updateButton = function(url, text, title, color) {
-	console.log(arguments);
-
 	if (color) {
 		chrome.browserAction.setBadgeBackgroundColor({ color: color });
 	}
@@ -66,8 +64,6 @@ var setErrorBadge = function(err) {
 };
 
 var setButton = function(opts) {
-	console.log('setButton', opts);
-
 	// If called without arguments; nothing to do
 	if (!opts) {
 		return setNoBadge(Memrise.DASHBOARD_URL, 'Go to dashboard');
