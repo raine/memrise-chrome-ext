@@ -151,7 +151,9 @@ var app = app || {};
 				reset: true,
 				error: this.fetchError.bind(this)
 			}).done(function() {
-				self.ui.loading.hide();
+				if (typeof self.ui.loading === 'object') {
+					self.ui.loading.hide();
+				}
 			});
 		},
 
