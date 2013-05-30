@@ -315,7 +315,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	if (!localStorage.firstInstalled) {
 		localStorage.firstInstalled = Date.now();
-		openURL('options/options.html?installed', true);
+		openURL('options/index.html?installed', true);
 	}
 });
 
