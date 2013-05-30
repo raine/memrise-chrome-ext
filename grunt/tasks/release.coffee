@@ -33,10 +33,10 @@ manifest = ->
 		unless grunt.file.isDir file
 			grunt.file.delete file
 
-	# TODO: doesn't work very well
-	for file in extra
-		if grunt.file.isDir(file) and grunt.file.expand("#{file}/**").length is 1
-			grunt.file.delete file
+	dirs = grunt.file.expand { filter: 'isDirectory'}, '**'
+	for dir in dirs.reverse()
+		if ls(dir).length is 0
+			grunt.file.delete dir
 
 zip = ->
 	o = 'memrise-button.zip'
