@@ -58,7 +58,11 @@ build = ->
 	version()
 	zip()
 
+publish = ->
+	exec 'open https://chrome.google.com/webstore/developer/edit/mahhgdkliaknjffpmocpaglcoljnhodn'
+
 module.exports =
+	publish  : publish
 	clone    : clone
 	clean    : clean
 	build    : build
