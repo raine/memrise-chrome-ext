@@ -24,9 +24,12 @@ var app = app || {};
 	};
 })(jQuery);
 
+if (document.location.search !== '?installed') {
+	track('Options Opened');
+}
+
 $(function() {
 	app.Options.start();
-
 	new app.Router();
 	Backbone.history.start();
 });
