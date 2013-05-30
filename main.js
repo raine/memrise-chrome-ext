@@ -118,7 +118,7 @@ var processGroups = function(groups) {
 
 	var groupsWL = settings.get('topics');
 	if (!groupsWL) {
-		return { type: 'group', obj: getMaxByWilting(groups) }
+		return { type: 'group', obj: getMaxByWilting(groups) };
 	}
 
 	// -  Remove groups that are disabled
@@ -303,7 +303,9 @@ chrome.browserAction.onClicked.addListener(function() {
 chrome.runtime.onInstalled.addListener(function() {
 	// Make sure the super properties are set in the events that are sent
 	// before going to the options for the first time
-	mixpanel.register(prepareSuperProps());
+	mixpanel.register({
+		'Version': chrome.app.getDetails().version
+	});
 
 	track('Extension Installed', {
 		'version': chrome.app.getDetails().version,
