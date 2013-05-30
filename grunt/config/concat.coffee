@@ -32,7 +32,7 @@ files =
 		'main.js'
 	]
 
-files = utils.prependPath files, 'build/'
+# files = utils.prependPath files, 'build/'
 
 module.exports =
 	dist:

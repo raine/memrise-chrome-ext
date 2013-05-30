@@ -20,7 +20,6 @@ version = ->
 		sed '-i', '%VERSION%', env.VERSION, file
 
 manifest = ->
-	cd 'build/'
 	manifestFiles = grunt.util._.initial grunt.file.read('MANIFEST').split("\n")
 	files = grunt.file.expand '{**,.*}'
 
@@ -43,13 +42,18 @@ build = ->
 		grunt.fatal 'Version not specified.'
 
 	clone()
-	exec 'grunt minify' # minify before changing directory
-	cd 'build/'
-	version()
-	markdown()
+	exec 'ln -s ../node_modules build/node_modules'
+	exec 'grunt --base build/ minify'
+	exec 'grunt --base build/ targethtml'
+	exec 'rm build/node_modules'
+
+	grunt.file.setBase 'build/'
+	markdown() # Needs to be run before manifest()
 	manifest()
+	version()
 
 module.exports =
+	clone    : clone
 	clean    : clean
 	build    : build
 	manifest : manifest

@@ -44,4 +44,5 @@ module.exports = (grunt) ->
 	grunt.registerTask 'release:build', releaseTasks.build
 	grunt.registerTask 'release:clean', releaseTasks.clean
 	grunt.registerTask 'release:manifest', releaseTasks.manifest
+	grunt.registerTask 'release:clone', releaseTasks.clone
 	grunt.registerTask 'release', ['release:clean', 'release:build']
