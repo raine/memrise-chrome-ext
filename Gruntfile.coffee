@@ -18,15 +18,15 @@ module.exports = (grunt) ->
 			files: ['test/**/*.js', 'options/**/*.js']
 			tasks: 'exec'
 
-		concat: require './grunt/config/concat'
-		uglify: require './grunt/config/uglify'
-		coffee: require './grunt/config/coffee'
-		targethtml: require './grunt/config/targethtml'
-
 		exec:
 			mocha:
 				command: 'mocha-phantomjs http://localhost:8080/test/index.html'
 				stdout: true
+
+		concat: require './grunt/config/concat'
+		uglify: require './grunt/config/uglify'
+		coffee: require './grunt/config/coffee'
+		targethtml: require './grunt/config/targethtml'
 
 	grunt.loadNpmTasks 'grunt-exec'
 	grunt.loadNpmTasks 'grunt-contrib-watch'

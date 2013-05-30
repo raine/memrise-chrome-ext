@@ -37,6 +37,11 @@ manifest = ->
 		if grunt.file.isDir(file) and grunt.file.expand("#{file}/**").length is 1
 			grunt.file.delete file
 
+zip = ->
+	o = 'memrise-button.zip'
+	if exec("zip -r ../#{o} .").code is 0
+		grunt.log.ok "build zipped to #{o}"
+
 build = ->
 	unless env.VERSION
 		grunt.fatal 'Version not specified.'
@@ -51,6 +56,7 @@ build = ->
 	markdown() # Needs to be run before manifest()
 	manifest()
 	version()
+	zip()
 
 module.exports =
 	clone    : clone
