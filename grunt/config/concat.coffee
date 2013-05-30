@@ -21,6 +21,7 @@ files =
 	'dist/common.concat.js': [
 		'shared.js'
 		'lib/localstore.js'
+		'lib/mixpanel.js'
 		'lib/jquery-1.9.1.min.js'
 		'lib/underscore.min.js'
 	]
@@ -28,7 +29,6 @@ files =
 	# Things only used by main
 	'dist/main.concat.js': [
 		'lib/animation.js'
-		'lib/mixpanel.js'
 		'main.js'
 	]
 
