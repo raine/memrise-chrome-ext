@@ -319,6 +319,9 @@ chrome.runtime.onInstalled.addListener(function() {
 		localStorage.firstInstalled = Date.now();
 		openURL('options/index.html?installed', true);
 	}
+
+	localStorage.lastInstalled = Date.now();
+	localStorage.lastVersion   = chrome.app.getDetails().version;
 });
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
