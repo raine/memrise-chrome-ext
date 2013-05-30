@@ -33,6 +33,7 @@ manifest = ->
 		unless grunt.file.isDir file
 			grunt.file.delete file
 
+	# TODO: doesn't work very well
 	for file in extra
 		if grunt.file.isDir(file) and grunt.file.expand("#{file}/**").length is 1
 			grunt.file.delete file
