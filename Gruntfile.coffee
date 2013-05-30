@@ -21,12 +21,7 @@ module.exports = (grunt) ->
 		concat: require './grunt/config/concat'
 		uglify: require './grunt/config/uglify'
 		coffee: require './grunt/config/coffee'
-
-		targethtml:
-			dist:
-				files:
-					'dist/index.html': 'options/index.html'
-					'dist/main.html': 'main.html'
+		targethtml: require './grunt/config/targethtml'
 
 		exec:
 			mocha:
