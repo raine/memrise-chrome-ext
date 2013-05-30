@@ -7,15 +7,6 @@ module.exports = (grunt) ->
 		require('./server.js').listen 8080
 
 	grunt.initConfig
-		coffee:
-			glob_to_multiple:
-				expand: true
-				flatten: true
-				cwd: 'test/'
-				src: ['*.coffee']
-				dest: 'test/'
-				ext: '.test.js'
-
 		watch:
 			coffee:
 				files: 'test/**/*.coffee'
@@ -27,6 +18,7 @@ module.exports = (grunt) ->
 
 		concat: require './grunt/config/concat'
 		uglify: require './grunt/config/uglify'
+		coffee: require './grunt/config/coffee'
 
 		targethtml:
 			dist:
