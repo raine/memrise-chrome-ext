@@ -1,52 +1,6 @@
 require 'shelljs/global'
 _ = require 'underscore'
 
-prependPath = (obj, path) ->
-	return _.reduce obj, (obj, v, k) ->
-		obj[path + k] = v.map (e) -> path + e
-		obj
-	, {}
-
-concatFiles =
-	# Things only used by options
-	'dist/options.concat.js': [
-		'lib/backbone.js'
-		'lib/backbone.marionette.js'
-		'lib/rivets.min.js'
-		'options/js/rivets.cfg.js'
-		'options/js/router.js'
-		'options/js/controller.js'
-		'options/js/topics.js'
-		'options/js/settings.js'
-		'options/js/changes.view.js'
-		'options/js/settings.view.js'
-		'options/js/navigation.view.js'
-		'options/js/app.js'
-	],
-
-	# Libs shared by main and options
-	'dist/common.concat.js': [
-		'shared.js'
-		'lib/localstore.js'
-		'lib/jquery-1.9.1.min.js'
-		'lib/underscore.min.js'
-	]
-
-	# Things only used by main
-	'dist/main.concat.js': [
-		'lib/animation.js'
-		'lib/mixpanel.js'
-		'main.js'
-	]
-
-uglifyFiles =
-	'options/js/options.min.js' : ['dist/options.concat.js']
-	'lib/common.min.js'         : ['dist/common.concat.js']
-	'lib/main.min.js'           : ['dist/main.concat.js']
-
-concatFiles = prependPath concatFiles, "build/"
-uglifyFiles = prependPath uglifyFiles, "build/"
-
 module.exports = (grunt) ->
 	grunt.registerTask 'server', 'Start a custom web server', ->
 		grunt.log.writeln 'Started web server on port 8080'
@@ -71,17 +25,8 @@ module.exports = (grunt) ->
 			files: ['test/**/*.js', 'options/**/*.js']
 			tasks: 'exec'
 
-		concat:
-			dist:
-				files:
-					concatFiles
-
-		uglify:
-			options:
-				mangle: {}
-
-			my_target:
-				files: uglifyFiles
+		concat: require './grunt/config/concat'
+		uglify: require './grunt/config/uglify'
 
 		targethtml:
 			dist:
