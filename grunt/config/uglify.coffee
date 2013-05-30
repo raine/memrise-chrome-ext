@@ -9,6 +9,7 @@ files =
 
 module.exports =
 	options:
+		report: 'min'
 		mangle: {}
 
 	my_target:
