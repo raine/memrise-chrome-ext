@@ -39,7 +39,7 @@ manifest = ->
 
 zip = ->
 	o = 'memrise-button.zip'
-	if exec("zip -r ../#{o} .").code is 0
+	if exec("zip -r #{o} .").code is 0
 		grunt.log.ok "build zipped to #{o}"
 
 build = ->
@@ -57,6 +57,7 @@ build = ->
 	manifest()
 	version()
 	zip()
+	exec 'open .'
 
 publish = ->
 	exec 'open https://chrome.google.com/webstore/developer/edit/mahhgdkliaknjffpmocpaglcoljnhodn'
