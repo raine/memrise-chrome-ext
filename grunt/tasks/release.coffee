@@ -50,6 +50,6 @@ build = ->
 	manifest()
 
 module.exports =
-	clean: clean
-	build: build
-	manifest: manifest
+	clean    : clean
+	build    : build
+	manifest : manifest
