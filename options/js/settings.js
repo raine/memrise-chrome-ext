@@ -17,15 +17,12 @@ var app = app || {};
 		},
 
 		sync: function(method, model, options) {
-			console.log('Settings: sync', method, model, JSON.stringify(model.attributes));
-
 			switch(method) {
 				case 'create':
 				case 'update':
 					this.ls.writeObj(model.attributes);
 					break;
 				case 'delete':
-					console.log('delete unimpl');
 					break;
 				case 'read':
 					// Read existing settings from localStorage
