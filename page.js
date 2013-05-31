@@ -24,10 +24,3 @@ if (gardeningArea) {
 		childList: true
 	});
 }
-
-if (document.location.pathname === '/home/') {
-	chrome.runtime.sendMessage({
-		type: 'home',
-		html: document.documentElement.innerHTML
-	});
-}

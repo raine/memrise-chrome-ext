@@ -93,22 +93,10 @@ var fetchGroups = function(cb, opts) {
 		return cb(null, groupsCache);
 	}
 
-	var parse = function(html) {
-		var res = Memrise.parseHTML(html);
-		if (typeof res === 'string') {
-			cb(err);
-		} else {
-			cb(null, res);
-			groupsCache = res;
-		}
-	};
-
-	if (opts.html) {
-		console.log('fetchGroups: parsing html');
-		parse(opts.html);
-	} else {
-		Memrise.getDB(parse);
-	}
+	Memrise.getDB(function(groups) {
+		groupsCache = groups;
+		cb(null, groups);
+	});
 };
 
 var processGroups = function(groups) {
@@ -282,9 +270,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		},
 		'refresh-from-cache': function() {
 			refreshButton({ cache: true });
-		},
-		'home': function() {
-			refreshButton({ html: request.html });
 		}
 	};
 
