@@ -11,27 +11,28 @@ var Memrise = {
 	API_URL       : 'http://www.memrise.com/api/category/learning/?with_num_ready_to_water',
 
 	// TODO: use $.getJSON
-	_get: function(url, callback) {
-		var cb;
+	_get: function(url, success, error) {
 		if (DEV_ENV) {
 			if (url === this.API_URL) {
 				url = chrome.extension.getURL('/assets/learning.json');
 			}
-
-			cb = function() {
-				var args = arguments;
-				setTimeout(function() {
-					callback.apply(null, args);
-				}, 1000);
-			};
 		}
 
-		return $.get(url, cb || callback);
+		return $.ajax(url, {
+			success : success,
+			error   : error
+		});
 	},
 
 	getCategories: function(cb) {
-		Memrise._get(this.API_URL, function(json) {
-			Memrise.parseLearningJSON(json, cb);
+		Memrise._get(this.API_URL, function(data) {
+			Memrise.parseLearningJSON(data, cb);
+		}, function(xhr) {
+			if (xhr.status === 403) {
+				cb('not-logged-in');
+			} else {
+				cb('error');
+			}
 		});
 	},
 
@@ -42,6 +43,6 @@ var Memrise = {
 			});
 		});
 
-		cb(categories);
+		cb(null, categories);
 	}
 };
