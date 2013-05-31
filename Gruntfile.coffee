@@ -14,9 +14,9 @@ module.exports = (grunt) ->
 				files: 'test/**/*.coffee'
 				tasks: 'coffee'
 
-		tests:
-			files: ['test/**/*.js', 'options/**/*.js']
-			tasks: 'exec'
+			tests:
+				files: ['test/**/*.js', 'options/**/*.js']
+				tasks: 'exec'
 
 		exec:
 			mocha:
