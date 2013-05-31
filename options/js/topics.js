@@ -110,12 +110,9 @@ var app = app || {};
 
 		sync: function(method, coll, options) {
 			if (method === 'read') {
-				return Memrise.getDB(function(html) {
-					// This can't be done in parse because parse() is called
-					// when resetting and it's too late to error
-					var res = Memrise.parseHTML(html);
-					if (typeof res === 'string') {
-						options.error(res);
+				return Memrise.getCategories(function(err, res) {
+					if (err) {
+						options.error(err);
 					} else {
 						options.success(res);
 					}
