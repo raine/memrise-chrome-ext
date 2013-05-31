@@ -41,9 +41,8 @@ module.exports = (grunt) ->
 		grunt.option 'force', true
 		grunt.task.run tasks
 
-	grunt.registerTask 'release:publish', releaseTasks.publish
-	grunt.registerTask 'release:build', releaseTasks.build
-	grunt.registerTask 'release:clean', releaseTasks.clean
+	grunt.registerTask 'release:publish',  releaseTasks.publish
+	grunt.registerTask 'release:build',    releaseTasks.build
+	grunt.registerTask 'release:clean',    releaseTasks.clean
 	grunt.registerTask 'release:manifest', releaseTasks.manifest
-	grunt.registerTask 'release:clone', releaseTasks.clone
-	grunt.registerTask 'release', ['release:clean', 'release:build']
+	grunt.registerTask 'release', 'Prepare a zip for Chrome Store', ['release:clean', 'release:build']
