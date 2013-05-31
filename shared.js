@@ -31,11 +31,11 @@ var Memrise = {
 
 	getCategories: function(cb) {
 		Memrise._get(this.API_URL, function(json) {
-			Memrise.parseJSON(json, cb);
+			Memrise.parseLearningJSON(json, cb);
 		});
 	},
 
-	parseJSON: function(json, cb) {
+	parseLearningJSON: function(json, cb) {
 		var categories = JSON.parse(json).categories.map(function(c) {
 			return _.extend(_.pick(c, 'name', 'slug'), {
 				wilting: c.num_ready_to_water
