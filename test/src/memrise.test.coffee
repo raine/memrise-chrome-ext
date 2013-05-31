@@ -65,4 +65,5 @@ suite "Memrise", ->
       assert.property category, 'name'
       assert.property category, 'wilting'
       assert.property category, 'slug'
-      assert.lengthOf Object.keys(category), 3
+      assert.property category, 'courses'
+      assert.lengthOf Object.keys(category), 4
