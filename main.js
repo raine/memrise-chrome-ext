@@ -8,7 +8,7 @@ var STRINGS = {
 	wilting: "%s: Water %d wilting plant"
 };
 
-var UPDATE_INTERVAL = 5; // Minutes
+var UPDATE_INTERVAL = 15; // Minutes
 var anim = new Animation();
 var groupsCache;
 
