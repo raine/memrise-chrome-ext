@@ -1,5 +1,9 @@
-var assert = chai.assert;
-
-mocha.setup({
-  ui: 'tdd'
-});
+window.chrome = {
+	app: {
+		getDetails: function() {
+			return {
+				version: '0.0.1'
+			};
+		}
+	}
+};

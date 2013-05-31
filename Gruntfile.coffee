@@ -11,7 +11,7 @@ module.exports = (grunt) ->
 	grunt.initConfig
 		watch:
 			coffee:
-				files: 'test/**/*.coffee'
+				files: 'test/src/*.coffee'
 				tasks: 'coffee'
 
 			tests:

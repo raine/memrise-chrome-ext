@@ -35,7 +35,3 @@ suite 'localStore', ->
 				contacts: [
 					name: 'John'
 				]
-
-		test 'foo' ->
-			ls.read
-
