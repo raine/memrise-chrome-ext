@@ -26,11 +26,7 @@ var console = {};
 });
 
 var openURL = function(url, newTab) {
-	if (newTab) {
-		chrome.tabs.create({ 'url': url });
-	} else {
-		chrome.tabs.update({ 'url': url });
-	}
+	chrome.tabs[newTab ? 'create' : 'update']({ 'url': url });
 };
 
 var getTitle = function(name, count) {
