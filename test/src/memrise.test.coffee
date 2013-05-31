@@ -18,3 +18,22 @@ suite "Memrise", ->
       assert.lengthOf requests, 1
       assert.equal requests[0].url, 'http://localhost'
       assert.equal requests[0].method, 'GET'
+
+  suite "parseLearningJSON()", ->
+    catArr = null
+
+    setup (done) ->
+      $.getJSON '/assets/learning.json', (obj, status, xhr) ->
+        json = xhr.responseText
+        Memrise.parseLearningJSON json, (arr) ->
+          catArr = arr
+          done()
+
+    test "should parse the JSON correctly", ->
+      assert.lengthOf catArr, 3
+
+      category = catArr[0]
+      assert.property category, 'name'
+      assert.property category, 'wilting'
+      assert.property category, 'slug'
+      assert.lengthOf Object.keys(category), 3
