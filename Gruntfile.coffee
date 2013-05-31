@@ -15,7 +15,7 @@ module.exports = (grunt) ->
 				tasks: 'coffee'
 
 			tests:
-				files: ['test/**/*.js', 'options/**/*.js']
+				files: ['test/**/*.js', 'options/**/*.js', 'test/index.html']
 				tasks: 'exec'
 
 		exec:
