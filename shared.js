@@ -10,6 +10,7 @@ var Memrise = {
 	LOGIN_URL     : 'http://www.memrise.com/login',
 	API_URL       : 'http://www.memrise.com/api/category/learning/?with_num_ready_to_water',
 
+	// TODO: use $.getJSON
 	_get: function(url, callback) {
 		var cb;
 		if (DEV_ENV) {

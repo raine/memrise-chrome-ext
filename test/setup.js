@@ -2,7 +2,7 @@ window.chrome = {
 	app: {
 		getDetails: function() {
 			return {
-				version: '0.0.1'
+				version: '1.0.0'
 			};
 		}
 	}
