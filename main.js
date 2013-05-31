@@ -155,7 +155,7 @@ var processGroups = function(groups) {
 	}
 
 	// TODO: There's a problem here that because Memrise
-	// dashboarb shows "Plant" button without wilting count
+	// dashboard shows "Plant" button without wilting count
 	// for courses that are not fully planted, the
 	// course.wilting will be 0 here for courses that
 	// actually have wilting plants, and those courses will
