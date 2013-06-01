@@ -61,8 +61,7 @@ suite "Memrise", ->
 
     setup (done) ->
       $.getJSON '/assets/learning.json', (obj, status, xhr) ->
-        json = xhr.responseText
-        Memrise.parseLearningJSON json, (err, arr) ->
+        Memrise.parseLearningJSON obj, (err, arr) ->
           catArr = arr
           done()
 
