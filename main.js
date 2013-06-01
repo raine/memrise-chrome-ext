@@ -109,109 +109,17 @@ var processGroups = function(groups) {
 		return { type: 'group', obj: getMaxByWilting(groups) };
 	}
 
-	// -  Remove groups that are disabled
-	// -  Get disabled courses for all groups
-	// -  If there are no disabled courses, sort groups by
-	// 	  wilting count and pick the one with highest count.
-	// -  If there are disabled courses, get enabled courses
-	// 	  for the group that has most wilting plants (based on
-	// 	  the wilting counts from enabled courses). Pick the
-	// 	  course with most wilting plants.
 	var enabledGroups = _.filter(groups, function(group) {
 		var groupObj = groupsWL[group.slug];
 		if (groupObj && groupObj.enabled) {
-			var coursesObj  = groupObj.courses;
-			var allDisabled = true;
-			group.courses.forEach(function(course) {
-				var c;
-				if (c = coursesObj[course.id]) {
-					course.enabled = c.enabled;
-				} else {
-					course.enabled = true; // Enabled unless false
-				}
-
-				if (course.enabled === true) {
-					allDisabled = false;
-				}
-			});
-
-			// Regard groups with all courses disabled as disabled
-			return !allDisabled;
+			return true;
 		} else if (groupObj === undefined) {
 			return true;
 		}
 	});
 
-	if (_.isEmpty(enabledGroups)) {
-		return;
-	}
-
-	// Returns the first disabled course, if any
-	var disabledCourses = _.chain(enabledGroups)
-		.pluck('courses').flatten()
-		.findWhere({ enabled: false })
-		.value();
-
-	// No disabled courses; sort groups by wilting count,
-	// pick the one with most
-	if (!disabledCourses) {
+	if (!_.isEmpty(enabledGroups)) {
 		return { type: 'group', obj: getMaxByWilting(enabledGroups) };
-	}
-
-	// TODO: There's a problem here that because Memrise
-	// dashboard shows "Plant" button without wilting count
-	// for courses that are not fully planted, the
-	// course.wilting will be 0 here for courses that
-	// actually have wilting plants, and those courses will
-	// be skipped.
-	//
-	// Get wilting count from courses
-	var maxGroup;
-	enabledGroups.forEach(function(group) {
-		var disabled = _.findWhere(group.courses, { enabled: false });
-		if (disabled) {
-			var wiltingTotal = group.courses.reduce(function(prev, course){
-				if (course.enabled) {
-					return prev + course.wilting;
-				} else {
-					return prev + 0;
-				}
-			}, 0);
-
-			group.wiltingReduced = wiltingTotal;
-		}
-
-		var getWilting = function(obj) {
-			if (!obj) return 0;
-			return ('wiltingReduced' in obj) ?
-				obj.wiltingReduced : obj.wilting;
-		};
-
-		// Use either wiltingReduced or wilting for
-		// comparison whichever is available
-		if (getWilting(group) > getWilting(maxGroup)) {
-			maxGroup = group;
-		}
-	});
-
-	// If maxGroup is null, there are no wilting plants
-	// and there's no point getting the maxCourse
-	if (!maxGroup) {
-		return;
-	}
-
-	// Set group as a button if there are no disabled courses
-	var disabled = _.findWhere(maxGroup.courses, { enabled: false });
-	if (disabled) {
-		var maxCourse = _.chain(maxGroup.courses)
-			.where({ enabled: true})
-			.sortBy('wilting')
-			.last().value();
-
-		maxCourse.group = maxGroup; // Add a reference to the group
-		return { type: 'course', obj: maxCourse };
-	} else {
-		return { type: 'group', obj: maxGroup };
 	}
 };
 
