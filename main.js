@@ -167,7 +167,7 @@ var processGroups = function(groups) {
 	// No disabled courses; sort groups by wilting count,
 	// pick the one with most
 	if (!disabledCourses) {
-		return { type: 'group', obj: getMaxByWilting(groups) };
+		return { type: 'group', obj: getMaxByWilting(enabledGroups) };
 	}
 
 	// TODO: There's a problem here that because Memrise
