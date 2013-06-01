@@ -1,14 +1,8 @@
 # What's new in Memrise Button
 
-## May 30, 2013 (2.0.0)
+## June 1, 2013 (2.0.0)
 
-* You can now disable tracking of individual courses. Due to limitations in
-  available data, the feature only works properly for courses that are fully
-  planted.
-
-  In other words, you're better off not using this feature with
-  topics that have courses with unplanted flowers, unless you don't want to
-  water those courses.
+* Now fetching the course data from the API.
 
 ## May 25, 2013 (1.37)
 
