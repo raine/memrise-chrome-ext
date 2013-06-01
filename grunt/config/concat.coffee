@@ -19,7 +19,7 @@ files =
 
   # Libs shared by main and options
   'dist/common.concat.js': [
-    'shared.js'
+    'lib/memrise.js'
     'lib/localstore.js'
     'lib/mixpanel.js'
     'lib/jquery-1.9.1.min.js'

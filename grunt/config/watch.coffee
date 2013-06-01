@@ -8,6 +8,6 @@ module.exports =
       'test/**/*.js',
       'options/**/*.js',
       'test/index.html',
-      'shared.js'
+      'lib/memrise.js'
     ]
     tasks: 'exec'
