@@ -9,8 +9,10 @@ var STRINGS = {
 };
 
 var UPDATE_INTERVAL = 15; // Minutes
+
 var anim = new Animation();
 var groupsCache;
+var unlogged;
 
 var settings = new LocalStore('settings', OPTIONS_DEFAULTS);
 
@@ -141,17 +143,18 @@ var refreshButton = function(opts) {
 			setErrorBadge(err);
 
 			if (err === 'not-logged-in') {
+				unlogged = true;
 				anim.doNext(function() {
 					anim.drawIcon('unlogged');
 				});
 			}
 		} else {
-			// Makes sure the icon is not grey if user is logged in.
-			// No reason to run this if the icon is not currently grey, but
-			// on the other hand there is no harm either.
-			anim.doNext(function() {
-				anim.drawIcon('logged');
-			});
+			if (unlogged) {
+				unlogged = false;
+				anim.doNext(function() {
+					anim.drawIcon('logged');
+				});
+			}
 
 			// processGroups returns instructions for setButton
 			var thing = processGroups(groups);
@@ -178,6 +181,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		},
 		'refresh-from-cache': function() {
 			refreshButton({ cache: true });
+		},
+		'home': function() {
+			if (unlogged) {
+				refreshButton({ animate: true });
+			}
 		}
 	};
 
