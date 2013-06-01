@@ -42,8 +42,9 @@ var Memrise = (function() {
 		parseLearningJSON: function(json, cb) {
 			var categories = json.categories.map(function(c) {
 				return _.extend(_.pick(c, 'name', 'slug'), {
-					wilting: c.num_ready_to_water,
-					courses: []
+					wilting   : c.num_ready_to_water,
+					courses   : [],
+					waterPath : "/garden/water/" + c.slug + "/"
 				});
 			});
 
