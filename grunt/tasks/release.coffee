@@ -39,7 +39,7 @@ manifest = ->
       grunt.file.delete dir
 
 zip = ->
-  o = 'memrise-button.zip'
+  o = "memrise-button-#{env.VERSION}.zip"
   if exec("zip -r #{o} .").code is 0
     grunt.log.ok "build zipped to #{o}"
 
