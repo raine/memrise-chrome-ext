@@ -9,19 +9,7 @@ module.exports = (grunt) ->
 		require('./server.js').listen 8080
 
 	grunt.initConfig
-		watch:
-			coffee:
-				files: 'test/src/*.coffee'
-				tasks: 'coffee'
-
-			tests:
-				files: [
-                  'test/**/*.js',
-                  'options/**/*.js',
-                  'test/index.html',
-                  'shared.js'
-                ]
-				tasks: 'exec'
+		watch: require './grunt/config/watch'
 
 		exec:
 			mocha:
