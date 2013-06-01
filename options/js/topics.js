@@ -147,7 +147,7 @@ var app = app || {};
 			return this.topics.fetch({
 				reset: true,
 				error: this.fetchError.bind(this)
-			}).done(function() {
+			}).always(function() {
 				if (typeof self.ui.loading === 'object') {
 					self.ui.loading.hide();
 				}
