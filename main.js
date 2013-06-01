@@ -89,9 +89,13 @@ var fetchGroups = function(cb, opts) {
 		return cb(null, groupsCache);
 	}
 
-	Memrise.getDB(function(groups) {
-		groupsCache = groups;
-		cb(null, groups);
+	Memrise.getCategories(function(err, categories) {
+		if (err) {
+			return cb(err);
+		}
+
+		groupsCache = categories;
+		cb(null, categories);
 	});
 };
 
