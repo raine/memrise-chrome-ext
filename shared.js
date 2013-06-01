@@ -11,7 +11,7 @@ var Memrise = (function() {
 		BASE_URL      : 'http://www.memrise.com',
 		DASHBOARD_URL : 'http://www.memrise.com/home',
 		LOGIN_URL     : 'http://www.memrise.com/login',
-		API_URL       : 'http://www.memrise.com/api/category/learning/?with_num_ready_to_water',
+		API_URL       : 'http://www.memrise.com/api/category/learning/?with_num_ready_to_water=true',
 
 		_get: function(url, success, error) {
 			if (USE_FIXTURE) {
