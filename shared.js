@@ -4,6 +4,8 @@ var OPTIONS_DEFAULTS = {
 	"track-usage": true
 };
 
+var USE_FIXTURE = false;
+
 var Memrise = {
 	BASE_URL      : 'http://www.memrise.com',
 	DASHBOARD_URL : 'http://www.memrise.com/home',
@@ -11,7 +13,7 @@ var Memrise = {
 	API_URL       : 'http://www.memrise.com/api/category/learning/?with_num_ready_to_water',
 
 	_get: function(url, success, error) {
-		if (DEV_ENV) {
+		if (USE_FIXTURE) {
 			if (url === this.API_URL) {
 				url = chrome.extension.getURL('/assets/learning.json');
 			}
