@@ -48,6 +48,14 @@ suite "Memrise", ->
         @server.respond()
         assert.isTrue cb.calledWith 'not-logged-in'
 
+    test "should return an XHR object", ->
+        @server = sinon.fakeServer.create()
+        jqXHR = Memrise.getCategories sinon.spy()
+        assert.property jqXHR, 'readyState'
+
+    teardown ->
+      @server.restore()
+
   suite "parseLearningJSON()", ->
     catArr = null
 
