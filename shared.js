@@ -20,8 +20,9 @@ var Memrise = {
 		}
 
 		return $.ajax(url, {
-			success : success,
-			error   : error
+			success  : success,
+			error    : error,
+			dataType : 'json'
 		});
 	},
 
@@ -38,7 +39,7 @@ var Memrise = {
 	},
 
 	parseLearningJSON: function(json, cb) {
-		var categories = JSON.parse(json).categories.map(function(c) {
+		var categories = json.categories.map(function(c) {
 			return _.extend(_.pick(c, 'name', 'slug'), {
 				wilting: c.num_ready_to_water,
 				courses: []
