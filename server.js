@@ -8,10 +8,16 @@ var requests = 0;
 var learningObj = JSON.parse(fs.readFileSync('assets/learning.json','utf8'));
 var getLearningJSON = function(req, res) {
 	learningObj.categories.forEach(function(category) {
-		if (requests % 2 === 0) {
-			category.num_ready_to_water = 0;
+		var params = require('url').parse(req.url, true).query;
+		var w;
+		if (w = params.wilting) {
+			category.num_ready_to_water = parseInt(w);
 		} else {
-			category.num_ready_to_water = 20;
+			if (requests % 2 === 0) {
+				category.num_ready_to_water = 0;
+			} else {
+				category.num_ready_to_water = 20;
+			}
 		}
 	});
 
