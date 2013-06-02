@@ -1,4 +1,5 @@
 grunt = require 'grunt'
+_     = require 'underscore'
 
 markdown = ->
   exec 'marked -o CHANGES.html CHANGES.md'
@@ -13,7 +14,10 @@ clone = ->
 version = ->
   filepath = 'manifest.json'
   manifest = grunt.file.readJSON filepath
-  manifest.version = env.VERSION
+  manifest.version     = env.VERSION
+  manifest.permissions = _.reject manifest.permissions, (p) ->
+    p.match 'localhost'
+
   grunt.file.write filepath, JSON.stringify(manifest, null, 4)
 
   for file in grunt.file.expand '**/*.{html,js}'
