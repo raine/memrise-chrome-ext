@@ -9,9 +9,13 @@ var learningObj = JSON.parse(fs.readFileSync('assets/learning.json','utf8'));
 var getLearningJSON = function(req, res) {
 	learningObj.categories.forEach(function(category) {
 		var params = require('url').parse(req.url, true).query;
-		var w;
-		if (w = params.wilting) {
-			category.num_ready_to_water = parseInt(w);
+		if (params.nologin === 'true') {
+			res.writeHead(403);
+			return res.end();
+		}
+
+		if (params.wilting) {
+			category.num_ready_to_water = +params.wilting;
 		} else {
 			if (requests % 2 === 0) {
 				category.num_ready_to_water = 0;

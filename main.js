@@ -126,9 +126,8 @@ var processGroups = function(groups) {
 };
 
 var refreshButton = function(opts) {
-	reschedule();
-
 	opts = opts !== undefined ? opts : {};
+	reschedule();
 	console.log('refreshing button', opts);
 
 	if (opts.animate) {
