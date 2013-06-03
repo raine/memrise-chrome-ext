@@ -29,9 +29,11 @@ var console = {};
 var Notification = {
 	build: function(url, title, text) {
 		var notification = webkitNotifications.createNotification(null, title, text);
-		notification.addEventListener('click', function() {
-			openURL(url, true);
-		});
+		if (url) {
+			notification.addEventListener('click', function() {
+				openURL(url, true);
+			});
+		}
 
 		return notification;
 	},
