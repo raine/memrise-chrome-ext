@@ -41,7 +41,7 @@ var Notification = {
 		var url   = Memrise.BASE_URL + obj.waterPath;
 		var title = STRINGS.notifications.wilting.title.replace('%s', obj.name);
 		var text  = STRINGS.notifications.wilting.text.replace('%d', obj.wilting);
-		if (obj.wilting !== 1) { text += 's'; }
+		if (obj.wilting !== 1) text += 's';
 		this.build(url, title, text).show();
 	}
 };
@@ -63,7 +63,7 @@ var getTitle = function(name, count) {
 		.replace('%s', name)
 		.replace('%d', count);
 
-	if (count !== 1) { title += 's'; }
+	if (count !== 1) title += 's';
 	return title;
 };
 
