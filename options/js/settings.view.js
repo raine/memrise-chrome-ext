@@ -12,8 +12,9 @@ var app = app || {};
 		},
 
 		events: {
-			'click #refresh' : 'refresh',
-			'click #reset'   : 'reset'
+			'click #refresh'           : 'refresh',
+			'click #reset'             : 'reset',
+			'click #test-notification' : 'testNotification'
 		},
 
 		ui: {
@@ -37,6 +38,10 @@ var app = app || {};
 
 		refresh: function() {
 			app.controller.triggerMethod('refresh', false);
+		},
+
+		testNotification: function() {
+			app.controller.triggerMethod('sendMessage', 'test-notification');
 		}
 	});
 })(jQuery);

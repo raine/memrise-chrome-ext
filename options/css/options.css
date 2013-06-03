@@ -111,7 +111,7 @@ section > h3 {
 }
 
 section > div > p:first-child {
-  margin: 0;
+  margin-top: 0;
 }
 
 .displaytable > section > * {
@@ -130,8 +130,8 @@ input.wilting-threshold {
   margin-right: 5px;
 }
 
-.checkboxes {
-  margin-top: 10px;
+.description {
+  margin-bottom: 13px;
 }
 
 .checkboxes label {

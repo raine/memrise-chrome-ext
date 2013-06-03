@@ -226,6 +226,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			if (unlogged) {
 				refreshButton({ animate: true });
 			}
+		},
+		'test-notification': function() {
+			if (groupsCache) {
+				var thing = processGroups(groupsCache);
+				if (thing) Notification.wilting(thing);
+			} else {
+				Notification.build(
+					null,
+					STRINGS.notifications.wilting.title.replace('%s', 'English'),
+					STRINGS.notifications.wilting.text.replace('%d', '123') + 's'
+				).show();
+			}
 		}
 	};
 

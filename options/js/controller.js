@@ -7,6 +7,7 @@ var app = app || {};
 		initialize: function() {
 			this.listenTo(app.settings, 'change', this.settingsChange);
 			this.on('refresh', this.sendRefreshMessage);
+			this.on('sendMessage', this.sendMessage);
 		},
 
 		settingsChange: function() {
@@ -14,8 +15,12 @@ var app = app || {};
 		},
 
 		sendRefreshMessage: function(cache) {
+			this.sendMessage(cache ? 'refresh-from-cache' : 'refresh');
+		},
+
+		sendMessage: function(type) {
 			chrome.extension.sendMessage({
-				type: cache ? 'refresh-from-cache' : 'refresh'
+				type: type
 			});
 		},
 
