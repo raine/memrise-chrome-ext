@@ -150,7 +150,10 @@ var processGroups = function(groups) {
 	});
 
 	if (!_.isEmpty(enabledGroups)) {
-		return { type: 'group', obj: getMaxByWilting(enabledGroups) };
+		var maxGroup = getMaxByWilting(enabledGroups);
+		if (maxGroup.wilting > 0) {
+			return { type: 'group', obj: maxGroup };
+		}
 	}
 };
 
