@@ -1,3 +1,5 @@
+var USE_MOCK_DATA = false;
+
 var COLORS = {
 	harvest: [ 250, 177, 31, 255 ],
 	wilting: [ 21, 161, 236, 255 ]
