@@ -29,8 +29,8 @@ var consoleHolder = console;
 var console = {};
 
 var Notification = {
-	build: function(url, title, text) {
-		var notification = webkitNotifications.createNotification(null, title, text);
+	build: function(url, title, text, icon) {
+		var notification = webkitNotifications.createNotification(icon, title, text);
 		if (url) {
 			notification.addEventListener('click', function() {
 				openURL(url, true);
@@ -45,8 +45,9 @@ var Notification = {
 		var url   = Memrise.BASE_URL + obj.waterPath;
 		var title = STRINGS.notifications.wilting.title.replace('%s', obj.name);
 		var text  = STRINGS.notifications.wilting.text.replace('%d', obj.wilting);
+		var icon  = obj.photo;
 		if (obj.wilting !== 1) text += 's';
-		this.build(url, title, text).show();
+		this.build(url, title, text, icon).show();
 	}
 };
 
@@ -232,14 +233,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		'test-notification': function() {
 			if (groupsCache) {
 				var thing = processGroups(groupsCache);
-				if (thing) Notification.wilting(thing);
-			} else {
-				Notification.build(
-					null,
-					STRINGS.notifications.wilting.title.replace('%s', 'English'),
-					STRINGS.notifications.wilting.text.replace('%d', '123') + 's'
-				).show();
+				if (thing) return Notification.wilting(thing);
 			}
+
+			Notification.build(
+				null,
+				STRINGS.notifications.wilting.title.replace('%s', 'English'),
+				STRINGS.notifications.wilting.text.replace('%d', '123') + 's',
+				'http://static.memrise.com.s3.amazonaws.com/uploads/language_photos/Flags_EnglandUSA.png'
+			).show();
 		}
 	};
 

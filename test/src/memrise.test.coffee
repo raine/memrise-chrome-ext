@@ -74,7 +74,8 @@ suite "Memrise", ->
       assert.property category, 'slug'
       assert.property category, 'courses'
       assert.property category, 'waterPath'
-      assert.lengthOf Object.keys(category), 5
+      assert.property category, 'photo'
+      assert.lengthOf Object.keys(category), 6
 
     test "should add waterPath to the JSON", ->
       category = catArr[0]
