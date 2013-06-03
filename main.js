@@ -4,8 +4,14 @@ var COLORS = {
 };
 
 var STRINGS = {
-	harvest: "%s: Harvest plants",
-	wilting: "%s: Water %d wilting plant"
+	harvest : "%s: Harvest plants",
+	wilting : "%s: Water %d wilting plant",
+	notifications: {
+		wilting: {
+			title : "%s: Ready to water",
+			text  : "Click to water %d plant"
+		}
+	}
 };
 
 var UPDATE_INTERVAL = 15; // Minutes
@@ -13,11 +19,32 @@ var UPDATE_INTERVAL = 15; // Minutes
 var anim = new Animation();
 var groupsCache;
 var unlogged;
+var isBadgeBlank;
 
 var settings = new LocalStore('settings', OPTIONS_DEFAULTS);
 
 var consoleHolder = console;
 var console = {};
+
+var Notification = {
+	build: function(url, title, text) {
+		var notification = webkitNotifications.createNotification(null, title, text);
+		notification.addEventListener('click', function() {
+			openURL(url, true);
+		});
+
+		return notification;
+	},
+
+	wilting: function(opts) {
+		var obj   = opts.obj; // Group or course
+		var url   = Memrise.BASE_URL + obj.waterPath;
+		var title = STRINGS.notifications.wilting.title.replace('%s', obj.name);
+		var text  = STRINGS.notifications.wilting.text.replace('%d', obj.wilting);
+		if (obj.wilting !== 1) { text += 's'; }
+		this.build(url, title, text).show();
+	}
+};
 
 ['log', 'info', 'error', 'debug'].forEach(function(e) {
 	console[e] = function() {
@@ -41,6 +68,8 @@ var getTitle = function(name, count) {
 };
 
 var updateButton = function(url, text, title, color) {
+	isBadgeBlank = text ? false : true;
+
 	if (color) {
 		chrome.browserAction.setBadgeBackgroundColor({ color: color });
 	}
@@ -166,7 +195,14 @@ var refreshButton = function(opts) {
 				}
 			}
 
+			var blankBadge = isBadgeBlank;
 			setButton(thing);
+
+			// Notification should only be shown as a result from an alarm
+			// and if there is currently no badge
+			if (opts.alarm && blankBadge) {
+				Notification.wilting(thing);
+			}
 		}
 	}, opts);
 };
@@ -208,8 +244,8 @@ chrome.runtime.onInstalled.addListener(function() {
 	});
 
 	track('Extension Installed', {
-		'version': chrome.app.getDetails().version,
-		'update': !!localStorage.firstInstalled
+		'version' : chrome.app.getDetails().version,
+		'update'  : !!localStorage.firstInstalled
 	});
 
 	console.log('installed... refreshing');
@@ -226,7 +262,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
 	console.log('got alarm', alarm);
-	refreshButton();
+	refreshButton({ alarm: true });
 });
 
 if (chrome.runtime && chrome.runtime.onStartup) {
