@@ -72,9 +72,9 @@ rivets.configure({
 		read: function(obj, keypath) {
 			return obj.get(keypath);
 		},
-
+		
 		publish: function(obj, keypath, value) {
-			obj.set(keypath, value);
+			obj.set(keypath, value, { validate:true });
 		}
 	}
 });

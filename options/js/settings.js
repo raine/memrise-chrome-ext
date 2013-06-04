@@ -16,6 +16,13 @@ var app = app || {};
 			this.fetch(); // Read values from localStorage
 		},
 
+		validate: function(attrs) {
+			var w = attrs['wilting-threshold'];
+			if (isNaN(w) || w < 1) {
+				return true;
+			}
+		},
+
 		sync: function(method, model, options) {
 			switch(method) {
 				case 'create':
