@@ -1,5 +1,11 @@
 # What's new in Memrise Button
 
+## June 4, 2013 (2.0.1)
+
+* Notifications can now be enabled to be shown when plants are ready to water.
+  ![](http://raneksi.github.io/memrise-chrome-ext/memrise-notification-windows.png)
+  ![](http://raneksi.github.io/memrise-chrome-ext/memrise-notification-mac.png)
+
 ## June 1, 2013 (2.0.0)
 
 * Now fetching the course data from the API.
