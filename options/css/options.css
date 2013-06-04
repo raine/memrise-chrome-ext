@@ -115,7 +115,7 @@ section > div > p:first-child {
 }
 
 .displaytable > section > * {
-  display: table-cell;
+  display: block;
   vertical-align: baseline;
 }
 
@@ -130,8 +130,16 @@ input.wilting-threshold {
   margin-right: 5px;
 }
 
+.scrolltext-viewport {
+  width: 500px !important;
+}
+
 .description {
   margin-bottom: 13px;
+}
+
+.description-enabled {
+  display: none;
 }
 
 .checkboxes label {
@@ -199,4 +207,14 @@ input[type="checkbox"]:disabled + span {
 .note {
   color: #777;
   display: none;
+}
+
+.plants {
+    /* line-height: 1em; */
+    /* display: inline-block; */
+    /* text-decoration: none; */
+    /* border-bottom: solid 1px #A5CADC; */
+    /* padding: 0; */
+    cursor: pointer;
+    color: #006EA5;
 }

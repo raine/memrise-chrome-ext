@@ -16,6 +16,8 @@
     <script src="/lib/jquery-1.9.1.min.js"></script>
     <script src="/lib/underscore.min.js"></script>
 
+    <script src="/lib/jquery.easing.min.js"></script>
+    <script src="/lib/jquery.scrolltext.js"></script>
     <script src="/lib/backbone.js"></script>
     <script src="/lib/backbone.marionette.js"></script>
     <script src="/lib/rivets.min.js"></script>
@@ -110,13 +112,16 @@
         <section id="notifications">
           <h3>Notifications</h3>
           <div>
-            <p class="description">Notifications are shown when plants are ready to water</p>
+              <p class="description" data-notification-description="settings.notifications">Notifications are shown when plants are ready to water</p>
+              <p class="description-enabled">
+                Notifications will be shown when <span data-html="settings.wilting-threshold | plants"></span> ready to water
+              </p>
             <label>
-              <input type="checkbox" />
+              <input type="checkbox" data-checked="settings.notifications" />
               <span>Enable notifications</span>
             </label>
             <p>
-              <button id="test-notification" class="btn btn-small">Test</button>
+              <button id="test-notification" class="btn btn-small">Test notification</button>
             </p>
           </div>
         </section>

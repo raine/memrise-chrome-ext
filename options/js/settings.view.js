@@ -14,11 +14,14 @@ var app = app || {};
 		events: {
 			'click #refresh'           : 'refresh',
 			'click #reset'             : 'reset',
-			'click #test-notification' : 'testNotification'
+			'click #test-notification' : 'testNotification',
+			'click .plants'            : 'plantsClick'
 		},
 
 		ui: {
-			'topics': 'section#topics'
+			'topics'      : 'section#topics',
+			'description' : '.description',
+			'plants'      : '#notifications .plants'
 		},
 
 		reset: function() {
@@ -26,14 +29,11 @@ var app = app || {};
 		},
 
 		onRender: function() {
-			rivets.bind(this.$el, {
-				settings: app.settings,
-				topics: this.whitelist.topics
-			});
-
 			this.delegateEvents();
 			this.whitelist.setElement(this.ui.topics);
 			this.whitelist.render();
+
+			_.defer(this.initializePlugins.bind(this));
 		},
 
 		refresh: function() {
@@ -42,6 +42,23 @@ var app = app || {};
 
 		testNotification: function() {
 			app.controller.triggerMethod('sendMessage', 'test-notification');
+		},
+
+		initializePlugins: function() {
+			var scroller = this.ui.description.scrollText('.description-enabled');
+
+			if (this.bindings) {
+				this.bindings.unbind();
+			}
+
+			this.bindings = rivets.bind(this.$el, {
+				settings : app.settings,
+				topics   : this.whitelist.topics
+			});
+		},
+
+		plantsClick: function() {
+			this.$('.wilting-threshold').focus();
 		}
 	});
 })(jQuery);

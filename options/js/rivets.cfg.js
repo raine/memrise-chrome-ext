@@ -1,3 +1,14 @@
+rivets.binders['notification-description'] = function(el, value) {
+	var scroller = $(el).data('scrollText');
+	var first    = _.isEmpty(this.model.changed);
+
+	if (value) {
+		scroller.show('.description-enabled', !first);
+	} else {
+		scroller.show('.description', !first);
+	}
+}
+
 rivets.binders['show-if-any-disabled'] = {
 	// Using my own routine since this function gets called from outside with
 	// value for which I have no use.
@@ -87,4 +98,15 @@ rivets.formatters.number = {
 	publish: function(value) {
 		return +value;
 	}
+};
+
+rivets.formatters.plants = function(value) {
+	var str = '<span class="plants"><span class="number">' + value + '</span>' + ' plant';
+	if (value !== 1) {
+		str += 's</span> are';
+	} else {
+		str += '</span> is';
+	}
+
+	return str;
 };
