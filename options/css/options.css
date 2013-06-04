@@ -200,7 +200,7 @@ input[type="checkbox"]:disabled + span {
   margin-bottom: 5px;
 }
 
-.news {
+.news ul li {
   max-width: 600px;
 }
 
