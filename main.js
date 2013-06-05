@@ -49,6 +49,17 @@ var Notification = {
 		var icon  = obj.photo;
 		if (obj.wilting !== 1) text += 's';
 		this.build(url, title, text, icon).show();
+	},
+
+	update: function(version) {
+		var args = [
+			'options/index.html#changes',
+			'Extension Updated',
+			"See what's new in " + version,
+			'icons/icon48.png'
+		];
+
+		Notification.build.apply(this, args).show();
 	}
 };
 
@@ -259,23 +270,38 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
+	var isUpdate = !!localStorage.firstInstalled;
+	var version  = chrome.app.getDetails().version;
+
 	// Make sure the super properties are set in the events that are sent
 	// before going to the options for the first time
 	mixpanel.register({
-		'Version': chrome.app.getDetails().version
+		'Version': version
 	});
 
 	track('Extension Installed', {
-		'version' : chrome.app.getDetails().version,
-		'update'  : !!localStorage.firstInstalled
+		'version' : version,
+		'update'  : isUpdate
 	});
 
 	console.log('installed... refreshing');
 	refreshButton({ animate: true });
 
-	if (!localStorage.firstInstalled) {
+	if (!isUpdate) {
 		localStorage.firstInstalled = Date.now();
 		openURL('options/index.html?installed', true);
+	}
+
+	// lastInstalled could possibly be used here but I have doubts about
+	// relying on Date.now() with static timestamps like LAST_UPDATE = 1370395171790
+	if (isUpdate) {
+		// Should be changed when notification is needed for an update
+		var NOTIF_UPDATE = '2.0.3';
+
+		if (localStorage.notifUpdate !== NOTIF_UPDATE) {
+			Notification.update(version);
+			localStorage.notifUpdate = NOTIF_UPDATE;
+		}
 	}
 
 	localStorage.lastInstalled = Date.now();
