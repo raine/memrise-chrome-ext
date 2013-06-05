@@ -1,13 +1,15 @@
 rivets.binders['notification-description'] = function(el, value) {
 	var scroller = $(el).data('scrollText');
-	var first    = _.isEmpty(this.model.changed);
+	var first    = this.init === undefined;
 
 	if (value) {
 		scroller.show('.description-enabled', !first);
 	} else {
 		scroller.show('.description', !first);
 	}
-}
+
+	this.init = true;
+};
 
 rivets.binders['show-if-any-disabled'] = {
 	// Using my own routine since this function gets called from outside with
