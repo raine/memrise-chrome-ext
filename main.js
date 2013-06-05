@@ -272,6 +272,7 @@ chrome.browserAction.onClicked.addListener(function() {
 chrome.runtime.onInstalled.addListener(function() {
 	var isUpdate = !!localStorage.firstInstalled;
 	var version  = chrome.app.getDetails().version;
+	var now      = Date.now();
 
 	// Make sure the super properties are set in the events that are sent
 	// before going to the options for the first time
@@ -288,7 +289,7 @@ chrome.runtime.onInstalled.addListener(function() {
 	refreshButton({ animate: true });
 
 	if (!isUpdate) {
-		localStorage.firstInstalled = Date.now();
+		localStorage.firstInstalled = now;
 		openURL('options/index.html?installed', true);
 	}
 
@@ -304,7 +305,7 @@ chrome.runtime.onInstalled.addListener(function() {
 		}
 	}
 
-	localStorage.lastInstalled = Date.now();
+	localStorage.lastInstalled = now;
 	localStorage.lastVersion   = chrome.app.getDetails().version;
 });
 
