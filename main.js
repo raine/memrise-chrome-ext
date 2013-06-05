@@ -25,11 +25,11 @@ var consoleHolder = console;
 var console = {};
 
 var Notification = {
-	build: function(url, title, text, icon) {
+	build: function(url, title, text, icon, trackArgs) {
 		var notification = webkitNotifications.createNotification(icon, title, text);
 		if (url) {
 			notification.addEventListener('click', function() {
-				track('Notification Click');
+				if (trackArgs) track.apply(null, trackArgs);
 				openURL(url, true);
 			});
 		}
@@ -43,8 +43,9 @@ var Notification = {
 		var title = STRINGS.notifications.wilting.title.replace('%s', obj.name);
 		var text  = STRINGS.notifications.wilting.text.replace('%d', obj.wilting);
 		var icon  = obj.photo;
+		var trackArgs = [ 'Notification Click', { 'Wilting': obj.wilting } ];
 		if (obj.wilting !== 1) text += 's';
-		this.build(url, title, text, icon).show();
+		this.build(url, title, text, icon, trackArgs).show();
 	},
 
 	update: function(version) {
@@ -52,7 +53,8 @@ var Notification = {
 			'options/index.html#changes',
 			'Extension Updated',
 			"See what's new in " + version,
-			'icons/icon48.png'
+			'icons/icon48.png',
+			[ 'Update Notification Click' ]
 		];
 
 		Notification.build.apply(this, args).show();
