@@ -1,6 +1,6 @@
 # What's new in Memrise Button
 
-## June 4, 2013 (2.0.1)
+## June 5, 2013 (2.0.1)
 
 * Notifications can now be enabled to be shown when plants are ready to water.
 
