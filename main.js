@@ -220,7 +220,7 @@ var refreshButton = function(opts) {
 
 			// Notification should only be shown as a result from an alarm
 			// and if there is currently no badge
-			if (opts.alarm && blankBadge) {
+			if (thing && opts.alarm && blankBadge && settings.get('notifications')) {
 				Notification.wilting(thing);
 			}
 		}
