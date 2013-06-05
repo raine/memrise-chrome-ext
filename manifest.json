@@ -31,5 +31,8 @@
 		"matches" : [ "http://www.memrise.com/*" ],
 		"js"      : [ "page.js" ],
 		"run_at"  : "document_end"
-	} ]
+	} ],
+	"web_accessible_resources": [
+		"icons/icon48.png"
+	]
 }
