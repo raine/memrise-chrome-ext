@@ -5,9 +5,9 @@ var app = app || {};
 
 	app.OptionsController = Marionette.Controller.extend({
 		initialize: function() {
-			this.listenTo(app.settings, 'change', this.settingsChange);
 			this.on('refresh', this.sendRefreshMessage);
 			this.on('sendMessage', this.sendMessage);
+			this.listenTo(app.settings, 'change:wilting-threshold change:topics', this.settingsChange);
 		},
 
 		settingsChange: function() {
