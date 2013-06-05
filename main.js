@@ -1,10 +1,8 @@
 var COLORS = {
-	harvest: [ 250, 177, 31, 255 ],
 	wilting: [ 21, 161, 236, 255 ]
 };
 
 var STRINGS = {
-	harvest : "%s: Harvest plants",
 	wilting : "%s: Water %d wilting plant",
 	notifications: {
 		wilting: {
