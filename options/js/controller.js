@@ -7,11 +7,20 @@ var app = app || {};
 		initialize: function() {
 			this.on('refresh', this.sendRefreshMessage);
 			this.on('sendMessage', this.sendMessage);
-			this.listenTo(app.settings, 'change:wilting-threshold change:topics', this.settingsChange);
+			this.listenTo(app.settings, 'change', this.settingsChange);
 		},
 
-		settingsChange: function() {
-			this.sendRefreshMessage(true);
+		settingsChange: function(model) {
+			var tracked = [ 'wilting-threshold', 'topics' ];
+			var changed = _.keys(model.changed);
+			if (!_.isEmpty(_.intersection(changed, tracked))) {
+				this.sendRefreshMessage(true);
+			}
+
+			mixpanel.register({
+				'Wilting Threshold'     : model.get('wilting-threshold'),
+				'Notifications Enabled' : model.get('notifications')
+			});
 		},
 
 		sendRefreshMessage: function(cache) {
