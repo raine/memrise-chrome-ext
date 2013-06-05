@@ -3,6 +3,8 @@ utils = require '../utils'
 files =
   # Things only used by options
   'dist/options.concat.js': [
+    'lib/jquery.easing.min.js'
+    'lib/jquery.scrolltext.js'
     'lib/backbone.js'
     'lib/backbone.marionette.js'
     'lib/rivets.min.js'
