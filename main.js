@@ -33,6 +33,7 @@ var Notification = {
 		var notification = webkitNotifications.createNotification(icon, title, text);
 		if (url) {
 			notification.addEventListener('click', function() {
+				track('Notification Click');
 				openURL(url, true);
 			});
 		}
