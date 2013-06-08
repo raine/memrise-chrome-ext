@@ -12,7 +12,7 @@ var STRINGS = {
 	}
 };
 
-var UPDATE_INTERVAL = 15; // Minutes
+var UPDATE_INTERVAL = 10; // Minutes
 
 var anim = new Animation();
 var groupsCache;
