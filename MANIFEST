@@ -7,6 +7,7 @@ icons/icon38.png
 icons/icon48.png
 lib/common.min.js
 lib/main.min.js
+lib/idle-timer.min.js
 main.html
 main.js
 manifest.json
