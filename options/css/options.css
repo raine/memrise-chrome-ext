@@ -218,3 +218,17 @@ input[type="checkbox"]:disabled + span {
     cursor: pointer;
     color: #006EA5;
 }
+
+#stats dl dt:not(first) {
+  margin-top: 5px;
+}
+
+#stats dl dt {
+  font-weight: 600;
+  color: #555;
+}
+
+#stats dl dd {
+  padding-top: 2px;
+  margin-left: 1em;
+}

@@ -9,6 +9,7 @@ var app = app || {};
 
 		initialize: function() {
 			this.whitelist = new app.TopicsWhitelist();
+			this.stats = new app.Stats();
 		},
 
 		events: {
@@ -20,6 +21,7 @@ var app = app || {};
 
 		ui: {
 			'topics'      : 'section#topics',
+			'stats'       : 'section#stats .content',
 			'description' : '.description',
 			'plants'      : '#notifications .plants'
 		},
@@ -32,6 +34,7 @@ var app = app || {};
 			this.delegateEvents();
 			this.whitelist.setElement(this.ui.topics);
 			this.whitelist.render();
+			this.ui.stats.append(this.stats.render().el);
 
 			_.defer(this.initializePlugins.bind(this));
 		},
