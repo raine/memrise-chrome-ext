@@ -24,6 +24,14 @@ var settings = new LocalStore('settings', OPTIONS_DEFAULTS);
 var consoleHolder = console;
 var console = {};
 
+['log', 'info', 'error', 'debug'].forEach(function(e) {
+	console[e] = function() {
+		var args = Array.prototype.slice.call(arguments);
+		args.unshift('[' + (new Date()).toISOString() + ']');
+		consoleHolder[e].apply(consoleHolder, args);
+	};
+});
+
 var Notification = {
 	build: function(url, title, text, icon, trackArgs) {
 		var notification = webkitNotifications.createNotification(icon, title, text);
@@ -60,14 +68,6 @@ var Notification = {
 		Notification.build.apply(this, args).show();
 	}
 };
-
-['log', 'info', 'error', 'debug'].forEach(function(e) {
-	console[e] = function() {
-		var args = Array.prototype.slice.call(arguments);
-		args.unshift('[' + (new Date()).toISOString() + ']');
-		consoleHolder[e].apply(consoleHolder, args);
-	};
-});
 
 var openURL = function(url, newTab) {
 	chrome.tabs[newTab ? 'create' : 'update']({ 'url': url });
