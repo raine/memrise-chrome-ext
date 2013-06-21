@@ -113,6 +113,8 @@ var app = app || {};
 				return this;
 			}
 
+			this.$el.empty();
+
 			for (var key in obj) {
 				var value = obj[key];
 				if (key in StatsFormatter.formatValue) {
@@ -124,9 +126,6 @@ var app = app || {};
 					value: value
 				}));
 			}
-
-			// console.log('obj', obj);
-			// this.$el.html(obj);
 
 			return this;
 		},
