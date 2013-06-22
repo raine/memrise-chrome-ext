@@ -89,7 +89,7 @@ var app = app || {};
 			},
 
 			'activity': function(arr) {
-				return '<span class="bar">' + arr.join(',') + '</span>';
+				return '<span class="line">' + arr.join(',') + '</span>';
 			}
 		},
 
@@ -164,14 +164,12 @@ var app = app || {};
 				}));
 			}
 
-			this.$('.bar').peity('bar', {
-				colours: ["#4d89f9"],
-				delimiter: ",",
+			this.$('.line').peity('line', {
+				colours: [ '#4d89f9' ],
+				delimiter: ',',
 				height: 24,
-				max: null,
-				min: 0,
 				spacing: 1,
-				width: 120
+				width: 128
 			});
 
 			return this;
