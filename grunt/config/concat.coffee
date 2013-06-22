@@ -9,6 +9,7 @@ files =
     'lib/backbone.marionette.js'
     'lib/rivets.min.js'
     'lib/q.min.js'
+    'lib/jquery.peity.js'
     'options/js/rivets.cfg.js'
     'options/js/router.js'
     'options/js/controller.js'
