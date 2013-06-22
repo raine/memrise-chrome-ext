@@ -14,8 +14,9 @@ var app = app || {};
 			this.getSessions()
 				.then(function(sessions) {
 					df.resolve({
-						timeSpent: this.measureTimeSpent(sessions),
-						longestStreak: this.measureLongestStreak(sessions)
+						timeSpent     : this.measureTimeSpent(sessions),
+						longestStreak : this.measureLongestStreak(sessions),
+						activity      : this.measureLastMonthActivity(sessions)
 					});
 				}.bind(this));
 
@@ -38,6 +39,43 @@ var app = app || {};
 			return ls;
 		},
 
+		measureLastMonthActivity: function(sessions) {
+			var getDayTimestamp = function(date) {
+				return (new Date(date.getFullYear(), date.getMonth(), date.getDate())).getTime();
+			};
+
+			var now    = new Date();
+			var curDay = getDayTimestamp(now);
+			var days   = [];
+
+			for (var i=0; i < 30; i++) {
+				var d = curDay - 60 * 60 * 24 * 1000 * i;
+				days.unshift(d);
+			}
+
+			sessions = sessions.map(function(obj) {
+				obj.midnight = getDayTimestamp(new Date(obj.start_time));
+				obj.answers  = obj.num_correct + obj.num_incorrect;
+				return obj;
+			});
+
+			var grouped = _.groupBy(sessions, function(session) {
+				return session.midnight;
+			});
+
+			days = days.map(function(midnight) {
+				if (midnight in grouped) {
+					return grouped[midnight].reduce(function(prev, cur) {
+						return prev + cur.answers;
+					}, 0);
+				} else {
+					return 0;
+				}
+			});
+
+			return days;
+		},
+
 		getSessions: function(cb) {
 			 var df = Q.defer();
 			 chrome.storage.local.get('sessions', function(obj) {
@@ -50,7 +88,8 @@ var app = app || {};
 	var StatsFormatter = {
 		STRINGS: {
 			'longestStreak' : 'Longest streak',
-			'timeSpent'     : 'Time spent in garden'
+			'timeSpent'     : 'Time spent in garden',
+			'activity'      : 'Activity last 30 days'
 		},
 
 		formatValue: {
@@ -58,6 +97,10 @@ var app = app || {};
 				var timeUnits = StatsFormatter.convertMS(ms);
 				var unitsStr  = StatsFormatter.formatTimeUnits(timeUnits);
 				return unitsStr;
+			},
+
+			'activity': function(arr) {
+				return '<span class="bar">' + arr.join(',') + '</span>';
 			}
 		},
 
@@ -126,6 +169,16 @@ var app = app || {};
 					value: value
 				}));
 			}
+
+			this.$('.bar').peity('bar', {
+				colours: ["#4d89f9"],
+				delimiter: ",",
+				height: 24,
+				max: null,
+				min: 0,
+				spacing: 1,
+				width: 120
+			});
 
 			return this;
 		},
