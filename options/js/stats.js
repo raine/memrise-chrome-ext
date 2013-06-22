@@ -8,10 +8,14 @@ var app = app || {};
 			var df = Q.defer();
 			this.getSessions()
 				.then(function(sessions) {
-					df.resolve({
-						timeSpent : this.measureTimeSpent(sessions),
-						activity  : this.measureLastMonthActivity(sessions)
-					});
+					if (_.isEmpty(sessions)) {
+						df.resolve({});
+					} else {
+						df.resolve({
+							timeSpent : this.measureTimeSpent(sessions),
+							activity  : this.measureLastMonthActivity(sessions)
+						});
+					}
 				}.bind(this));
 
 			return df.promise;
@@ -136,12 +140,17 @@ var app = app || {};
 		},
 
 		render: function(obj) {
-			if (!obj) {
+			if (obj === undefined) {
 				this.stats.done(this.render.bind(this));
 				return this;
 			}
 
 			this.$el.empty();
+
+			if (_.isEmpty(obj)) {
+				this.$el.html('No statistics');
+				return this;
+			}
 
 			for (var key in obj) {
 				var value = obj[key];
