@@ -1,8 +1,3 @@
-// <dt>Time spent in garden</dt>
-// <dd>1 day, 2 hours, 32 minutes, 20 seconds</dd>
-// <dt>Longest streak</dt>
-// <dd>32 correct</dd>
-
 var app = app || {};
 
 (function($) {
@@ -14,9 +9,8 @@ var app = app || {};
 			this.getSessions()
 				.then(function(sessions) {
 					df.resolve({
-						timeSpent     : this.measureTimeSpent(sessions),
-						longestStreak : this.measureLongestStreak(sessions),
-						activity      : this.measureLastMonthActivity(sessions)
+						timeSpent : this.measureTimeSpent(sessions),
+						activity  : this.measureLastMonthActivity(sessions)
 					});
 				}.bind(this));
 
@@ -29,14 +23,6 @@ var app = app || {};
 			}, 0);
 
 			return ms;
-		},
-
-		measureLongestStreak: function(sessions) {
-			var ls = sessions.reduce(function(prev, cur) {
-				return prev < cur.longest_streak ? cur.longest_streak : prev;
-			}, 0);
-
-			return ls;
 		},
 
 		measureLastMonthActivity: function(sessions) {
@@ -87,7 +73,6 @@ var app = app || {};
 
 	var StatsFormatter = {
 		STRINGS: {
-			'longestStreak' : 'Longest streak',
 			'timeSpent'     : 'Time spent in garden',
 			'activity'      : 'Activity last 30 days'
 		},
