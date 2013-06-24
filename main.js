@@ -313,7 +313,7 @@ chrome.runtime.onInstalled.addListener(function() {
 	// relying on Date.now() with static timestamps like LAST_UPDATE = 1370395171790
 	if (isUpdate) {
 		// Should be changed when notification is needed for an update
-		var NOTIF_UPDATE = '2.0.3';
+		var NOTIF_UPDATE = '2.0.4';
 
 		if (localStorage.notifUpdate !== NOTIF_UPDATE) {
 			Notification.update(version);
