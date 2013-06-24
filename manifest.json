@@ -25,7 +25,8 @@
 		"notifications",
 		"http://localhost/*",
 		"storage",
-		"unlimitedStorage"
+		"unlimitedStorage",
+		"activeTab"
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.mxpnl.com; object-src 'self'",
 	"content_scripts": [ {

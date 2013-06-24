@@ -69,8 +69,26 @@ var Notification = {
 	}
 };
 
-var openURL = function(url, newTab) {
-	chrome.tabs[newTab ? 'create' : 'update']({ 'url': url });
+var openURL = function(url, newTab, curTab) {
+	if (newTab || !curTab) {
+		return chrome.tabs.create({ 'url': url });
+	}
+
+	var matchers = [
+		"/home",
+		"/course/.*",
+		"/garden/.*"
+	];
+
+	var onMemrise;
+	if (curTab.url.indexOf(Memrise.BASE_URL) === 0) {
+		onMemrise = _.any(matchers, function(m) {
+			return new RegExp(m).test(curTab.url);
+		});
+	}
+
+	var method = (onMemrise ? 'update' : 'create');
+	chrome.tabs[method]({ 'url': url });
 };
 
 var getTitle = function(name, count) {
@@ -258,12 +276,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	methods[request.type]();
 });
 
-chrome.browserAction.onClicked.addListener(function() {
+chrome.browserAction.onClicked.addListener(function(tab) {
 	track('Button Click');
 
 	var url;
 	if (url = localStorage.actionURL) {
-		openURL(url);
+		openURL(url, false, tab);
 	}
 });
 
