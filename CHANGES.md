@@ -1,5 +1,11 @@
 # What's new in Memrise Button
 
+## June 24, 2013 (2.0.4)
+
+* When clicking the button, open in a new tab if not already on Memrise.com.
+  I learned of a way to do this without requiring additional permissions.
+* Some statistics in the Options page.
+
 ## June 5, 2013 (2.0.1)
 
 * Notifications can now be enabled to be shown when plants are ready to water.
