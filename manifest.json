@@ -37,5 +37,12 @@
 	"web_accessible_resources": [
 		"icons/icon48.png",
 		"lib/idle-timer.min.js"
-	]
+	],
+	"commands": {
+		"_execute_browser_action": {
+			"suggested_key": {
+				"default": "Alt+M"
+			}
+		}
+	}
 }
