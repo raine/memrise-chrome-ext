@@ -1,5 +1,11 @@
 # What's new in Memrise Button
 
+## June 25, 2013 (2.0.5)
+
+* Added a default shortcut `Alt+M` for activating the button. The shortcut
+  can be changed at the bottom of the Extensions page
+  (`chrome://extensions`).
+
 ## June 24, 2013 (2.0.4)
 
 * When clicking the button, open in a new tab if not already on Memrise.com.
