@@ -353,3 +353,9 @@ chrome.alarms.get('refresh', function(alarm) {
 		reschedule();
 	}
 });
+
+chrome.commands.onCommand.addListener(function(command) {
+	chrome.storage.local.get('lastPlantedCourse', function(obj) {
+		openURL(Memrise.BASE_URL + "/course/next/" + obj.lastPlantedCourse);
+	});
+});

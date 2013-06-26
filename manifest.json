@@ -43,6 +43,12 @@
 			"suggested_key": {
 				"default": "Alt+M"
 			}
+		},
+		"plant-previous-course": {
+			"suggested_key": {
+				"default": "Alt+P"
+			},
+			"description": "Open the course level that was previously grown"
 		}
 	}
 }
