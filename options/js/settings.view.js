@@ -10,7 +10,7 @@ var app = app || {};
 		initialize: function() {
 			this.whitelist = new app.TopicsWhitelist();
 			this.stats     = new app.Stats();
-			this.hotkeyP   = this.getHotkey();
+			this.hotkeyP   = this.getHotkeys();
 		},
 
 		events: {
@@ -26,7 +26,7 @@ var app = app || {};
 			'stats'       : 'section#stats .content',
 			'description' : '.description',
 			'plants'      : '#notifications .plants',
-			'hotkey'      : 'section#hotkey .hotkey'
+			'hotkeys'     : 'section#hotkey .text'
 		},
 
 		reset: function() {
@@ -36,7 +36,7 @@ var app = app || {};
 		onRender: function() {
 			this.delegateEvents();
 
-			this.hotkeyP.done(this.renderHotkey.bind(this));
+			this.hotkeyP.done(this.renderHotkeys.bind(this));
 
 			this.whitelist.setElement(this.ui.topics);
 			this.whitelist.render();
@@ -70,23 +70,24 @@ var app = app || {};
 			this.$('.wilting-threshold').focus();
 		},
 
-		getHotkey: function() {
+		getHotkeys: function() {
 			var df = Q.defer();
 
 			chrome.commands.getAll(function(hotkeys) {
-				df.resolve(hotkeys[0].shortcut); // _execute_browser_action
+				df.resolve(hotkeys);
 			});
 
 			return df.promise;
 		},
 
-		renderHotkey: function(hotkey) {
-			if (hotkey.length > 0) {
-				this.ui.hotkey.text(hotkey);
-				this.$('.hotkey-on').show();
-			} else {
-				this.$('.hotkey-off').show();
-			}
+		renderHotkeys: function(hotkeys) {
+			var hotkeysTmpl = _.template($('#hotkeys-tmpl').html());
+			var browserActionHotkey = _.findWhere(hotkeys, { name: '_execute_browser_action'});
+			browserActionHotkey.description = "Activate the button";
+
+			this.ui.hotkeys.prepend(
+				hotkeysTmpl({ hotkeys: hotkeys })
+			);
 		},
 
 		goToExtensions: function() {

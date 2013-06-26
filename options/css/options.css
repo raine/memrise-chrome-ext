@@ -228,7 +228,22 @@ input[type="checkbox"]:disabled + span {
   margin-left: 1em;
 }
 
-.hotkey {
+.hotkeys {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.hotkeys .key {
+  text-align: right;
+  white-space: nowrap;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-right: 10px;
+  vertical-align: top;
+  line-height: 20px;
+}
+
+.hotkeys .hotkey {
   font-family: monospace;
   padding: 3px 6px 5px 6px;
   color: #555;
@@ -238,6 +253,13 @@ input[type="checkbox"]:disabled + span {
   border-radius: 3px;
   box-shadow: inset 0 -3px 0 #DADADA;
   border: 1px solid #B9B9B9;
+}
+
+.hotkeys .hotkey:empty:before {
+  content: "Not set";
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+  color: #777;
+  font-size: 11px;
 }
 
 .hotkey-on, .hotkey-off {

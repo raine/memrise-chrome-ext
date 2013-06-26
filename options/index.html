@@ -82,6 +82,17 @@
       </li>
     </script>
 
+    <script type="text/template" id="hotkeys-tmpl" class="template">
+      <table class="hotkeys">
+        <% _.each(hotkeys, function(hotkey) { %>
+          <tr>
+            <td class="key"><span class="hotkey"><%= hotkey.shortcut %></span></td>
+            <td class="desc"><%= hotkey.description %></td>
+          </tr>
+        <% }); %>
+      </table>
+    </script>
+
     <script type="text/template" id="settings-tmpl" class="template">
       <div class="displaytable">
         <section>
@@ -97,12 +108,10 @@
         </section>
 
         <section id="hotkey">
-          <h3>Hotkey</h3>
+          <h3>Shortcuts</h3>
           <div>
             <div class="text">
-              <p class="hotkey-off">No hotkey set for the button</p>
-              <p class="hotkey-on">Use the shortcut <span class="hotkey"></span> to activate the button</p>
-              <p>The shortcut can be changed at the bottom of the <a class="go-to-ext">Extensions</a> page</p>
+              <p>The shortcuts can be changed at the bottom of the <a class="go-to-ext">Extensions</a> page</p>
             </div>
           </div>
         </section>
