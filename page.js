@@ -31,6 +31,11 @@ if (document.location.pathname === '/home/') {
 	});
 }
 
+if (document.location.pathname.match(/\/grow\/$/)) {
+	var courseId = document.location.pathname.match(/\/course\/(\d+)\//)[1];
+	chrome.storage.local.set({ lastPlantedCourse: +courseId });
+}
+
 if (gardeningArea) {
 	var idleTimer = document.createElement('script');
 	idleTimer.src = chrome.extension.getURL('lib/idle-timer.min.js');
