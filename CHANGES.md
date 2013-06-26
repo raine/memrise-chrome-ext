@@ -1,5 +1,9 @@
 # What's new in Memrise Button
 
+## June 26, 2013 (2.0.6)
+
+* Added a new shortcut `Alt+P` for easy access to the course level that was previously grown.
+
 ## June 25, 2013 (2.0.5)
 
 * Added a default shortcut `Alt+M` for activating the button. The shortcut
