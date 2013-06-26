@@ -202,6 +202,7 @@ input[type="checkbox"]:disabled + span {
 
 .news ul li {
   max-width: 600px;
+  padding: 3px 0;
 }
 
 .note {
