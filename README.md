@@ -3,9 +3,9 @@ memrise-chrome-ext
 
 An unofficial memrise extension to help you take care of your plants
 
-![](http://raneksi.github.io/memrise-chrome-ext/memrise-button.png?1)
+![](https://raw.github.com/raneksi/memrise-chrome-ext/gh-pages/memrise-button.png)
 
-![](http://raneksi.github.io/memrise-chrome-ext/options.png?1)
+![](https://raw.github.com/raneksi/memrise-chrome-ext/gh-pages/options.png)
 
 ---
 
