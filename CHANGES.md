@@ -20,8 +20,8 @@
 
 * Notifications can now be enabled to be shown when plants are ready to water.
 
-![](http://raneksi.github.io/memrise-chrome-ext/memrise-notification-windows.png)
-![](http://raneksi.github.io/memrise-chrome-ext/memrise-notification-mac.png)
+![](https://raw.github.com/raneksi/memrise-chrome-ext/gh-pages/memrise-notification-windows.png)
+![](https://raw.github.com/raneksi/memrise-chrome-ext/gh-pages/memrise-notification-mac.png)
 
 ## June 1, 2013 (2.0.0)
 
