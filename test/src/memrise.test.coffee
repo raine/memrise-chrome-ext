@@ -79,4 +79,4 @@ suite "Memrise", ->
 
     test "should add waterPath to the JSON", ->
       category = catArr[0]
-      assert.equal category.waterPath, "/garden/water/#{category.slug}/"
+      assert.equal category.waterPath, "/garden/review/#{category.slug}/"
