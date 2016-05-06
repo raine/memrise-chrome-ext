@@ -110,7 +110,7 @@ var app = app || {};
 
 		sync: function(method, coll, options) {
 			if (method === 'read') {
-				return Memrise.getCategories(function(err, res) {
+				return Memrise.getCourses(function(err, res) {
 					if (err) {
 						options.error(err);
 					} else {

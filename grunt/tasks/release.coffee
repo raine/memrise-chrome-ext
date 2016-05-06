@@ -2,7 +2,7 @@ grunt = require 'grunt'
 _     = require 'underscore'
 
 markdown = ->
-  exec 'marked -o CHANGES.html CHANGES.md'
+  exec '../node_modules/.bin/marked -o CHANGES.html CHANGES.md'
 
 clean = ->
   exec 'rm -rf build/'
@@ -53,8 +53,8 @@ build = ->
 
   clone()
   exec 'ln -s ../node_modules build/node_modules'
-  exec 'grunt --base build/ minify'
-  exec 'grunt --base build/ targethtml'
+  exec './node_modules/.bin/grunt --base build/ minify'
+  exec './node_modules/.bin/grunt --base build/ targethtml'
   exec 'rm build/node_modules'
 
   grunt.file.setBase 'build/'

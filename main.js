@@ -15,7 +15,7 @@ var STRINGS = {
 var UPDATE_INTERVAL = 10; // Minutes
 
 var anim = new Animation();
-var groupsCache;
+var coursesCache;
 var unlogged;
 var isBadgeBlank;
 
@@ -45,14 +45,13 @@ var Notification = {
 		return notification;
 	},
 
-	wilting: function(opts) {
-		var obj   = opts.obj; // Group or course
-		var url   = Memrise.BASE_URL + obj.waterPath;
-		var title = STRINGS.notifications.wilting.title.replace('%s', obj.name);
-		var text  = STRINGS.notifications.wilting.text.replace('%d', obj.wilting);
-		var icon  = obj.photo;
-		var trackArgs = [ 'Notification Click', { 'Wilting': obj.wilting } ];
-		if (obj.wilting !== 1) text += 's';
+	wilting: function(course) {
+		var url   = course.url + 'garden/review';
+		var title = STRINGS.notifications.wilting.title.replace('%s', course.name);
+		var text  = STRINGS.notifications.wilting.text.replace('%d', course.review);
+		var icon  = course.photo;
+		var trackArgs = [ 'Notification Click', { 'Wilting': course.review } ];
+		if (course.review !== 1) text += 's';
 		this.build(url, title, text, icon, trackArgs).show();
 	},
 
@@ -123,71 +122,67 @@ var setErrorBadge = function(err) {
 	}
 };
 
-var setButton = function(opts) {
+var setButton = function(course) {
+  console.log('setButton', course);
 	// If called without arguments; nothing to do
-	if (!opts) {
+	if (!course) {
 		return setNoBadge(Memrise.DASHBOARD_URL, 'Go to dashboard');
 	}
 
-	var obj = opts.obj;
-	var count;
-
-	if (opts.type === 'group') {
-		count = obj.wilting;
-	} else if (opts.type === 'course') {
-		count = obj.group.wiltingReduced;
-	}
-
-	var text  = count.toString();
+	var text  = course.review.toString();
 	var color = COLORS.wilting;
-	var title = getTitle(obj.name, count);
-	var url   = Memrise.BASE_URL + obj.waterPath;
+	var title = getTitle(course.name, course.review);
+	var url   = course.url + 'garden/review';
 
 	updateButton(url, text, title, color);
 };
 
-var fetchGroups = function(cb, opts) {
+var fetchCourses = function(cb, opts) {
 	opts = opts !== undefined ? opts : {};
 
-	if (groupsCache && opts.cache) {
-		return cb(null, groupsCache);
+	if (coursesCache && opts.cache) {
+		return cb(null, coursesCache);
 	}
 
-	Memrise.getCategories(function(err, categories) {
+	Memrise.getCourses(function(err, courses) {
 		if (err) {
 			return cb(err);
 		}
 
-		groupsCache = categories;
-		cb(null, categories);
+		coursesCache = courses;
+		cb(null, courses);
 	});
 };
 
-var processGroups = function(groups) {
-	var getMaxByWilting = function(groups) {
-		return _.last(_.sortBy(groups, 'wilting'));
-	};
+var getMaxByWilting = function(courses) {
+  return _.last(_.sortBy(courses, 'review'));
+};
 
-	var groupsWL = settings.get('topics');
-	if (!groupsWL) {
-		return { type: 'group', obj: getMaxByWilting(groups) };
-	}
+var processCourses = function(courses) {
 
-	var enabledGroups = _.filter(groups, function(group) {
-		var groupObj = groupsWL[group.slug];
-		if (groupObj && groupObj.enabled) {
-			return true;
-		} else if (groupObj === undefined) {
-			return true;
-		}
-	});
+	// var groupsWL = settings.get('topics');
+	// if (!groupsWL) {
+	// 	return { type: 'group', obj: getMaxByWilting(courses) };
+	// }
 
-	if (!_.isEmpty(enabledGroups)) {
-		var maxGroup = getMaxByWilting(enabledGroups);
-		if (maxGroup.wilting > 0) {
-			return { type: 'group', obj: maxGroup };
-		}
-	}
+	// var enabledCourses = _.filter(courses, function(course) {
+	// 	var groupObj = groupsWL[group.slug];
+	// 	if (groupObj && groupObj.enabled) {
+	// 		return true;
+	// 	} else if (groupObj === undefined) {
+	// 		return true;
+	// 	}
+	// });
+
+  return getMaxByWilting(courses);
+
+	// if (!_.isEmpty(enabledCourses)) {
+	// 	var maxGroup = getMaxByWilting(enabledCourses);
+	// 	if (maxGroup.wilting > 0) {
+	// 		return { type: 'group', obj: maxGroup };
+	// 	}
+	// }
+
 };
 
 var refreshButton = function(opts) {
@@ -199,7 +194,7 @@ var refreshButton = function(opts) {
 		anim.start();
 	}
 
-	fetchGroups(function(err, groups) {
+	fetchCourses(function(err, courses) {
 		anim.stop();
 
 		if (err) {
@@ -220,24 +215,23 @@ var refreshButton = function(opts) {
 				});
 			}
 
-			// processGroups returns instructions for setButton
-			var thing = processGroups(groups);
-			if (thing) {
-				var wilting = thing.type === 'course' ?
-					thing.obj.group.wiltingReduced : thing.obj.wilting;
-
-				if (wilting < settings.get('wilting-threshold')) {
+			// processCourses returns instructions for setButton
+			var course = processCourses(courses);
+      console.log('course', course);
+			if (course) {
+				var toBeReviewed = course.review;
+				if (toBeReviewed < settings.get('wilting-threshold')) {
 					return setButton();
 				}
 			}
 
 			var blankBadge = isBadgeBlank;
-			setButton(thing);
+			setButton(course);
 
 			// Notification should only be shown as a result from an alarm
 			// and if there is currently no badge
-			if (thing && opts.alarm && blankBadge && settings.get('notifications')) {
-				Notification.wilting(thing);
+			if (course && opts.alarm && blankBadge && settings.get('notifications')) {
+				Notification.wilting(course);
 			}
 		}
 	}, opts);
@@ -259,8 +253,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			}
 		},
 		'test-notification': function() {
-			if (groupsCache) {
-				var thing = processGroups(groupsCache);
+			if (coursesCache) {
+				var thing = processCourses(coursesCache);
 				if (thing) return Notification.wilting(thing);
 			}
 

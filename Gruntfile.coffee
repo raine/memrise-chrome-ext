@@ -30,7 +30,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'minify', ['concat', 'uglify']
 
   grunt.registerTask 'default', ->
-    tasks = ['server', 'coffee', 'exec', 'watch']
+    tasks = ['server', 'coffee', 'watch']
     grunt.option 'force', true
     grunt.task.run tasks
 
